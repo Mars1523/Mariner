@@ -56,7 +56,7 @@ public class ClimbSub extends SubsystemBase {
         climbController = climbMotorOne.getClosedLoopController();
 
         // climbMotorTwo.setControl(new Follower(climbMotorOne.getDeviceId(),true));
-        climbController.setReference(climbSetpoint, ControlType.kPosition);
+        climbController.setReference(0, ControlType.kPosition);
     }
 
     public void pushUp() {

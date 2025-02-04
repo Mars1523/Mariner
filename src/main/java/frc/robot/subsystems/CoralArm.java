@@ -46,7 +46,7 @@ public class CoralArm extends SubsystemBase {
         // Constants.configMotor(coralWheel, true);
 
         coralWristController = coralWrist.getClosedLoopController();
-        coralWristController.setReference(coralArmSetpoint, ControlType.kMAXMotionPositionControl);
+        coralWristController.setReference(0, ControlType.kMAXMotionPositionControl);
     }
 
     public void intakeCoral() {
@@ -62,7 +62,7 @@ public class CoralArm extends SubsystemBase {
     }
 
     public void setCoralWristSetpoint(double setpoint) {
-        coralArmSetpoint = setpoint;
+        coralWristController.setReference(setpoint, ControlType.kMAXMotionPositionControl);
     }
 
     public boolean hasCoral() {
