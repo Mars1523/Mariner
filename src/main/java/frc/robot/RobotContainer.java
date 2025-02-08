@@ -17,7 +17,7 @@ public class RobotContainer {
   Joystick primaryJoy = new Joystick(0);
   XboxController secondaryController = new XboxController(1);
 
-  AutoNav autoNav = new AutoNav();
+  // AutoNav autoNav = new AutoNav();
 
   Elevator elevator = new Elevator();
 

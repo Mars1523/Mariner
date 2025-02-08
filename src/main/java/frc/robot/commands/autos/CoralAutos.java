@@ -5,6 +5,9 @@ import frc.robot.subsystems.CoralArm;
 
 public class CoralAutos {
 
+    public CoralAutos() {
+    }
+
     public class AutoIntakeCoral extends Command {
         private CoralArm coralArm = new CoralArm();
 
