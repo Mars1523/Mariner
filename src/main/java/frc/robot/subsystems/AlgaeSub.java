@@ -12,8 +12,13 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -24,67 +29,88 @@ public class AlgaeSub extends SubsystemBase {
     SparkMax algaeWrist = new SparkMax(56, MotorType.kBrushless);
     TalonSRX algaeSpinner = new TalonSRX(13);
     //SparkMax algaeSpinMotor = new SparkMax(0, MotorType.kBrushless);
+    TrapezoidProfile trapezoidProfile = new TrapezoidProfile(new Constraints(1, 4));
     private SparkClosedLoopController algaeWristController;
+    private double setpoint = 0;
     // pincher1
     // pivotmotor
     // DigitalInput topLimitSwitch = new DigitalInput(0);
     // DigitalInput bottomLimitSwitch = new DigitalInput(1);
-
-    public AlgaeSub() {
-
-        SparkMaxConfig configAlgaeWrist = new SparkMaxConfig();
-        configAlgaeWrist
-                .inverted(false)
-                .idleMode(SparkMaxConfig.IdleMode.kBrake);
-        configAlgaeWrist.encoder.positionConversionFactor(1.0/125.0);
-        configAlgaeWrist.closedLoop
-                .pid(0.15, 0, 0)
-                .outputRange(-0.25, 0.25);
-        algaeWrist.configure(configAlgaeWrist, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
-        // Constants.configPIDMotor(algaeWrist,true, 0,0,0);
-        // Constants.configMotor(algaeSpinMotor, false);
-
-        // SparkMaxConfig configAlgaeSpin = new SparkMaxConfig();
-        // configAlgaeSpin
-        //         .inverted(false)
-        //         .idleMode(SparkMaxConfig.IdleMode.kBrake);
-        // configAlgaeSpin.encoder.positionConversionFactor(1/10);
-        //algaeSpinMotor.configure(configAlgaeSpin, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
-        
-        algaeWristController = algaeWrist.getClosedLoopController();
-        algaeWristController.setReference(0, ControlType.kPosition);
-
-        algaeWrist.getEncoder().setPosition(0);
-
-    }
-
-    // ok plan a
-    // methods
-    // grab()
-    // pincher1.set(0.5)
-    // pincher2.set(0.5)
-    public void grab() {
-        algaeSpinner.set(TalonSRXControlMode.PercentOutput, 0.5);
-    }
-
-    // // grab for amount of time or until we have an algae
-    // // thatll be in commands though
-
-    public void release() {
-        algaeSpinner.set(TalonSRXControlMode.PercentOutput, -0.5);
-    }
-
-    // //
-    public void stop() {
-       algaeSpinner.set(TalonSRXControlMode.PercentOutput, 0);
-    }
-
-    public void stopWrist() {
-        algaeWrist.set(0);
-    }
-
-    public void setAlgaeSetpoint(double setpoint) {
-        algaeWristController.setReference(setpoint, ControlType.kPosition);
+        // private  trapezoidSetpoint;
+    TrapezoidProfile.State trapezoidSetpoint = new TrapezoidProfile.State();
+    
+        public AlgaeSub() {
+    
+            SparkMaxConfig configAlgaeWrist = new SparkMaxConfig();
+            configAlgaeWrist
+                    .inverted(false)
+                    .idleMode(SparkMaxConfig.IdleMode.kCoast);
+            configAlgaeWrist.encoder
+                .positionConversionFactor(1.0/125.0)
+                .velocityConversionFactor(1.0/125.0);
+            configAlgaeWrist.closedLoop
+                    .pid(7, 0, 0)
+                    .outputRange(-1, 1);
+            algaeWrist.configure(configAlgaeWrist, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+            // Constants.configPIDMotor(algaeWrist,true, 0,0,0);
+            // Constants.configMotor(algaeSpinMotor, false);
+    
+            // SparkMaxConfig configAlgaeSpin = new SparkMaxConfig();
+            // configAlgaeSpin
+            //         .inverted(false)
+            //         .idleMode(SparkMaxConfig.IdleMode.kBrake);
+            // configAlgaeSpin.encoder.positionConversionFactor(1/10);
+            //algaeSpinMotor.configure(configAlgaeSpin, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+            
+            algaeWristController = algaeWrist.getClosedLoopController();
+            algaeWristController.setReference(0, ControlType.kPosition);
+    
+            algaeWrist.getEncoder().setPosition(0);
+    
+            // Shuffleboard.getTab("Debug").add("P", 0.0);
+            Shuffleboard.getTab("Debug").addDouble("Algae Wrist Setpoint", () -> setpoint);
+            Shuffleboard.getTab("Debug").addDouble("Algae Wrist Current", () -> algaeWrist.getEncoder().getPosition());
+            Shuffleboard.getTab("Debug").addDouble("Algae Wrist Power", () -> algaeWrist.getAppliedOutput());
+        }
+    
+        // ok plan a
+        // methods
+        // grab()
+        // pincher1.set(0.5)
+        // pincher2.set(0.5)
+        public void grab() {
+            algaeSpinner.set(TalonSRXControlMode.PercentOutput, 0.75);
+        }
+    
+        // // grab for amount of time or until we have an algae
+        // // thatll be in commands though
+    
+        public void release() {
+            algaeSpinner.set(TalonSRXControlMode.PercentOutput, -0.75);
+        }
+    
+        // //
+        public void stop() {
+           algaeSpinner.set(TalonSRXControlMode.PercentOutput, 0);
+        }
+    
+        public void stopWrist() {
+            algaeWrist.set(0);
+        }
+    
+        public void setAlgaeSetpoint(double setpoint) {
+            // algaeWristController.setReference(setpoint, ControlType.kPosition);
+            this.setpoint = setpoint;
+        }
+    
+        @Override
+        public void periodic() {
+            trapezoidSetpoint = trapezoidProfile.calculate(0.02,
+                        trapezoidSetpoint,
+                        new TrapezoidProfile.State(setpoint, 0));
+        //System.out.println("Setpoint " + setpoint + " goal "+ trapezoidSetpoint);
+        NetworkTableInstance.getDefault().getEntry("/Shuffleboard/Debug/AlgaeWristGoal").setDouble(trapezoidSetpoint.position);
+        algaeWristController.setReference(trapezoidSetpoint.position, ControlType.kPosition);
     }
 
     // public boolean hasAlgae() {
@@ -104,9 +130,9 @@ public class AlgaeSub extends SubsystemBase {
         return run(() -> setAlgaeSetpoint(Constants.SetpointConstants.AlgaeArmAngles.down));
     }
 
-    // public Command algaeArmUp(){
-    //     return run(()-> setAlgaeSetpoint(3));
-    // }
+    public Command algaeArmUp() {
+        return run(() -> setAlgaeSetpoint(Constants.SetpointConstants.AlgaeArmAngles.up));
+    }
 
     public Command algaeArmStop(){
         return run(() -> stopWrist());

@@ -13,6 +13,7 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -32,11 +33,12 @@ public class CoralArm extends SubsystemBase {
     //SparkMax coralWheel = new SparkMax(100, MotorType.kBrushless);
     //SparkMax coralWrist = new SparkMax(1001, MotorType.kBrushless);
     TalonSRX coralWheel = new TalonSRX(11);
-    VictorSPX coralWrist = new VictorSPX(10);
+    SparkMax coralWrist = new SparkMax(10, MotorType.kBrushed);
 
     private final PIDController coralWristPID = new PIDController(0.1, 0, 0);
 
     public CoralArm() {
+        Shuffleboard.getTab("PID").add("Coral", coralWristPID);
         // SparkMaxConfig configWrist = new SparkMaxConfig();
         // configWrist
         //         .inverted(false)
@@ -63,7 +65,7 @@ public class CoralArm extends SubsystemBase {
 
     @Override
     public void periodic() {
-        coralWrist.set(VictorSPXControlMode.PercentOutput, coralWristPID.calculate(coralWristSetpoint));
+        coralWrist.set(VictorSPXControlMode.PercentOutput, coralWristPID.calculate(coralWrist.getSelectedSensorPosition()));
     }
 
     public void intakeCoral() {
@@ -79,7 +81,7 @@ public class CoralArm extends SubsystemBase {
     }
 
     public void stopCoralWrist() {
-        coralWrist.set(VictorSPXControlMode.PercentOutput,0);
+        coralWrist.set(0);
     }
 
     public void setCoralWristSetpoint(double setpoint) {

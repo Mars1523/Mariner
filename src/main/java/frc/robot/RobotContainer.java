@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.DefaultSwerve;
+import frc.robot.commands.Configuration.ConfigSystem;
 import frc.robot.subsystems.CoralArm;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -31,6 +32,8 @@ public class RobotContainer {
   CoralArm coralArm = new CoralArm();
 
   DefaultSwerve swerve = new DefaultSwerve(primaryJoy, swerveSubsystem);
+
+  //ConfigSystem configSystem = new ConfigSystem(Constants.SetpointConstants.OptionArrays.positionList, coralArm, elevatorSub, algaeSub)
 
   // AutoNav autoNav = new AutoNav();
 
@@ -58,10 +61,10 @@ public class RobotContainer {
         .onTrue(elevatorSub.stow());
     new JoystickButton(secondaryController, XboxController.Button.kA.value)
         .onTrue(elevatorSub.l1());
-    //new JoystickButton(secondaryController, XboxController.Button.kB.value)
-        //.onTrue(elevatorSub.l2());
-    //new JoystickButton(secondaryController, XboxController.Button.kX.value)
-        //.onTrue(elevatorSub.l3());
+    new JoystickButton(primaryJoy, 3)
+        .onTrue(elevatorSub.l2());
+    new JoystickButton(primaryJoy, 4)
+        .onTrue(elevatorSub.l3());
     new JoystickButton(secondaryController, XboxController.Button.kStart.value)
         .onTrue(elevatorSub.l4());
     //new JoystickButton(secondaryController, XboxController.Button.kB.value)
@@ -69,7 +72,7 @@ public class RobotContainer {
     new JoystickButton(secondaryController, XboxController.Button.kX.value)
       .onTrue(algaeSub.algaeArmDown());
     new JoystickButton(secondaryController, XboxController.Button.kB.value)
-      .onTrue(algaeSub.algaeArmStop());
+      .onTrue(algaeSub.algaeArmUp());
     new JoystickButton(secondaryController, XboxController.Button.kBack.value)
       .onTrue(algaeSub.algaeArmStop());
 
@@ -93,6 +96,8 @@ public class RobotContainer {
     new JoystickButton(primaryJoy, 8)
       .onTrue(coralArm.stopWrist());
     
+    new JoystickButton(primaryJoy, 6)
+      .onTrue(new ConfigSystem(Constants.SetpointConstants.OptionArrays.positionList, 0, coralArm, elevatorSub, algaeSub));
     // new JoystickButton(secondaryController, XboxController.Button.kB.value)
     //   .onTrue(algaeSub.algaeArmStop());
     // secondaryController.getPOV()

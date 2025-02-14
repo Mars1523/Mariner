@@ -192,8 +192,8 @@ public final class Constants {
     }
 
     public class AlgaeArmAngles {
-      public static double up = -3; // hold algae in
-      public static double down = -1.5; // intake or outtake algae
+      public static double up = 0; // hold algae in
+      public static double down = -0.25; // intake or outtake algae
     }
     // L2 and L3 Angle
     // L4 Angle
@@ -241,7 +241,7 @@ public final class Constants {
           AlgaeArmAngles.up);
       public ConfigOption Processor = new ConfigOption(CoralPivotAngles.up, ElevatorSetpoints.groundLevel,
           AlgaeArmAngles.down);
-      public ConfigOption TestConfig = new ConfigOption(CoralPivotAngles.l1, ElevatorSetpoints.l1, AlgaeArmAngles.up);
+      public ConfigOption testConfig = new ConfigOption(CoralPivotAngles.l1, ElevatorSetpoints.l1, AlgaeArmAngles.up);
 
       // to hold everything in while sitting there
       public ConfigOption driveConfig = new ConfigOption(CoralPivotAngles.l4, ElevatorSetpoints.groundLevel,
@@ -283,23 +283,22 @@ public final class Constants {
       // ElevatorSetpoints.l4, XOffset.none, YOffset.Algae,
       // RotOffset.none, AlgaeArmAngles.up };
 
-      List<ConfigOption> positionList = new ArrayList<ConfigOption>();
+      public static List<ConfigOption> positionList = new ArrayList<ConfigOption>();
 
-      OptionArrays() {
-        positionList.add(l1); // 0
-        positionList.add(l2Left); // 1
-        positionList.add(l3Left); // 2
-        positionList.add(l4Left); // 3
-        positionList.add(l2Right);// 4
-        positionList.add(l3Right);// 5
-        positionList.add(l4Right);// 6
-        positionList.add(CoralStation); // 7
-        positionList.add(Processor); // 8
-        positionList.add(AlgaeLow); // 9
-        positionList.add(AlgaeHigh); // 10
+      public OptionArrays(){
+        positionList.add(testConfig); // 0
+        // positionList.add(l2Left); // 1
+        // positionList.add(l3Left); // 2
+        // positionList.add(l4Left); // 3
+        // positionList.add(l2Right);// 4
+        // positionList.add(l3Right);// 5
+        // positionList.add(l4Right);// 6
+        // positionList.add(CoralStation); // 7
+        // positionList.add(Processor); // 8
+        // positionList.add(AlgaeLow); // 9
+        // positionList.add(AlgaeHigh); // 10
 
       }
-
     }
 
   }
