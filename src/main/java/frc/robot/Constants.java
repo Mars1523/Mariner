@@ -50,7 +50,7 @@ public final class Constants {
 
   }
 
-  public static final ModuleConfiguration ModuleType = SdsModuleConfigurations.MK4I_L1;
+  public static final ModuleConfiguration ModuleType = SdsModuleConfigurations.MK4N_L2;
 
   public static void configMotor(SparkMax motor, boolean Inverted) {
   }
