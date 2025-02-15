@@ -58,6 +58,13 @@ public final class SdsModuleConfigurations {
                         (14.0 / 50.0) * (10.0 / 60.0),
                         false);
 
+        public static final ModuleConfiguration MK4N_L2 = new ModuleConfiguration(
+                        0.10033,
+                        1/5.9,
+                        true,
+                        1/18.75,
+                        false);
+
         private SdsModuleConfigurations() {
         }
 }

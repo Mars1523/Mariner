@@ -34,26 +34,18 @@ public class SwerveSubsystem extends SubsystemBase {
         private final SlewRateLimiter yRateLimiter = new SlewRateLimiter(2);
         private final SlewRateLimiter rotRateLimiter = new SlewRateLimiter(2);
 
-        private final Translation2d frontLeftLocation = new Translation2d(0.381, 0.381);
-        private final Translation2d frontRightLocation = new Translation2d(0.381, -0.381);
-        private final Translation2d backLeftLocation = new Translation2d(-0.381, 0.381);
-        private final Translation2d backRightLocation = new Translation2d(-0.381, -0.381);
-
         private final SwerveModule fLSwerve = new SwerveModule(15, 14, true, true,
                         new CanCoderConfig(20, -0.137), 0.66);
-        private final SwerveModule fRSwerve = new SwerveModule(13, 12, true, true,
+        private final SwerveModule fRSwerve = new SwerveModule(13, 12, false, true,
                         new CanCoderConfig(19, 0), .533);
         private final SwerveModule bLSwerve = new SwerveModule(17, 16, true, true,
                         new CanCoderConfig(21, 0.172), 0.039);
-        private final SwerveModule bRSwerve = new SwerveModule(11, 10, true, true,
+        private final SwerveModule bRSwerve = new SwerveModule(11, 10, false, true,
                         new CanCoderConfig(18, -0.429), 1.856);
 
         private AHRS gyro = new AHRS(NavXComType.kMXP_SPI);
 
         private LinearFilter hitFilter = LinearFilter.movingAverage(30);
-
-        private final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
-                        frontLeftLocation, frontRightLocation, backLeftLocation, backRightLocation);
 
         public void drive(double xPercent, double yPercent, double rotPercent, boolean fieldRelative) {
                 drive(xPercent, yPercent, rotPercent, fieldRelative, 0, 0);
@@ -125,7 +117,7 @@ public class SwerveSubsystem extends SubsystemBase {
         public Rotation2d yawOffset = new Rotation2d();
 
         SwerveDriveOdometry ometry = new SwerveDriveOdometry(
-                        kinematics,
+                        Constants.DriveConstants.kinematics,
                         getRotation(),
                         new SwerveModulePosition[] {
                                         fLSwerve.getPosition(),
