@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.DefaultSwerve;
 import frc.robot.commands.Configuration.ConfigSystem;
 import frc.robot.subsystems.CoralArm;
@@ -31,6 +32,8 @@ public class RobotContainer {
   AlgaeSub algaeSub = new AlgaeSub();
   // ClimbSub climbSub = new ClimbSub();
   CoralArm coralArm = new CoralArm();
+
+  ClimbSub climbSub = new ClimbSub();
 
   DefaultSwerve swerve = new DefaultSwerve(primaryJoy, swerveSubsystem);
 
@@ -92,13 +95,16 @@ public class RobotContainer {
       .onFalse(coralArm.stopCoralSpin());
 
     new JoystickButton(primaryJoy, 7)
-      .onTrue(coralArm.l1())
-      .onFalse(coralArm.stopWrist());
+      .onTrue(coralArm.l1());
     new JoystickButton(primaryJoy, 8)
-      .onTrue(coralArm.stopWrist());
+      .onTrue(coralArm.up());
     
-    new JoystickButton(primaryJoy, 6)
-      .onTrue(new ConfigSystem(Constants.SetpointConstants.OptionArrays.positionList, 0, coralArm, elevatorSub, algaeSub));
+    //new JoystickButton(primaryJoy, 6)
+     // .onTrue(new ConfigSystem(Constants.SetpointConstants.OptionArrays.positionList, 0, coralArm, elevatorSub, algaeSub));
+
+    new JoystickButton(primaryJoy, 5)
+      .onTrue(climbSub.climb())
+      .onFalse(climbSub.climbStopCommand());
     // new JoystickButton(secondaryController, XboxController.Button.kB.value)
     //   .onTrue(algaeSub.algaeArmStop());
     // secondaryController.getPOV()

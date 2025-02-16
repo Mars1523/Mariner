@@ -29,7 +29,7 @@ public class AlgaeSub extends SubsystemBase {
     SparkMax algaeWrist = new SparkMax(56, MotorType.kBrushless);
     TalonSRX algaeSpinner = new TalonSRX(41);
     //SparkMax algaeSpinMotor = new SparkMax(0, MotorType.kBrushless);
-    TrapezoidProfile trapezoidProfile = new TrapezoidProfile(new Constraints(1, 4));
+    TrapezoidProfile trapezoidProfile = new TrapezoidProfile(new Constraints(1, 3));
     private SparkClosedLoopController algaeWristController;
     private double setpoint = 0;
     // pincher1
@@ -47,9 +47,9 @@ public class AlgaeSub extends SubsystemBase {
                     .idleMode(SparkMaxConfig.IdleMode.kCoast);
             configAlgaeWrist.encoder
                 .positionConversionFactor(1.0/125.0)
-                .velocityConversionFactor(1.0/125.0);
+                .velocityConversionFactor((1.0/125.0)/60);
             configAlgaeWrist.closedLoop
-                    .pid(7, 0, 0)
+                    .pid(4, 0, 0)
                     .outputRange(-1, 1);
             algaeWrist.configure(configAlgaeWrist, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
             // Constants.configPIDMotor(algaeWrist,true, 0,0,0);
@@ -65,7 +65,7 @@ public class AlgaeSub extends SubsystemBase {
             algaeWristController = algaeWrist.getClosedLoopController();
             algaeWristController.setReference(0, ControlType.kPosition);
     
-            algaeWrist.getEncoder().setPosition(0);
+            // algaeWrist.getEncoder().setPosition(0);
     
             // Shuffleboard.getTab("Debug").add("P", 0.0);
             Shuffleboard.getTab("Debug").addDouble("Algae Wrist Setpoint", () -> setpoint);

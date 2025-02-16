@@ -11,6 +11,8 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.wpilibj.motorcontrol.PWMMotorController;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -25,6 +27,8 @@ public class ClimbSub extends SubsystemBase {
 
     double climbSetpoint;
     SparkClosedLoopController climbController;
+    private final SparkMax climb1 = new SparkMax(58, MotorType.kBrushless);
+    private final SparkMax climb2 = new SparkMax(57, MotorType.kBrushless);
 
     // either have the non pid motor follow the pid one or have 2 pid controllers
     // idk
@@ -35,44 +39,59 @@ public class ClimbSub extends SubsystemBase {
 
         SparkMaxConfig configLeader = new SparkMaxConfig();
         configLeader
-                .inverted(false)
-                .idleMode(SparkMaxConfig.IdleMode.kBrake);
+                .inverted(true)
+                .idleMode(SparkMaxConfig.IdleMode.kCoast);
         configLeader.smartCurrentLimit(30, 30);
         configLeader.secondaryCurrentLimit(35);
-        configLeader.encoder.positionConversionFactor(1/60);
-        configLeader.closedLoop
-                .pid(0, 0, 0)
-                .outputRange(-1, 1);
-        //climbMotorOne.configure(configLeader, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+        configLeader.encoder.positionConversionFactor(1.0/60.0);
+        climb1.configure(configLeader, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
 
         SparkMaxConfig configFollower = new SparkMaxConfig();
         configFollower
                 .inverted(false)
-                .idleMode(SparkMaxConfig.IdleMode.kBrake);
-        configFollower.encoder.positionConversionFactor(1/60);
+                .idleMode(SparkMaxConfig.IdleMode.kCoast);
+        configFollower.encoder.positionConversionFactor(1.0/60.0);
         configFollower.smartCurrentLimit(30, 30);
         configFollower.secondaryCurrentLimit(35);
         //configFollower.follow(climbMotorOne);
-        //climbMotorTwo.configure(configFollower, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+        climb2.configure(configFollower, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
 
         //climbController = climbMotorOne.getClosedLoopController();
 
         // climbMotorTwo.setControl(new Follower(climbMotorOne.getDeviceId(),true));
         //climbController.setReference(0, ControlType.kPosition);
+
+        Shuffleboard.getTab("Debug").addDouble("Climb 1 Current", () -> climb1.getEncoder().getPosition());
+        Shuffleboard.getTab("Debug").addDouble("Climb 2 Current", () -> climb2.getEncoder().getPosition());
     }
 
-    public void pushUp() {
+    public void climbDown() {
         // set climb motors to down
-        climbSetpoint = 0;
+        climb1.set(0.2);
+        climb2.set(0.2);
     }
 
-    public void lowerBot() {
-        // set climb motors up?
-        climbSetpoint = 0;
+    // public void climbUp() {
+    //     // set climb motors up?
+    //     climb1.set(-0.8);
+    //     climb2.set(-0.8);
+    // }
+
+    public void climbStop(){
+        climb1.set(0);
+        climb2.set(0);
     }
     // i wonder still
     // we could have it push down until it reaches a setpoint
     // or have the pull up initiated as the driver presses a button then have it
     // freeze in place when not being moved
     // that way the drivers can tell it when to stop
+
+    public Command climb(){
+        return run(() -> climbDown());
+    }
+    public Command climbStopCommand(){
+        return run(() -> climbStop());
+    }
+
 }

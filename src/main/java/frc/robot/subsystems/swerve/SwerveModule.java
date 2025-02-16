@@ -109,7 +109,7 @@ public class SwerveModule {
                 // turn motor configurations
                 SparkMaxConfig turnConfig = new SparkMaxConfig();
                 turnConfig
-                                .inverted(driveMotorInverted)
+                                .inverted(turningMotorInverted)
                                 .idleMode(SparkMaxConfig.IdleMode.kCoast)
                                 .smartCurrentLimit(20);
                 turnConfig.encoder
@@ -124,14 +124,16 @@ public class SwerveModule {
                 // turningEncoder.setPosition(encoder.getAbsAngle().getRadians());
                 double scaledTurnPosition = scale(turningMotor.getAnalog().getVoltage() - voltageOffset, 0, 3.365, 0,
                                 2 * Math.PI);
-                // turningEncoder.setPosition(scaledTurnPosition);
+                turningEncoder.setPosition(scaledTurnPosition);
 
                 pidController = turningMotor.getClosedLoopController();
 
-                Shuffleboard.getTab("Debug").addDouble("EncoderPositionScaledOffset " + turningMotorID,
+                Shuffleboard.getTab("Debug").addDouble("EncoderPositionScaledOffsetVoltage " + turningMotorID,
                                 () -> scale(turningMotor.getAnalog().getVoltage() - voltageOffset, 0, 3.365, 0,
                                                 2 * Math.PI));
-                Shuffleboard.getTab("Debug").addDouble("EncoderPositionRaw " + turningMotorID,
+                Shuffleboard.getTab("Debug").addDouble("EncoderPosition " + turningMotorID,
+                                () -> turningEncoder.getPosition());
+                Shuffleboard.getTab("Debug").addDouble("EncoderVoltageRaw " + turningMotorID,
                                 () -> turningMotor.getAnalog().getVoltage());
         }
 

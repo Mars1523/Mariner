@@ -59,9 +59,9 @@ public final class Constants {
     public static final double kDrivePeriod = TimedRobot.kDefaultPeriod;
 
     // Distance between left and right wheels
-    public static final double kTrackWidthMeters = 0.6223 / 2;
+    public static final double kTrackWidthMeters = 0.5842 / 2;
     // Distance between front and back wheels
-    public static final double kTrackBaseMeters = 0.40004999999999996 / 2;
+    public static final double kTrackBaseMeters = 0.5842 / 2;
 
     private static final Translation2d kFrontLeftLocation = new Translation2d(kTrackBaseMeters, kTrackWidthMeters);
     private static final Translation2d kFrontRightLocation = new Translation2d(kTrackBaseMeters, -kTrackWidthMeters);
@@ -145,9 +145,9 @@ public final class Constants {
 
     public class ElevatorSetpoints {
       public static double l1 = 0.5;
-      public static double l2 = 1;
-      public static double l3 = 1.5;
-      public static double l4 = 2;
+      public static double l2 = 0.9;
+      public static double l3 = 1.2;
+      public static double l4 = 1.6;
 
       public static double groundLevel = 0;
       public static double algaeLow = 1.25;
@@ -163,7 +163,7 @@ public final class Constants {
 
     public class CoralPivotAngles {
       // angle of release
-      public static double l1 = 1; // reef l1
+      public static double l1 = 0.1; // reef l1
       public static double lmid = 1; // reef l2 and l3
       public static double l4 = 1; // reef l4
       public static double CoralSt = 2; // pointing up to recieve coral from hp
