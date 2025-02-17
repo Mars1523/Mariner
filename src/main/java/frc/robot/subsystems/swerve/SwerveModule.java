@@ -1,20 +1,22 @@
 package frc.robot.subsystems.swerve;
 
+import com.revrobotics.REVLibError;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
-import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import frc.robot.Constants;
 
@@ -101,7 +103,6 @@ public class SwerveModule {
                 driveMotor.configure(driveConfig, SparkBase.ResetMode.kNoResetSafeParameters,
                                 SparkBase.PersistMode.kNoPersistParameters);
 
-                turningEncoder = turningMotor.getEncoder();
 
                 double turningPositionConversionFactor = Math
                                 .toRadians(Constants.ModuleConstants.TurningEncoderDegreesPerPulse);
@@ -118,27 +119,37 @@ public class SwerveModule {
                 turnConfig.closedLoop
                                 .pid(1.0, 0.0, 0.1)
                                 .outputRange(-1, 1);
-                turningMotor.configure(turnConfig, SparkMax.ResetMode.kResetSafeParameters,
+                REVLibError turnConfigResult  = turningMotor.configure(turnConfig, SparkMax.ResetMode.kResetSafeParameters,
                                 SparkMax.PersistMode.kNoPersistParameters);
+                                // Shuffleboard.getTab("Debug")
+                Shuffleboard.getTab("Debug").add("Turn motor set config result" + turningMotorID, turnConfigResult.value);
+                turningEncoder = turningMotor.getEncoder();
 
-                // turningEncoder.setPosition(encoder.getAbsAngle().getRadians());
-                double scaledTurnPosition = scale(turningMotor.getAnalog().getVoltage() - voltageOffset, 0, 3.365, 0,
-                                2 * Math.PI);
-                turningEncoder.setPosition(scaledTurnPosition);
-
+                REVLibError turnSetPosResult = turningEncoder.setPosition( scaleSwerve(turningMotor.getAnalog().getVoltage() - voltageOffset));
+                Shuffleboard.getTab("Debug").add("Turn encoder set position result" +  turningMotorID, turnSetPosResult.value);
                 pidController = turningMotor.getClosedLoopController();
 
-                Shuffleboard.getTab("Debug").addDouble("EncoderPositionScaledOffsetVoltage " + turningMotorID,
-                                () -> scale(turningMotor.getAnalog().getVoltage() - voltageOffset, 0, 3.365, 0,
-                                                2 * Math.PI));
-                Shuffleboard.getTab("Debug").addDouble("EncoderPosition " + turningMotorID,
-                                () -> turningEncoder.getPosition());
-                Shuffleboard.getTab("Debug").addDouble("EncoderVoltageRaw " + turningMotorID,
+                Shuffleboard.getTab("Debug").addDouble("SwerveTurnAbsRot " + turningMotorID,
+                                                () -> scale(scaleSwerve(turningMotor.getAnalog().getVoltage() - voltageOffset), 0,
+                                                Math.PI * 2, 0,
+                                                1));
+                Shuffleboard.getTab("Debug").addDouble("SwerveTurnRelRot " + turningMotorID,
+                                () -> Units.radiansToRotations(turningEncoder.getPosition()));
+                Shuffleboard.getTab("Debug").addDouble("SwerveTurnAbsVolts " + turningMotorID,
                                 () -> turningMotor.getAnalog().getVoltage());
         }
 
         private static double scale(double value, double min, double max, double a, double b) {
                 return a + ((value - min) / (max - min)) * (b - a);
+        }
+
+        private static double scaleSwerve(double value) {
+                final double maxVolts = 3.365;
+                if (value < 0) {
+                        value += maxVolts;
+                }
+                value = value % maxVolts;
+                return scale(value, 0, maxVolts, 0, 2 * Math.PI);
         }
 
         public SwerveModuleState getState() {

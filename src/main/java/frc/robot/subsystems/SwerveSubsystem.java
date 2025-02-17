@@ -23,7 +23,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.LimelightHelpers;
-import frc.robot.subsystems.swerve.CanCoderConfig;
 import frc.robot.subsystems.swerve.SwerveModule;
 //import frc.robot.command.autolime.AutoAlignTags;
 
@@ -35,13 +34,13 @@ public class SwerveSubsystem extends SubsystemBase {
         private final SlewRateLimiter rotRateLimiter = new SlewRateLimiter(2);
 
         private final SwerveModule fLSwerve = new SwerveModule(15, 14, false, true,
-                        new CanCoderConfig(20, -0.137), 2.336);
+                        null, 2.336);
         private final SwerveModule fRSwerve = new SwerveModule(13, 12, false, true,
-                        new CanCoderConfig(19, 0), .553);
+                        null, .553);
         private final SwerveModule bLSwerve = new SwerveModule(17, 16, false, true,
-                        new CanCoderConfig(21, 0.172), 1.704);
+                        null, 1.704);
         private final SwerveModule bRSwerve = new SwerveModule(11, 10, false, true,
-                        new CanCoderConfig(18, -0.429), 0.176);
+                        null, 0.176);
 
         private AHRS gyro = new AHRS(NavXComType.kMXP_SPI);
 

@@ -49,7 +49,7 @@ public class CoralArm extends SubsystemBase {
                 .idleMode(SparkMaxConfig.IdleMode.kBrake);
         configWrist.encoder.positionConversionFactor(1.0 / 100.0);
         configWrist.closedLoop
-                .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
+                .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
                 .pid(0.75, 0, 0)
                 .outputRange(-0.45, 0.45);
         coralWrist.configure(configWrist, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
