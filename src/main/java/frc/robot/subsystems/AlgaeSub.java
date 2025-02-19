@@ -79,14 +79,14 @@ public class AlgaeSub extends SubsystemBase {
         // pincher1.set(0.5)
         // pincher2.set(0.5)
         public void grab() {
-            algaeSpinner.set(TalonSRXControlMode.PercentOutput, 0.75);
+            algaeSpinner.set(TalonSRXControlMode.PercentOutput, 0.65);
         }
     
         // // grab for amount of time or until we have an algae
         // // thatll be in commands though
     
         public void release() {
-            algaeSpinner.set(TalonSRXControlMode.PercentOutput, -0.75);
+            algaeSpinner.set(TalonSRXControlMode.PercentOutput, -0.65);
         }
     
         // //

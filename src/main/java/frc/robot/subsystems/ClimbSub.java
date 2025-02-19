@@ -67,8 +67,8 @@ public class ClimbSub extends SubsystemBase {
 
     public void climbDown() {
         // set climb motors to down
-        climb1.set(0.2);
-        climb2.set(0.2);
+        climb1.set(0.4);
+        climb2.set(0.4);
     }
 
     // public void climbUp() {

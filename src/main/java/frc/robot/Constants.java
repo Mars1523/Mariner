@@ -144,7 +144,7 @@ public final class Constants {
     // here is where we keep all the setpoints for the subsystem pid
 
     public class ElevatorSetpoints {
-      public static double l1 = 0.5;
+      public static double l1 = 0.9;
       public static double l2 = 0.9;
       public static double l3 = 1.2;
       public static double l4 = 1.6;
@@ -163,8 +163,8 @@ public final class Constants {
 
     public class CoralPivotAngles {
       // angle of release
-      public static double l1 = 0.1; // reef l1
-      public static double lmid = 1; // reef l2 and l3
+      public static double l1 = 0.4; // reef l1
+      public static double lmid = 0.3333; // reef l2 and l3
       public static double l4 = 1; // reef l4
       public static double CoralSt = 2; // pointing up to recieve coral from hp
       public static double up = 0; // out of the way for intaking algae
@@ -193,7 +193,7 @@ public final class Constants {
 
     public class AlgaeArmAngles {
       public static double up = 0; // hold algae in
-      public static double down = -0.25; // intake or outtake algae
+      public static double down = -0.3333; // intake or outtake algae
     }
     // L2 and L3 Angle
     // L4 Angle
