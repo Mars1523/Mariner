@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.SetpointConstants.Options;
 import frc.robot.Constants.SetpointConstants.ConfigOption;
-import frc.robot.subsystems.AlgaeSub;
+import frc.robot.subsystems.AlgaeArm;
 import frc.robot.subsystems.CoralArm;
 import frc.robot.subsystems.Elevator;
 
@@ -20,20 +20,20 @@ public class ConfigSystem extends InstantCommand{
 
     CoralArm coralArm;
     Elevator elevatorSub;
-    AlgaeSub algaeSub;
+    AlgaeArm algaeArm;
     Options options;
     ConfigOption configOption;
 
-    public ConfigSystem(ConfigOption configOption, CoralArm coralArm, Elevator elevatorSub, AlgaeSub algaeSub) {
+    public ConfigSystem(ConfigOption configOption, CoralArm coralArm, Elevator elevatorSub, AlgaeArm algaeArm) {
 
         addRequirements(coralArm);
         addRequirements(elevatorSub);
-        addRequirements(algaeSub);
+        addRequirements(algaeArm);
 
         
         this.coralArm = coralArm;
         this.elevatorSub = elevatorSub;
-        this.algaeSub = algaeSub;
+        this.algaeArm = algaeArm;
         this.configOption = configOption;
 
     }
@@ -43,7 +43,7 @@ public class ConfigSystem extends InstantCommand{
     
         coralArm.setCoralWristSetpoint(configOption.coralAngle);
         elevatorSub.setPosition(configOption.elevatorSetpoint);
-        algaeSub.setAlgaeSetpoint(configOption.algaeAngle);
+        algaeArm.setAlgaeSetpoint(configOption.algaeAngle);
     }
 
     // public Command configureCommand(int choice){

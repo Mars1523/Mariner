@@ -19,7 +19,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
-public class AlgaeSub extends SubsystemBase {
+public class AlgaeArm extends SubsystemBase {
     // motors
     SparkMax algaeWrist = new SparkMax(56, MotorType.kBrushless);
     SparkMax algaeSpinner = new SparkMax(41, MotorType.kBrushless);
@@ -34,7 +34,7 @@ public class AlgaeSub extends SubsystemBase {
         // private  trapezoidSetpoint;
     TrapezoidProfile.State trapezoidSetpoint = new TrapezoidProfile.State();
     
-        public AlgaeSub() {
+        public AlgaeArm() {
     
             SparkMaxConfig configAlgaeWrist = new SparkMaxConfig();
             configAlgaeWrist

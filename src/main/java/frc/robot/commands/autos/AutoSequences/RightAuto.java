@@ -1,4 +1,4 @@
-package frc.robot.commands.autos.autosequences;
+package frc.robot.commands.autos.AutoSequences;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
