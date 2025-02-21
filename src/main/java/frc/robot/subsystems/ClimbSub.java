@@ -27,6 +27,7 @@ public class ClimbSub extends SubsystemBase {
 
     double climbSetpoint;
     SparkClosedLoopController climbController;
+    SparkClosedLoopController climbController2;
     private final SparkMax climb1 = new SparkMax(58, MotorType.kBrushless);
     private final SparkMax climb2 = new SparkMax(57, MotorType.kBrushless);
 
@@ -41,6 +42,7 @@ public class ClimbSub extends SubsystemBase {
         configLeader
                 .inverted(true)
                 .idleMode(SparkMaxConfig.IdleMode.kCoast);
+        configLeader.closedLoop.pid(0,0, 0).outputRange(0, 0);
         configLeader.smartCurrentLimit(30, 30);
         configLeader.secondaryCurrentLimit(35);
         configLeader.encoder.positionConversionFactor(1.0/60.0);
@@ -50,16 +52,18 @@ public class ClimbSub extends SubsystemBase {
         configFollower
                 .inverted(false)
                 .idleMode(SparkMaxConfig.IdleMode.kCoast);
+        configFollower.closedLoop.pid(0,0, 0).outputRange(0, 0);
         configFollower.encoder.positionConversionFactor(1.0/60.0);
         configFollower.smartCurrentLimit(30, 30);
         configFollower.secondaryCurrentLimit(35);
         //configFollower.follow(climbMotorOne);
         climb2.configure(configFollower, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
 
-        //climbController = climbMotorOne.getClosedLoopController();
+        climbController = climb1.getClosedLoopController();
+        climbController2 = climb2.getClosedLoopController();
 
         // climbMotorTwo.setControl(new Follower(climbMotorOne.getDeviceId(),true));
-        //climbController.setReference(0, ControlType.kPosition);
+        climbController.setReference(0, ControlType.kPosition);
 
         Shuffleboard.getTab("Debug").addDouble("Climb 1 Current", () -> climb1.getEncoder().getPosition());
         Shuffleboard.getTab("Debug").addDouble("Climb 2 Current", () -> climb2.getEncoder().getPosition());

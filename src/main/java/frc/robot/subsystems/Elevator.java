@@ -59,7 +59,7 @@ public class Elevator extends SubsystemBase {
         SparkMaxConfig configFollow = new SparkMaxConfig();
         configFollow
                 .inverted(false)
-                .idleMode(SparkMaxConfig.IdleMode.kBrake);
+                .idleMode(SparkMaxConfig.IdleMode.kCoast);
         configFollow.encoder.positionConversionFactor(positionFactor);
         configFollow.closedLoop
                 .pid(1.4, 0, 0)
@@ -118,5 +118,13 @@ public class Elevator extends SubsystemBase {
 
     public Command l4() {
         return run(() -> setPosition(Constants.SetpointConstants.ElevatorSetpoints.l4));
+    }
+
+    public Command algaeLow() {
+        return run(() -> setPosition(Constants.SetpointConstants.ElevatorSetpoints.algaeLow));
+    }
+
+    public Command algaeHigh() {
+        return run(() -> setPosition(Constants.SetpointConstants.ElevatorSetpoints.algaeHigh));
     }
 }

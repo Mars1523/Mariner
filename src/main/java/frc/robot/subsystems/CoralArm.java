@@ -50,8 +50,8 @@ public class CoralArm extends SubsystemBase {
         configWrist.encoder.positionConversionFactor(1.0 / 100.0);
         configWrist.closedLoop
                 .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-                .pid(0.75, 0, 0)
-                .outputRange(-0.45, 0.45);
+                .pid(0.8, 0, 0)
+                .outputRange(-0.8, 0.6);
         coralWrist.configure(configWrist, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
         Shuffleboard.getTab("Debug").addDouble("CoralEncoder", () -> coralWrist.getAbsoluteEncoder().getPosition());
 
@@ -124,6 +124,10 @@ public class CoralArm extends SubsystemBase {
 
     public Command l4() {
         return run(() -> setCoralWristSetpoint(Constants.SetpointConstants.CoralPivotAngles.l4));
+    }
+
+    public Command coralStation(){
+        return run(() -> setCoralWristSetpoint(Constants.SetpointConstants.CoralPivotAngles.CoralSt));
     }
 
     public Command up() {

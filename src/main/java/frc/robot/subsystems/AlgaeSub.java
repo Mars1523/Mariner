@@ -1,8 +1,5 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.ctre.phoenix6.swerve.SwerveRequest.Idle;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.ControlType;
@@ -11,13 +8,11 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
-import edu.wpi.first.networktables.NetworkTable;
+
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.motorcontrol.Spark;
+
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -27,7 +22,7 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 public class AlgaeSub extends SubsystemBase {
     // motors
     SparkMax algaeWrist = new SparkMax(56, MotorType.kBrushless);
-    TalonSRX algaeSpinner = new TalonSRX(41);
+    SparkMax algaeSpinner = new SparkMax(41, MotorType.kBrushless);
     //SparkMax algaeSpinMotor = new SparkMax(0, MotorType.kBrushless);
     TrapezoidProfile trapezoidProfile = new TrapezoidProfile(new Constraints(1, 3));
     private SparkClosedLoopController algaeWristController;
@@ -52,6 +47,12 @@ public class AlgaeSub extends SubsystemBase {
                     .pid(4, 0, 0)
                     .outputRange(-1, 1);
             algaeWrist.configure(configAlgaeWrist, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+            SparkMaxConfig configAlgaeSpinMotor = new SparkMaxConfig();
+            configAlgaeSpinMotor
+                .inverted(false)
+                .idleMode(IdleMode.kCoast);
+            algaeSpinner.configure(configAlgaeSpinMotor, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+
             // Constants.configPIDMotor(algaeWrist,true, 0,0,0);
             // Constants.configMotor(algaeSpinMotor, false);
     
@@ -79,19 +80,19 @@ public class AlgaeSub extends SubsystemBase {
         // pincher1.set(0.5)
         // pincher2.set(0.5)
         public void grab() {
-            algaeSpinner.set(TalonSRXControlMode.PercentOutput, 0.65);
+            algaeSpinner.set(0.65);
         }
     
         // // grab for amount of time or until we have an algae
         // // thatll be in commands though
     
         public void release() {
-            algaeSpinner.set(TalonSRXControlMode.PercentOutput, -0.65);
+            algaeSpinner.set(-0.65);
         }
     
         // //
         public void stop() {
-           algaeSpinner.set(TalonSRXControlMode.PercentOutput, 0);
+           algaeSpinner.set(0);
         }
     
         public void stopWrist() {
