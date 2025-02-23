@@ -145,13 +145,15 @@ public final class Constants {
 
     public class ElevatorSetpoints {
       public static double l1 = 0.32;
-      public static double l2 = 0.5;
+      public static double l2 = 0.45;
       public static double l3 = 0.75;
-      public static double l4 = 0.8;
+      public static double l4 = 1.25;
 
       public static double groundLevel = 0;
       public static double algaeLow = 0.8;
-      public static double algaeHigh = 1.2;
+      public static double algaeHigh = 1.1;
+      public static double coralStation = 0.33;
+      public static double processor = 0.289;
 
     }
     // lowest level
@@ -165,8 +167,8 @@ public final class Constants {
       // angle of release
       public static double l1 = 0.3; // reef l1
       public static double lmid = 0.3; // reef l2 and l3
-      public static double l4 = 0.4; // reef l4
-      public static double CoralSt = 0.14; // pointing up to recieve coral from hp
+      public static double l4 = 0.37; // reef l4
+      public static double CoralSt = 0.12; // pointing up to recieve coral from hp
       public static double up = 0; // out of the way for intaking algae
     }
 
@@ -194,6 +196,7 @@ public final class Constants {
     public class AlgaeArmAngles {
       public static double up = 0; // hold algae in
       public static double down = -0.3; // intake or outtake algae
+      public static double processor = -0.2;
     }
     // L2 and L3 Angle
     // L4 Angle
@@ -233,22 +236,21 @@ public final class Constants {
       public static ConfigOption l2Right = new ConfigOption(CoralPivotAngles.lmid, ElevatorSetpoints.l2, AlgaeArmAngles.up);
       public static ConfigOption l3Right = new ConfigOption(CoralPivotAngles.lmid, ElevatorSetpoints.l3, AlgaeArmAngles.up);
       public static ConfigOption l4Right = new ConfigOption(CoralPivotAngles.l4, ElevatorSetpoints.l4, AlgaeArmAngles.up);
-      public static ConfigOption AlgaeLow = new ConfigOption(CoralPivotAngles.up, ElevatorSetpoints.algaeLow,
+      public static ConfigOption algaeLow = new ConfigOption(CoralPivotAngles.up, ElevatorSetpoints.algaeLow,
           AlgaeArmAngles.down);
-      public static ConfigOption AlgaeHigh = new ConfigOption(CoralPivotAngles.up, ElevatorSetpoints.algaeHigh,
+      public static ConfigOption algaeHigh = new ConfigOption(CoralPivotAngles.up, ElevatorSetpoints.algaeHigh,
           AlgaeArmAngles.down);
-      public static ConfigOption AlgaeGround = new ConfigOption(CoralPivotAngles.up, ElevatorSetpoints.groundLevel,
+      public static ConfigOption algaeGround = new ConfigOption(CoralPivotAngles.up, ElevatorSetpoints.groundLevel,
           AlgaeArmAngles.down);
       // different spots
-      public static ConfigOption CoralStation = new ConfigOption(CoralPivotAngles.CoralSt, ElevatorSetpoints.l2,
+      public static ConfigOption coralStation = new ConfigOption(CoralPivotAngles.CoralSt, ElevatorSetpoints.coralStation,
           AlgaeArmAngles.up);
-      public static ConfigOption Processor = new ConfigOption(CoralPivotAngles.up, ElevatorSetpoints.groundLevel,
-          AlgaeArmAngles.down);
-      public static ConfigOption testConfig = new ConfigOption(CoralPivotAngles.up, ElevatorSetpoints.groundLevel, AlgaeArmAngles.up);
+      public static ConfigOption processor = new ConfigOption(CoralPivotAngles.up, ElevatorSetpoints.processor,
+          AlgaeArmAngles.processor);
+      public static ConfigOption driveConfig = new ConfigOption(CoralPivotAngles.up, ElevatorSetpoints.groundLevel, AlgaeArmAngles.up);
 
       // to hold everything in while sitting there
-      public static ConfigOption driveConfig = new ConfigOption(CoralPivotAngles.l4, ElevatorSetpoints.groundLevel,
-          AlgaeArmAngles.up);
+   
 
       // public static double[] l1 = { CoralPivotAngles.l1, ElevatorSetpoints.l1,
       // XOffset.l1, YOffset.l1, RotOffset.l1,

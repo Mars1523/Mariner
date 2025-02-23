@@ -64,6 +64,7 @@ public class ClimbSub extends SubsystemBase {
 
         // climbMotorTwo.setControl(new Follower(climbMotorOne.getDeviceId(),true));
         climbController.setReference(0, ControlType.kPosition);
+        climbController2.setReference(0, ControlType.kPosition);
 
         Shuffleboard.getTab("Debug").addDouble("Climb 1 Current", () -> climb1.getEncoder().getPosition());
         Shuffleboard.getTab("Debug").addDouble("Climb 2 Current", () -> climb2.getEncoder().getPosition());
@@ -71,12 +72,12 @@ public class ClimbSub extends SubsystemBase {
 
     public void climbDown() {
         // set climb motors to down
-        climb1.set(0.4);
-        climb2.set(0.4);
+        climb1.set(0.6);
+        climb2.set(0.6);
     }
 
     // public void climbUp() {
-    //     // set climb motors up?
+    //     // set climb motors up??
     //     climb1.set(-0.8);
     //     climb2.set(-0.8);
     // }
@@ -85,6 +86,11 @@ public class ClimbSub extends SubsystemBase {
         climb1.set(0);
         climb2.set(0);
     }
+
+    public void setClimbSetpoint(double Setpoint){
+        climbController.setReference(Setpoint, ControlType.kPosition);
+        climbController.setReference(Setpoint, ControlType.kPosition);
+    }
     // i wonder still
     // we could have it push down until it reaches a setpoint
     // or have the pull up initiated as the driver presses a button then have it
@@ -92,10 +98,10 @@ public class ClimbSub extends SubsystemBase {
     // that way the drivers can tell it when to stop
 
     public Command climb(){
-        return run(() -> climbDown());
+        return run(() -> setClimbSetpoint(0.4));
     }
     public Command climbStopCommand(){
-        return run(() -> climbStop());
+        return run(() -> setClimbSetpoint(0));
     }
 
 }

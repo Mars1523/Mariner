@@ -6,12 +6,17 @@ package frc.robot;
 
 import javax.print.attribute.standard.JobHoldUntil;
 
+import edu.wpi.first.cameraserver.CameraServer;
+
 //import org.littletonrobotics.urcl.URCL;
 
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -35,13 +40,16 @@ public class RobotContainer {
   SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
   Elevator elevatorSub = new Elevator();
   // CoralArm coralArm = new CoralArm();
-  AlgaeArm algaeSub = new AlgaeArm();
+  AlgaeArm algaeArm = new AlgaeArm();
   // ClimbSub climbSub = new ClimbSub();
   CoralArm coralArm = new CoralArm();
 
   ClimbSub climbSub = new ClimbSub();
   
   DefaultSwerve swerve = new DefaultSwerve(primaryJoy, swerveSubsystem);
+
+
+  // PowerDistribution pdh = new PowerDistribution(1, ModuleType.kRev);
 
   //Constants constants = new Constants()
   //SetpointConstants setpointConstants = new SetpointConstants();
@@ -58,6 +66,9 @@ public class RobotContainer {
 
     swerveSubsystem.setDefaultCommand(swerve);
     configureBindings();
+    CameraServer.startAutomaticCapture();
+
+    // Shuffleboard.getTab("Debug").add(pdh);
 
     // dependent on the alliance color
     // have to rotate to face april tag at each pos
@@ -97,11 +108,11 @@ public class RobotContainer {
     //   .onTrue(coralArm.coralStation());
 
     new JoystickButton(secondaryController, XboxController.Button.kA.value)
-      .onTrue(algaeSub.algaeSpinIn())
-      .onFalse(algaeSub.algaeSpinStop());
+      .onTrue(algaeArm.algaeSpinIn())
+      .onFalse(algaeArm.algaeSpinStop());
     new JoystickButton(secondaryController, XboxController.Button.kB.value)
-      .onTrue(algaeSub.algaeSpinOut())
-      .onFalse(algaeSub.algaeSpinStop());
+      .onTrue(algaeArm.algaeSpinOut())
+      .onFalse(algaeArm.algaeSpinStop());
 
     new JoystickButton(secondaryController, XboxController.Button.kX.value)
       .onTrue(coralArm.intakeCoralCommand())
@@ -111,18 +122,20 @@ public class RobotContainer {
       .onFalse(coralArm.stopCoralSpin());
 
     new JoystickButton(primaryJoy, 7)
-      .onTrue(new ConfigSystem(Constants.SetpointConstants.Options.l4Left, coralArm, elevatorSub, algaeSub));
+      .onTrue(new ConfigSystem(Constants.SetpointConstants.Options.l4Left, coralArm, elevatorSub, algaeArm));
     new JoystickButton(primaryJoy, 9)
-      .onTrue(new ConfigSystem(Constants.SetpointConstants.Options.l3Left, coralArm, elevatorSub, algaeSub));
+      .onTrue(new ConfigSystem(Constants.SetpointConstants.Options.l3Left, coralArm, elevatorSub, algaeArm));
     new JoystickButton(primaryJoy, 11)
-      .onTrue(new ConfigSystem(Constants.SetpointConstants.Options.l2Left, coralArm, elevatorSub, algaeSub));
-    new JoystickButton(primaryJoy, 12)
-      .onTrue(new ConfigSystem(Constants.SetpointConstants.Options.l1, coralArm, elevatorSub, algaeSub));
+      .onTrue(new ConfigSystem(Constants.SetpointConstants.Options.l2Left, coralArm, elevatorSub, algaeArm));
+    new JoystickButton(primaryJoy, 4)
+      .onTrue(new ConfigSystem(Constants.SetpointConstants.Options.l1, coralArm, elevatorSub, algaeArm));
 
     new JoystickButton(primaryJoy, 10)
-      .onTrue(new ConfigSystem(Constants.SetpointConstants.Options.AlgaeLow, coralArm, elevatorSub, algaeSub));
+      .onTrue(new ConfigSystem(Constants.SetpointConstants.Options.algaeLow, coralArm, elevatorSub, algaeArm));
     new JoystickButton(primaryJoy, 8)
-      .onTrue(new ConfigSystem(Constants.SetpointConstants.Options.AlgaeHigh, coralArm, elevatorSub, algaeSub));
+      .onTrue(new ConfigSystem(Constants.SetpointConstants.Options.algaeHigh, coralArm, elevatorSub, algaeArm));
+    new JoystickButton(primaryJoy, 3)
+      .onTrue(new ConfigSystem(Constants.SetpointConstants.Options.coralStation, coralArm, elevatorSub, algaeArm));
     
     //new JoystickButton(keyboard, 0);
     // var button7 = new JoystickButton(primaryJoy, 7);
@@ -134,8 +147,10 @@ public class RobotContainer {
     new JoystickButton(primaryJoy, 5)
       .onTrue(climbSub.climb())
       .onFalse(climbSub.climbStopCommand());
-    new JoystickButton(primaryJoy, 6)
-     .onTrue(new ConfigSystem(Constants.SetpointConstants.Options.testConfig, coralArm, elevatorSub, algaeSub));
+    new JoystickButton(primaryJoy, 6).and(algaeArm::hasAlgae)
+     .onTrue(new ConfigSystem(Constants.SetpointConstants.Options.processor, coralArm, elevatorSub, algaeArm));
+    new JoystickButton(primaryJoy, 6).and(() -> !algaeArm.hasAlgae())
+      .onTrue(new ConfigSystem(Constants.SetpointConstants.Options.driveConfig, coralArm, elevatorSub, algaeArm));
     // new JoystickButton(secondaryController, XboxController.Button.kB.value)
     //   .onTrue(algaeSub.algaeArmStop());
     // secondaryController.getPOV()

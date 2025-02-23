@@ -1,6 +1,8 @@
 package frc.robot.subsystems;
 
+import com.revrobotics.sim.SparkLimitSwitchSim;
 import com.revrobotics.spark.SparkClosedLoopController;
+import com.revrobotics.spark.SparkLimitSwitch;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
@@ -24,9 +26,10 @@ public class AlgaeArm extends SubsystemBase {
     SparkMax algaeWrist = new SparkMax(56, MotorType.kBrushless);
     SparkMax algaeSpinner = new SparkMax(41, MotorType.kBrushless);
     //SparkMax algaeSpinMotor = new SparkMax(0, MotorType.kBrushless);
-    TrapezoidProfile trapezoidProfile = new TrapezoidProfile(new Constraints(1, 3));
+    TrapezoidProfile trapezoidProfile = new TrapezoidProfile(new Constraints(30, 10));
     private SparkClosedLoopController algaeWristController;
     private double setpoint = 0;
+    SparkLimitSwitch limitSwitch = algaeSpinner.getForwardLimitSwitch();
     // pincher1
     // pivotmotor
     // DigitalInput topLimitSwitch = new DigitalInput(0);
@@ -42,15 +45,16 @@ public class AlgaeArm extends SubsystemBase {
                     .idleMode(SparkMaxConfig.IdleMode.kCoast);
             configAlgaeWrist.encoder
                 .positionConversionFactor(1.0/125.0)
-                .velocityConversionFactor((1.0/125.0)/60);
+                .velocityConversionFactor((1.0/125.0)/60.0);
             configAlgaeWrist.closedLoop
                     .pid(4, 0, 0)
                     .outputRange(-1, 1);
             algaeWrist.configure(configAlgaeWrist, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+
             SparkMaxConfig configAlgaeSpinMotor = new SparkMaxConfig();
             configAlgaeSpinMotor
                 .inverted(false)
-                .idleMode(IdleMode.kCoast);
+                .idleMode(IdleMode.kBrake);
             algaeSpinner.configure(configAlgaeSpinMotor, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
 
             // Constants.configPIDMotor(algaeWrist,true, 0,0,0);
@@ -80,14 +84,14 @@ public class AlgaeArm extends SubsystemBase {
         // pincher1.set(0.5)
         // pincher2.set(0.5)
         public void grab() {
-            algaeSpinner.set(0.65);
+            algaeSpinner.set(0.9);
         }
     
         // // grab for amount of time or until we have an algae
         // // thatll be in commands though
     
         public void release() {
-            algaeSpinner.set(-0.65);
+            algaeSpinner.set(-0.9);
         }
     
         // //
@@ -127,6 +131,10 @@ public class AlgaeArm extends SubsystemBase {
 
     // }
 
+    public boolean hasAlgae(){
+        return limitSwitch.isPressed();
+    }
+
     public Command algaeArmDown(){
         return run(() -> setAlgaeSetpoint(Constants.SetpointConstants.AlgaeArmAngles.down));
     }
@@ -140,11 +148,11 @@ public class AlgaeArm extends SubsystemBase {
     }
 
     public Command algaeSpinIn(){
-        return run(() -> grab());
+        return run(() -> grab()).until(this::hasAlgae);
     }
 
     public Command algaeSpinOut(){
-        return run(()-> release());
+        return run(()-> release()).until(() -> !hasAlgae());
     }
 
     public Command algaeSpinStop(){

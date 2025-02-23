@@ -31,16 +31,16 @@ public class Elevator extends SubsystemBase {
 
     TrapezoidProfile.State trapezoidSetpoint = new TrapezoidProfile.State();
 
-    public SparkMaxConfig configElevatorMotor(boolean Inverted, double kP, double kI, double kD) {
-        SparkMaxConfig config = new SparkMaxConfig();
-        config
-                .inverted(Inverted)
-                .idleMode(SparkMaxConfig.IdleMode.kCoast);
-        config.closedLoop
-                .pid(kP, kI, kD)
-                .outputRange(-1, 1);
-        return config;
-    }
+    // public SparkMaxConfig configElevatorMotor(boolean Inverted, double kP, double kI, double kD) {
+    //     SparkMaxConfig config = new SparkMaxConfig();
+    //     config
+    //             .inverted(Inverted)
+    //             .idleMode(SparkMaxConfig.IdleMode.kCoast);
+    //     config.closedLoop
+    //             .pid(kP, kI, kD)
+    //             .outputRange(-1, 1);
+    //     return config;
+    // }
 
     public Elevator() {
         SparkMaxConfig configLead = new SparkMaxConfig();
@@ -49,7 +49,7 @@ public class Elevator extends SubsystemBase {
                 .idleMode(SparkMaxConfig.IdleMode.kCoast);
         configLead.encoder.positionConversionFactor(positionFactor);
         configLead.closedLoop
-                .pid(1.4, 0, 0)
+                .pid(2.2, 0, 0)
                 .outputRange(-0.25, 0.4);
         // .feedbackSensor(FeedbackSensor.kPrimaryEncoder);
         configLead.closedLoop.maxMotion
@@ -62,7 +62,7 @@ public class Elevator extends SubsystemBase {
                 .idleMode(SparkMaxConfig.IdleMode.kCoast);
         configFollow.encoder.positionConversionFactor(positionFactor);
         configFollow.closedLoop
-                .pid(1.4, 0, 0)
+                .pid(2.2, 0, 0)
                 .outputRange(-0.25, 0.4);
         // .feedbackSensor(FeedbackSensor.`);
         // configFollow.follow(elevator1, true);
