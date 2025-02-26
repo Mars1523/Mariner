@@ -144,16 +144,16 @@ public final class Constants {
     // here is where we keep all the setpoints for the subsystem pid
 
     public class ElevatorSetpoints {
-      public static double l1 = 0.32;
-      public static double l2 = 0.45;
-      public static double l3 = 0.75;
-      public static double l4 = 1.25;
+      public static double l1 = 0.31;
+      public static double l2 = 0.44;
+      public static double l3 = 0.74;
+      public static double l4 = 1.24;
 
       public static double groundLevel = 0;
       public static double algaeLow = 0.8;
       public static double algaeHigh = 1.1;
-      public static double coralStation = 0.31;
-      public static double processor = 0.289;
+      public static double coralStation = 0.30;
+      public static double processor = 0.2;
 
     }
     // lowest level
