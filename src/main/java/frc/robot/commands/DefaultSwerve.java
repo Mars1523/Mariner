@@ -11,10 +11,12 @@ public class DefaultSwerve extends Command {
 
     private Joystick joy;
     private SwerveSubsystem swerveSub;
+    private Elevator elevator;
     boolean slow = false;
 
-    public DefaultSwerve(Joystick joy, SwerveSubsystem swerveSub) {
+    public DefaultSwerve(Joystick joy, SwerveSubsystem swerveSub, Elevator elevator) {
         addRequirements(swerveSub);
+        addRequirements(elevator);
         this.swerveSub = swerveSub;
         this.joy = joy;
     }
@@ -59,6 +61,12 @@ public class DefaultSwerve extends Command {
             ySpeed *= 0.75;
             rot *= 0.25;
         }
+
+        // if (elevator.tooHigh()){
+        //     xSpeed *= 0.75;
+        //     ySpeed *= 0.75;
+        //     rot *= 0.25;
+        // }
 
         if (joy.getRawButton(12)) {
             swerveSub.zeroYaw();

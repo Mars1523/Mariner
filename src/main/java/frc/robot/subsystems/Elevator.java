@@ -91,6 +91,11 @@ public class Elevator extends SubsystemBase {
         // elevatorController.setReference(setpoint, ControlType.kPosition);
         // elevatorController2.setReference(setpoint, ControlType.kPosition);
     }
+    
+    // public boolean tooHigh() {
+    //     boolean tooHigh = currentSetpoint>0.5;
+    //     return tooHigh;
+    // }
 
     @Override
     public void periodic() {

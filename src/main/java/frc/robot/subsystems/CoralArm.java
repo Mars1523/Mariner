@@ -53,7 +53,7 @@ public class CoralArm extends SubsystemBase {
         configWrist.encoder.positionConversionFactor(1.0 / 100.0);
         configWrist.closedLoop
                 .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-                .pid(1.3, 0, 0)
+                .pid(1.45, 0, 0)
                 .outputRange(-0.8, 0.7);
         coralWrist.configure(configWrist, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
         Shuffleboard.getTab("Debug").addDouble("CoralEncoder", () -> coralWrist.getAbsoluteEncoder().getPosition());

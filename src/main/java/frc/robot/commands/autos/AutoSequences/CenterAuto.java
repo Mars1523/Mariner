@@ -19,7 +19,7 @@ public class CenterAuto extends SequentialCommandGroup {
     public CenterAuto() {
         addCommands(
         new AutoNav(0), //go to reef side
-        new ConfigSystem(Constants.SetpointConstants.Options.l3Left, coralArm, elevator, algaeArm),
+        new ConfigSystem(Constants.SetpointConstants.Options.l3, coralArm, elevator, algaeArm),
         new AutoCoralScore(coralArm),
         new AutoNav(0), //coral station //maybe have it run autonav and stow config in parallel
         new ConfigSystem(Constants.SetpointConstants.Options.coralStation, coralArm, elevator, algaeArm),

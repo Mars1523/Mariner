@@ -52,7 +52,7 @@ public class ClimbSub extends SubsystemBase {
         configFollower
                 .inverted(false)
                 .idleMode(SparkMaxConfig.IdleMode.kCoast);
-        configFollower.closedLoop.pid(0.5,0, 0).outputRange(0, 0.7);
+        configFollower.closedLoop.pid(3.5,0, 0).outputRange(0, 0.7);
         configFollower.encoder.positionConversionFactor(1.0/60.0);
         configFollower.smartCurrentLimit(30, 30);
         configFollower.secondaryCurrentLimit(35);
@@ -98,7 +98,13 @@ public class ClimbSub extends SubsystemBase {
     // that way the drivers can tell it when to stop
 
     public Command climb(){
-        return run(() -> setClimbSetpoint(0.4));
+        return run(() -> setClimbSetpoint(1.5));
+    }
+    public Command climbManual(){
+        return run(() -> climbDown());
+    }
+    public Command climbStopManual(){
+        return run(() -> climbStop());
     }
     public Command climbStopCommand(){
         return run(() -> setClimbSetpoint(0));

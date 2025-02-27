@@ -21,7 +21,7 @@ public class LeftAuto extends SequentialCommandGroup {
     public LeftAuto() {
         addCommands(
         new AutoNav(0), // Northwest
-        new ConfigSystem(Constants.SetpointConstants.Options.l3Right, coralArm, elevator, algaeArm),
+        new ConfigSystem(Constants.SetpointConstants.Options.l3, coralArm, elevator, algaeArm),
         new AutoCoralScore(coralArm),
         new AutoNav(0), //move away
         new ParallelCommandGroup(
@@ -34,7 +34,7 @@ public class LeftAuto extends SequentialCommandGroup {
         new ConfigSystem(Constants.SetpointConstants.Options.coralStation, coralArm, elevator, algaeArm),
         new AutoCoralIntake(coralArm),
         new AutoNav(0),//Southwest
-        new ConfigSystem(Constants.SetpointConstants.Options.l3Right, coralArm, elevator, algaeArm),
+        new ConfigSystem(Constants.SetpointConstants.Options.l3, coralArm, elevator, algaeArm),
         new AutoCoralScore(coralArm)
 
         );
