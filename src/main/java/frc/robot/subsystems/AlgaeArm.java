@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 
-import com.revrobotics.sim.SparkLimitSwitchSim;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLimitSwitch;
 import com.revrobotics.spark.SparkMax;
@@ -14,7 +13,6 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 
 import edu.wpi.first.networktables.NetworkTableInstance;
-
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -43,6 +41,13 @@ public class AlgaeArm extends SubsystemBase {
             configAlgaeWrist
                     .inverted(false)
                     .idleMode(SparkMaxConfig.IdleMode.kCoast);
+            configAlgaeWrist.absoluteEncoder
+                    .inverted(true)
+                    .zeroCentered(true)
+                    .zeroOffset(0.915);
+            configAlgaeWrist.signals
+                    .absoluteEncoderPositionAlwaysOn(true)
+                    .absoluteEncoderPositionPeriodMs(100);
             configAlgaeWrist.encoder
                 .positionConversionFactor(1.0/125.0)
                 .velocityConversionFactor((1.0/125.0)/60.0);
@@ -55,7 +60,9 @@ public class AlgaeArm extends SubsystemBase {
             configAlgaeSpinMotor
                 .inverted(false)
                 .idleMode(IdleMode.kBrake);
-            algaeSpinner.configure(configAlgaeSpinMotor, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+            algaeSpinner.configure(configAlgaeSpinMotor, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
+            algaeWrist.getEncoder().setPosition(algaeWrist.getAbsoluteEncoder().getPosition());
 
             // Constants.configPIDMotor(algaeWrist,true, 0,0,0);
             // Constants.configMotor(algaeSpinMotor, false);
@@ -75,6 +82,8 @@ public class AlgaeArm extends SubsystemBase {
             // Shuffleboard.getTab("Debug").add("P", 0.0);
             Shuffleboard.getTab("Debug").addDouble("Algae Wrist Setpoint", () -> algaeWristSetpoint);
             Shuffleboard.getTab("Debug").addDouble("Algae Wrist Current", () -> algaeWrist.getEncoder().getPosition());
+            Shuffleboard.getTab("Debug").addDouble("Algae Wrist Absolute",
+                    () -> algaeWrist.getAbsoluteEncoder().getPosition());
             Shuffleboard.getTab("Debug").addDouble("Algae Wrist Power", () -> algaeWrist.getAppliedOutput());
         }
     

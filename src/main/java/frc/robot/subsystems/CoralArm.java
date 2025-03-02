@@ -14,10 +14,7 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.util.Units;
-import edu.wpi.first.units.Unit;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -40,7 +37,7 @@ public class CoralArm extends SubsystemBase {
     TalonSRX coralWheel = new TalonSRX(40);
     SparkMax coralWrist = new SparkMax(55, MotorType.kBrushless);
 
-    //LimitSwitch coralLimitSwitch = coralWheel.isFwdLimitSwitchClosed();
+    // LimitSwitch coralLimitSwitch = coralWheel.LimitSwitch;
 
     private final PIDController coralWristPID = new PIDController(0.1, 0, 0);
 
@@ -50,13 +47,21 @@ public class CoralArm extends SubsystemBase {
         configWrist
                 .inverted(false)
                 .idleMode(SparkMaxConfig.IdleMode.kBrake);
+        configWrist.signals
+                .absoluteEncoderPositionAlwaysOn(true);
         configWrist.encoder.positionConversionFactor(1.0 / 100.0);
+        configWrist.absoluteEncoder
+                .startPulseUs(0)
+                .endPulseUs(4096)
+                .zeroOffset(.9)
+                .zeroCentered(true);
         configWrist.closedLoop
                 .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
                 .pid(1.45, 0, 0)
                 .outputRange(-0.8, 0.7);
-        coralWrist.configure(configWrist, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
-        Shuffleboard.getTab("Debug").addDouble("CoralEncoder", () -> coralWrist.getAbsoluteEncoder().getPosition());
+        coralWrist.configure(configWrist, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
+        coralWrist.getEncoder().setPosition(coralWrist.getAbsoluteEncoder().getPosition());
 
         // SparkMaxConfig configWheel = new SparkMaxConfig();
         // configWheel
@@ -77,7 +82,8 @@ public class CoralArm extends SubsystemBase {
         // coralWheel.getSensorCollection().getp
 
         Shuffleboard.getTab("Debug").addDouble("Coral Wrist Setpoint", () -> coralWristSetpoint);
-        Shuffleboard.getTab("Debug").addDouble("Coral Wrist Current", () -> coralWrist.getEncoder().getPosition());
+        Shuffleboard.getTab("Debug").addDouble("Coral Wrist Encoder Abs", () -> coralWrist.getAbsoluteEncoder().getPosition());
+        Shuffleboard.getTab("Debug").addDouble("Coral Wrist Encoder", () -> coralWrist.getEncoder().getPosition());
         Shuffleboard.getTab("Debug").addDouble("Coral Wrist Power", () -> coralWrist.getAppliedOutput());
     }
 
