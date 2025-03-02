@@ -154,7 +154,7 @@ public final class Constants {
       public static double groundLevel = 0;
       public static double algaeLow = 0.83;
       public static double algaeHigh = 1.12;
-      public static double coralStation = 0.15;
+      public static double coralStation = 0.17;
       public static double processor = 0.23;
 
     }
@@ -170,21 +170,21 @@ public final class Constants {
       public static double l1 = 0.25; // reef l1
       public static double lmid = 0.3; // reef l2 and l3
       public static double l4 = 0.32; // reef l4
-      public static double CoralSt = 0.12; // pointing up to recieve coral from hp
+      public static double CoralSt = 0.14; // pointing up to recieve coral from hp
       public static double up = 0; // out of the way for intaking algae
     }
 
     public class StrafeOffsets {
       //static double l1 = 0;
-      public static double leftReef = 0.13;
-      public static double rightReef = -0.2;
+      public static double leftReef = 0.12;
+      public static double rightReef = -0.21;
       public static double centerReef = 0;
       //static double CoralSt = 0;
     }
 
     public class DistanceOffsets {
       public static double leftReefScore = 0.6;
-      public static double rightReefScore = 0.63;
+      public static double rightReefScore = 0.6;
       public static double algaeReefGrab = 0.2;
       public static double reefConfigure = 0.75;
     }

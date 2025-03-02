@@ -20,7 +20,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose3d;
 
-public class AutoAlignTags extends Command {
+public class AutoAlignReef extends Command {
 
     private SwerveSubsystem swerveSub;
     private ProfiledPIDController strafePID;
@@ -30,6 +30,8 @@ public class AutoAlignTags extends Command {
     private double distanceGoal;
     private double rotationGoal;
     private boolean lowSpeed;
+    private double strafeError;
+    private double distanceError;
     // private static double rot;
     // private static double distanceSpeed;
 
@@ -57,18 +59,20 @@ public class AutoAlignTags extends Command {
         return LimelightHelpers.getTV(Constants.ReefLimelightName);
     }
 
-    public AutoAlignTags(SwerveSubsystem swerveSub, double strafeGoal, double distanceGoal, double rotationGoal ) {
+    public AutoAlignReef(SwerveSubsystem swerveSub, double strafeGoal, double distanceGoal, double rotationGoal, double strafeError, double distanceError) {
         addRequirements(swerveSub);
         this.swerveSub = swerveSub;
         this.strafeGoal = strafeGoal;
         this.distanceGoal = distanceGoal;
         this.rotationGoal = rotationGoal;
+        this.strafeError = strafeError;
+        this.distanceError = distanceError;
 
-        strafePID = new ProfiledPIDController(3 * .6, .8 * .5, .8 * .125,
+        strafePID = new ProfiledPIDController(3.3 * .6, .8 * .5, .8 * .125,
                 new TrapezoidProfile.Constraints(Constants.DriveConstants.MaxVelocityMetersPerSecond / 3, 3 / 1.5));
-        distancePID = new ProfiledPIDController(3 * .6, .8 * .5, .8 * .125,
+        distancePID = new ProfiledPIDController(3.3 * .6, .8 * .5, .8 * .125,
                 new TrapezoidProfile.Constraints(Constants.DriveConstants.MaxVelocityMetersPerSecond / 3, 3 / 1.5));
-        rotationPID = new ProfiledPIDController(3 * .6, .8 * .5, .8 * .125,
+        rotationPID = new ProfiledPIDController(3.3 * .6, .8 * .5, .8 * .125,
                 new TrapezoidProfile.Constraints(Constants.DriveConstants.MaxAngularVelocityRadiansPerSecond / 3,
                         3 / 1.5));
 
@@ -87,9 +91,9 @@ public class AutoAlignTags extends Command {
     public void initialize() {
         // LimelightHelpers.SetFiducialIDFiltersOverride("limelight-back", new
         // int[]{4,7});
-        distancePID.reset(0.5);
-        strafePID.reset(0);
-        rotationPID.reset(0);
+        distancePID.reset(distanceGoal);
+        strafePID.reset(strafeGoal);
+        rotationPID.reset(rotationGoal);
     }
 
     public boolean aligned() {
@@ -101,8 +105,8 @@ public class AutoAlignTags extends Command {
             return false;
         }
         var target = target_opt.get();
-        if ((Math.abs(target.getZ()) < distanceGoal+0.1)
-                && (Math.abs(target.getX()) < strafeGoal+0.2)
+        if ((Math.abs(distanceGoal - target.getZ()) < distanceError)
+                && (Math.abs(strafeGoal - target.getX()) < strafeError)
         // && (Math.abs(target.getRotation().getAngle()) < 0.5)
         ) {
             return true;

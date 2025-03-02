@@ -40,7 +40,7 @@ public class CoralArm extends SubsystemBase {
     TalonSRX coralWheel = new TalonSRX(40);
     SparkMax coralWrist = new SparkMax(55, MotorType.kBrushless);
 
-    //LimitSwitch coralLimitSwitch = coralWheel.LimitSwitch;
+    //LimitSwitch coralLimitSwitch = coralWheel.isFwdLimitSwitchClosed();
 
     private final PIDController coralWristPID = new PIDController(0.1, 0, 0);
 
@@ -113,6 +113,14 @@ public class CoralArm extends SubsystemBase {
     public boolean isReady(){
         double coralPosition = coralWrist.getEncoder().getPosition();
         return coralPosition > (coralWristSetpoint - 0.1) && coralPosition < (coralWristSetpoint + 0.1);
+    }
+
+    public boolean hasCoral(){
+        return coralWheel.isFwdLimitSwitchClosed() == 1;
+    }
+
+    public boolean hasNoCoral(){
+        return coralWheel.isFwdLimitSwitchClosed() == 0;
     }
 
     //public boolean hasCoral() {

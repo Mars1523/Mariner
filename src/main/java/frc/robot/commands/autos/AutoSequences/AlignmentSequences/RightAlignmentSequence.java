@@ -1,11 +1,14 @@
 package frc.robot.commands.autos.AutoSequences.AlignmentSequences;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
 import frc.robot.Constants.SetpointConstants.ConfigOption;
 import frc.robot.commands.Configuration.ConfigSystem;
-import frc.robot.commands.autos.AutoAlignTags;
+import frc.robot.commands.autos.AutoAlignReef;
+import frc.robot.commands.autos.AutoAlignStation;
+import frc.robot.commands.autos.CoralAutos.AutoCoralScore;
 import frc.robot.subsystems.AlgaeArm;
 import frc.robot.subsystems.CoralArm;
 import frc.robot.subsystems.Elevator;
@@ -15,14 +18,16 @@ public class RightAlignmentSequence extends SequentialCommandGroup {
 
     public RightAlignmentSequence(CoralArm coralArm, AlgaeArm algaeArm, Elevator elevator, SwerveSubsystem swerveSubsystem, ConfigOption configOption) {
                 var config = new ConfigSystem(configOption, coralArm, elevator, algaeArm);
-                var configureAlign = new AutoAlignTags(swerveSubsystem, Constants.SetpointConstants.StrafeOffsets.rightReef,Constants.SetpointConstants.DistanceOffsets.reefConfigure, 0);
-                var scoreAlign = new AutoAlignTags(swerveSubsystem, Constants.SetpointConstants.StrafeOffsets.rightReef, Constants.SetpointConstants.DistanceOffsets.rightReefScore, 0);
+                var configureAlign = new AutoAlignReef(swerveSubsystem, Constants.SetpointConstants.StrafeOffsets.rightReef, Constants.SetpointConstants.DistanceOffsets.reefConfigure, 0, 0.04, 0.04);
+                var scoreAlign = new AutoAlignReef(swerveSubsystem, Constants.SetpointConstants.StrafeOffsets.rightReef, Constants.SetpointConstants.DistanceOffsets.rightReefScore, 0, 0.02, 0.02);
+                var scoreCoral = new AutoCoralScore(coralArm);
         addCommands(
             new ParallelCommandGroup(
-                configureAlign,
-                config.until(config::isConfigured)
+                configureAlign.until(configureAlign::aligned),
+                config
             ),
-            scoreAlign.until(scoreAlign::aligned)
+            scoreAlign.until(scoreAlign::aligned),
+            scoreCoral.withTimeout(0.5)
         );
 }
 }
