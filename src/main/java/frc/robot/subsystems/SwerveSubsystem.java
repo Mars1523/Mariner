@@ -7,7 +7,6 @@ import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.studica.frc.AHRS;
 import com.studica.frc.AHRS.NavXComType;
 
-import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -24,7 +23,6 @@ import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.LimelightHelpers;
 import frc.robot.subsystems.swerve.SwerveModule;
-//import frc.robot.command.autolime.AutoAlignTags;
 
 //add motor channel numbers later
 public class SwerveSubsystem extends SubsystemBase {
@@ -44,8 +42,6 @@ public class SwerveSubsystem extends SubsystemBase {
 
         private AHRS gyro = new AHRS(NavXComType.kMXP_SPI);
 
-        private LinearFilter hitFilter = LinearFilter.movingAverage(30);
-
         public void drive(double xPercent, double yPercent, double rotPercent, boolean fieldRelative) {
                 drive(xPercent, yPercent, rotPercent, fieldRelative, 0, 0);
         }
@@ -53,38 +49,14 @@ public class SwerveSubsystem extends SubsystemBase {
         public void drive(double xPercent, double yPercent, double rotPercent, boolean fieldRelative, double a,
                         double b) {
 
-                // System.out.println("DRIVE");
-                // if (!AutoAlignTags.running) {
-                // var st = Thread.currentThread().getStackTrace();
-                // for (var s : st) {
-                // System.out.println(s + "\n");
-                // }
-
-                // }
-
                 var xSpeed = xRateLimiter.calculate(xPercent) * Constants.DriveConstants.MaxVelocityMetersPerSecond;
                 var ySpeed = yRateLimiter.calculate(yPercent) * Constants.DriveConstants.MaxVelocityMetersPerSecond;
                 var rot = rotRateLimiter.calculate(rotPercent)
                                 * Constants.DriveConstants.MaxAngularVelocityRadiansPerSecond;
 
-                // if (!primaryJoy.getTrigger()) {
-                // xSpeed *= 0.5;
-                // ySpeed *= 0.5;
-                // rot *= 0.2;
-                // } else {
-                // rot *= 0.5;
-                // }
-
-                // while(primaryJoy.getRawButton(7)){
-                // xSpeed *= 0.75;
-                // ySpeed *= 0.75;
-                // rot *= 0.2;
-                // }
                 ChassisSpeeds chasSpeed = fieldRelative
                                 ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, getRotation())
                                 : new ChassisSpeeds(xSpeed, ySpeed, rot);
-
-                // var swerveModuleStates = kinematics.toSwerveModuleStates(chasSpeed);
 
                 // TODO: DEFINE MAX SPEED
                 var swerveModuleStates2 = DriveConstants.kinematics.toSwerveModuleStates(
@@ -94,23 +66,6 @@ public class SwerveSubsystem extends SubsystemBase {
 
                 driveStates(swerveModuleStates2);
 
-        }
-
-        public double getDriveMotorVelocity() {
-                return hitFilter.calculate(fLSwerve.driveMotor.getEncoder().getVelocity());
-        }
-
-        public boolean uh = false;
-
-        public boolean hasHitSomething() {
-                if (Math.abs(getDriveMotorVelocity()) > 1.3) {
-                        uh = true;
-                }
-                if (uh == true && Math.abs(getDriveMotorVelocity()) < 0.4) {
-                        return true;
-                } else {
-                        return false;
-                }
         }
 
         public Rotation2d yawOffset = new Rotation2d();
@@ -134,10 +89,9 @@ public class SwerveSubsystem extends SubsystemBase {
                         yawOffset = gyro.getRotation2d();
                 }
         }
-        // Configure AutoBuilder last
 
         public void botposewithapriltag() {
-                var aprilRotation = LimelightHelpers.getBotPose2d("limelight-back").getRotation();
+                var aprilRotation = LimelightHelpers.getBotPose2d("limelight-front").getRotation();
                 if (aprilRotation.getDegrees() == 0) {
                         return;
                 }
@@ -146,7 +100,6 @@ public class SwerveSubsystem extends SubsystemBase {
 
         @Override
         public void periodic() {
-                // TODO Auto-generated method stub
                 ometry.update(
                                 getRotation(),
                                 new SwerveModulePosition[] {
@@ -190,15 +143,15 @@ public class SwerveSubsystem extends SubsystemBase {
                 return DriveConstants.kinematics.toChassisSpeeds(getModuleStates());
         }
 
-        public void driveStates(SwerveModuleState[] swerveModuleStates) {
-                SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates,
+        public void driveStates(SwerveModuleState[] desiredStates) {
+                SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates,
                                 Constants.DriveConstants.MaxVelocityMetersPerSecond);
 
                 SwerveModuleState[] optimizedSwerveModuleStates = {
-                                fLSwerve.optimizeModuleState(swerveModuleStates[0]),
-                                fRSwerve.optimizeModuleState(swerveModuleStates[1]),
-                                bLSwerve.optimizeModuleState(swerveModuleStates[2]),
-                                bRSwerve.optimizeModuleState(swerveModuleStates[3]),
+                                fLSwerve.optimizeModuleState(desiredStates[0]),
+                                fRSwerve.optimizeModuleState(desiredStates[1]),
+                                bLSwerve.optimizeModuleState(desiredStates[2]),
+                                bRSwerve.optimizeModuleState(desiredStates[3]),
                 };
 
                 fLSwerve.setDesiredState(optimizedSwerveModuleStates[0]);
@@ -216,6 +169,7 @@ public class SwerveSubsystem extends SubsystemBase {
                         e.printStackTrace();
                         throw new RuntimeException(e);
                 }
+                // Configure AutoBuilder last
                 AutoBuilder.configure(
                                 this::getPose, // Robot pose supplier
                                 this::resetOmetry, // Method to reset odometry (will be called if your auto has a
@@ -252,7 +206,6 @@ public class SwerveSubsystem extends SubsystemBase {
                                 },
                                 this // Reference to this subsystem to set requirements
                 );
-                Shuffleboard.getTab("Debug").addDouble("drive velocity", this::getDriveMotorVelocity);
                 Shuffleboard.getTab("Debug").addDouble("drive velocity unfiltered",
                                 () -> fLSwerve.driveMotor.getEncoder().getVelocity());
                 Shuffleboard.getTab("Debug").addDouble("robot angle from april tags",
