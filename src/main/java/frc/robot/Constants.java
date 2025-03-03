@@ -38,6 +38,8 @@ import frc.robot.subsystems.CoralArm;
 
 public final class Constants {
   public static String ReefLimelightName = "limelight-front";
+  public static String UpperLimelightName = "limelight-upper";
+  public static String VisionLimelightName = "limelight-vision";
 
   public static final class AutoConstants {
     public static double kPYController = 3;
@@ -186,7 +188,9 @@ public final class Constants {
       public static double leftReefScore = 0.6;
       public static double rightReefScore = 0.6;
       public static double algaeReefGrab = 0.2;
-      public static double reefConfigure = 0.75;
+      public static double reefCoralConfigure = 0.75;
+      public static double reefAlgaeConfigure = 0.85;
+      public static double reefAlgaeStow = 1.1;
     }
 
     public class RotOffsets {

@@ -42,8 +42,8 @@ public class AutoAlignStation extends Command {
     // }
 
     static final Optional<Pose3d> getTargetPose() {
-        if (LimelightHelpers.getTV("limelight-upper")) {
-            return Optional.of(LimelightHelpers.getTargetPose3d_RobotSpace("limelight-upper"));
+        if (LimelightHelpers.getTV(Constants.UpperLimelightName)) {
+            return Optional.of(LimelightHelpers.getTargetPose3d_RobotSpace(Constants.UpperLimelightName));
         } else {
             return Optional.empty();
         }
@@ -56,7 +56,7 @@ public class AutoAlignStation extends Command {
     }
 
     public static boolean speakerAimReady() {
-        return LimelightHelpers.getTV("limelight-upper");
+        return LimelightHelpers.getTV(Constants.UpperLimelightName);
     }
 
     public AutoAlignStation(SwerveSubsystem swerveSub, double strafeGoal, double distanceGoal, double rotationGoal, double strafeError, double distanceError) {
@@ -149,10 +149,6 @@ public class AutoAlignStation extends Command {
         nt.getEntry("/Shuffleboard/Tune/AutoAlignTags/PID Strafe Out").setDouble(strafeSpeed);
         nt.getEntry("/Shuffleboard/Tune/AutoAlignTags/LL rotation yaw").setDouble(target.getRotation().getZ());
         nt.getEntry("/Shuffleboard/Tune/AutoAlignTags/PID rotation out").setDouble(rot);
-
-        // how do i set a different goal for the distance
-
-        // System.out.println(getStance());
 
         swerveSub.drive(distanceSpeed / DriveConstants.MaxVelocityMetersPerSecond,
                 strafeSpeed / DriveConstants.MaxVelocityMetersPerSecond,
