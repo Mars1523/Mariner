@@ -20,7 +20,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose3d;
 
-public class AutoAlignStation extends Command {
+public class AutoAlignUpper extends Command {
 
     private SwerveSubsystem swerveSub;
     private ProfiledPIDController strafePID;
@@ -59,7 +59,7 @@ public class AutoAlignStation extends Command {
         return LimelightHelpers.getTV(Constants.UpperLimelightName);
     }
 
-    public AutoAlignStation(SwerveSubsystem swerveSub, double strafeGoal, double distanceGoal, double rotationGoal, double strafeError, double distanceError) {
+    public AutoAlignUpper(SwerveSubsystem swerveSub, double strafeGoal, double distanceGoal, double rotationGoal, double strafeError, double distanceError) {
         addRequirements(swerveSub);
         this.swerveSub = swerveSub;
         this.strafeGoal = strafeGoal;
@@ -107,6 +107,7 @@ public class AutoAlignStation extends Command {
         var target = target_opt.get();
         if ((Math.abs(distanceGoal - target.getZ()) < distanceError)
                 && (Math.abs(strafeGoal - target.getX()) < strafeError)
+                && (Math.abs(rotationGoal - target.getRotation().getZ()) < 0.02)
         // && (Math.abs(target.getRotation().getAngle()) < 0.5)
         ) {
             return true;

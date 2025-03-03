@@ -107,6 +107,7 @@ public class AutoAlignReef extends Command {
         var target = target_opt.get();
         if ((Math.abs(distanceGoal - target.getZ()) < distanceError)
                 && (Math.abs(strafeGoal - target.getX()) < strafeError)
+                && (Math.abs(rotationGoal - target.getRotation().getZ()) < 0.02)
         // && (Math.abs(target.getRotation().getAngle()) < 0.5)
         ) {
             return true;

@@ -181,6 +181,7 @@ public final class Constants {
       public static double leftReef = 0.12;
       public static double rightReef = -0.21;
       public static double centerReef = 0;
+      public static double processor = 0;
       //static double CoralSt = 0;
     }
 
@@ -191,6 +192,8 @@ public final class Constants {
       public static double reefCoralConfigure = 0.75;
       public static double reefAlgaeConfigure = 0.85;
       public static double reefAlgaeStow = 1.1;
+      public static double processorInitial = 0.75;
+      public static double processorScore = 0.5;
     }
 
     public class RotOffsets {

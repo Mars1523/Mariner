@@ -7,7 +7,7 @@ import frc.robot.Constants.SetpointConstants.ConfigOption;
 import frc.robot.commands.Configuration.ConfigSystem;
 import frc.robot.commands.autos.AutoAlignReef;
 import frc.robot.commands.autos.AutoAlignReef;
-import frc.robot.commands.autos.AutoAlignStation;
+import frc.robot.commands.autos.AutoAlignUpper;
 import frc.robot.commands.autos.CoralAutos.AutoCoralScore;
 import frc.robot.subsystems.AlgaeArm;
 import frc.robot.subsystems.CoralArm;

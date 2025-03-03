@@ -28,9 +28,10 @@ import frc.robot.Constants.SetpointConstants.Options;
 import frc.robot.commands.DefaultSwerve;
 import frc.robot.commands.Configuration.ConfigSystem;
 import frc.robot.commands.autos.AutoAlignReef;
-import frc.robot.commands.autos.AutoAlignStation;
+import frc.robot.commands.autos.AutoAlignUpper;
 import frc.robot.commands.autos.AutoSequences.AlignmentSequences.CoralStationSequence;
 import frc.robot.commands.autos.AutoSequences.AlignmentSequences.LeftAlignmentSequence;
+import frc.robot.commands.autos.AutoSequences.AlignmentSequences.ProcessorAlignmentSequence;
 import frc.robot.commands.autos.AutoSequences.AlignmentSequences.RightAlignmentSequence;
 import frc.robot.subsystems.CoralArm;
 import frc.robot.subsystems.Elevator;
@@ -243,7 +244,7 @@ public class RobotContainer {
     xboxY.and(rightBumper).onTrue(
       new RightAlignmentSequence(coralArm,algaeArm,elevatorSub,swerveSubsystem,Constants.SetpointConstants.Options.l4));
     xboxA.and(noBumper).and(() -> algaeArm.hasAlgae()).onTrue(
-      new ConfigSystem(Constants.SetpointConstants.Options.processor, coralArm, elevatorSub, algaeArm));
+      new ProcessorAlignmentSequence(coralArm, algaeArm, elevatorSub, swerveSubsystem));
     xboxA.and(noBumper).onTrue(
       new ConfigSystem(Constants.SetpointConstants.Options.driveConfig, coralArm, elevatorSub, algaeArm));
     xboxB.and(noBumper).onTrue(
