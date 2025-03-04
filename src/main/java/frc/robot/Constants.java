@@ -184,6 +184,8 @@ public final class Constants {
       public static double rightL4 = -0.23;
       public static double centerReef = 0;
       public static double processor = 0;
+      public static double l1Left = 0.10;
+      public static double l1Right = 0.10;
       //static double CoralSt = 0;
     }
 
@@ -197,10 +199,12 @@ public final class Constants {
       public static double reefAlgaeStow = 1.1;
       public static double processorInitial = 0.75;
       public static double processorScore = 0.5;
+      public static double l1 = 0.5;
     }
 
     public class RotOffsets {
-      public static double l1 = 0;
+      public static double l1Left = 30;
+      public static double l1Right = -30;
       public static double none = 0;
       public static double CoralSt = 0.166;
     }

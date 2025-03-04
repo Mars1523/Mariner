@@ -30,6 +30,8 @@ import frc.robot.commands.Configuration.ConfigSystem;
 import frc.robot.commands.autos.AutoAlignReef;
 import frc.robot.commands.autos.AutoAlignUpper;
 import frc.robot.commands.autos.AutoSequences.AlignmentSequences.CoralStationSequence;
+import frc.robot.commands.autos.AutoSequences.AlignmentSequences.L1AlignmentSequence;
+import frc.robot.commands.autos.AutoSequences.AlignmentSequences.L4AlignmentSequence;
 import frc.robot.commands.autos.AutoSequences.AlignmentSequences.LeftAlignmentSequence;
 import frc.robot.commands.autos.AutoSequences.AlignmentSequences.ProcessorAlignmentSequence;
 import frc.robot.commands.autos.AutoSequences.AlignmentSequences.RightAlignmentSequence;
@@ -228,21 +230,22 @@ public class RobotContainer {
     //xboxA.and(noBumper).onTrue(new PrintCommand("no bumper and button pressed"));
 
     xboxA.and(leftBumper).onTrue(
-      new LeftAlignmentSequence(coralArm,algaeArm,elevatorSub,swerveSubsystem,Constants.SetpointConstants.Options.l1));
+      new L1AlignmentSequence(coralArm, algaeArm, elevatorSub, swerveSubsystem, Constants.SetpointConstants.StrafeOffsets.l1Left, Constants.SetpointConstants.DistanceOffsets.l1, Constants.SetpointConstants.RotOffsets.l1Left));
     xboxB.and(leftBumper).onTrue(
       new LeftAlignmentSequence(coralArm,algaeArm,elevatorSub,swerveSubsystem,Constants.SetpointConstants.Options.l2));
     xboxX.and(leftBumper).onTrue(
       new LeftAlignmentSequence(coralArm,algaeArm,elevatorSub,swerveSubsystem,Constants.SetpointConstants.Options.l3));
     xboxY.and(leftBumper).onTrue(
-      new LeftAlignmentSequence(coralArm,algaeArm,elevatorSub,swerveSubsystem,Constants.SetpointConstants.Options.l4));
+      new L4AlignmentSequence(coralArm, algaeArm, elevatorSub,swerveSubsystem,Constants.SetpointConstants.StrafeOffsets.leftL4));
+      // new LeftAlignmentSequence(coralArm,algaeArm,elevatorSub,swerveSubsystem,Constants.SetpointConstants.Options.l4));
     xboxA.and(rightBumper).onTrue(
-      new RightAlignmentSequence(coralArm,algaeArm,elevatorSub,swerveSubsystem,Constants.SetpointConstants.Options.l1));
+      new L1AlignmentSequence(coralArm, algaeArm, elevatorSub, swerveSubsystem, Constants.SetpointConstants.StrafeOffsets.l1Right, Constants.SetpointConstants.DistanceOffsets.l1, Constants.SetpointConstants.RotOffsets.l1Right));
     xboxB.and(rightBumper).onTrue(
       new RightAlignmentSequence(coralArm,algaeArm,elevatorSub,swerveSubsystem,Constants.SetpointConstants.Options.l2));
     xboxX.and(rightBumper).onTrue(
       new RightAlignmentSequence(coralArm,algaeArm,elevatorSub,swerveSubsystem,Constants.SetpointConstants.Options.l3));
     xboxY.and(rightBumper).onTrue(
-      new RightAlignmentSequence(coralArm,algaeArm,elevatorSub,swerveSubsystem,Constants.SetpointConstants.Options.l4));
+      new L4AlignmentSequence(coralArm, algaeArm, elevatorSub,swerveSubsystem,Constants.SetpointConstants.StrafeOffsets.leftL4));
     xboxA.and(noBumper).and(() -> algaeArm.hasAlgae()).onTrue(
       new ProcessorAlignmentSequence(coralArm, algaeArm, elevatorSub, swerveSubsystem));
     xboxA.and(noBumper).onTrue(

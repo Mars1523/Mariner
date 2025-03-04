@@ -11,14 +11,14 @@ import frc.robot.subsystems.CoralArm;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.SwerveSubsystem;
 
-public class L4AlignmentSequence extends SequentialCommandGroup{
+public class L1AlignmentSequence extends SequentialCommandGroup{
 //give it a strafeoffset for each side in the parameters, when constructing just use the leftreef or rightReef setpoint strafeoffset constants
 //this is so we dont need two identical classes
-    public L4AlignmentSequence(CoralArm coralArm, AlgaeArm algaeArm, Elevator elevator, SwerveSubsystem swerveSubsystem, double strafeOffset){
-        var config = new ConfigSystem(Constants.SetpointConstants.Options.l4, coralArm, elevator, algaeArm);
+    public L1AlignmentSequence(CoralArm coralArm, AlgaeArm algaeArm, Elevator elevator, SwerveSubsystem swerveSubsystem, double strafeOffset, double distanceOffset, double rotationOffset){
+        var config = new ConfigSystem(Constants.SetpointConstants.Options.l1, coralArm, elevator, algaeArm);
         var stow = new ConfigSystem(Constants.SetpointConstants.Options.driveConfig, coralArm, elevator, algaeArm);
-        var configureAlign = new AutoAlignReef(swerveSubsystem, strafeOffset, Constants.SetpointConstants.DistanceOffsets.reefCoralConfigure, 0, 0.04, 0.04);
-        var scoreAlign = new AutoAlignReef(swerveSubsystem, strafeOffset, Constants.SetpointConstants.DistanceOffsets.leftReefScore, 0, 0.02, 0.02);
+        var configureAlign = new AutoAlignReef(swerveSubsystem, 0 ,Constants.SetpointConstants.DistanceOffsets.reefCoralConfigure, 0, 0.04, 0.04);
+        var scoreAlign = new AutoAlignReef(swerveSubsystem, strafeOffset, distanceOffset, rotationOffset, 0.02, 0.02);
         var scoreCoral = new AutoCoralScore(coralArm);
     
     addCommands(
@@ -30,6 +30,6 @@ public class L4AlignmentSequence extends SequentialCommandGroup{
             scoreCoral.withTimeout(0.5),
             configureAlign.until(configureAlign::aligned),
             stow.until(stow::isConfigured)
-    );
+        );
     }
 }
