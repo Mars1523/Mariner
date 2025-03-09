@@ -178,10 +178,10 @@ public final class Constants {
 
     public class StrafeOffsets {
       //static double l1 = 0;
-      public static double leftReef = 0.12;
-      public static double leftL4 = 0.10;
+      public static double leftReef = 0.11;
+      public static double leftL4 = 0.11;
       public static double rightReef = -0.21;
-      public static double rightL4 = -0.23;
+      public static double rightL4 = -0.3;
       public static double centerReef = 0;
       public static double processor = 0;
       public static double l1Left = 0.10;
@@ -190,10 +190,10 @@ public final class Constants {
     }
 
     public class DistanceOffsets {
-      public static double leftReefScore = 0.53;
-      public static double rightReefScore = 0.53;
-      public static double L4score = 0.55;
-      public static double algaeReefGrab = 0.4;
+      public static double leftReefScore = 0.47;
+      public static double rightReefScore = 0.47;
+      public static double L4score = 0.5;
+      public static double algaeReefGrab = 0.42;
       public static double reefCoralConfigure = 0.75;
       public static double reefAlgaeConfigure = 0.85;
       public static double reefAlgaeStow = 1.1;

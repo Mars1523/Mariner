@@ -177,7 +177,8 @@ public class RobotContainer {
     // new JoystickButton(primaryJoy, 9)
     //   .whileTrue(new AutoAlignTags(swerveSubsystem, -0.21, 0.5, 0));
     primaryJoy.button(11)
-      .onTrue(climbSub.climb()).onFalse(climbSub.climbStopManual());
+      .onTrue(climbSub.climbSlow().withTimeout(0.5).andThen(climbSub.climb()))
+      .onFalse(climbSub.climbStopManual());
     //new JoystickButton(keyboard, 0);
     // var button7 = new JoystickButton(primaryJoy, 7);
     // var button8 = new JoystickButton(primaryJoy, 8);
@@ -232,6 +233,7 @@ public class RobotContainer {
     var noBumper = leftBumper.or(rightBumper).negate();
     var hasAlgae = new Trigger(algaeArm::hasAlgae);
 
+    var hasTarget = new Trigger(this::getUpperTag);
     //xboxA.and(leftBumper).onTrue();
     //xboxA.and(noBumper).onTrue(new PrintCommand("no bumper and button pressed"));
 
@@ -251,10 +253,10 @@ public class RobotContainer {
     xboxX.and(rightBumper).onTrue(
       new RightAlignmentSequence(coralArm,algaeArm,elevatorSub,swerveSubsystem,Constants.SetpointConstants.Options.l3));
     xboxY.and(rightBumper).onTrue(
-      new L4AlignmentSequence(coralArm, algaeArm, elevatorSub,swerveSubsystem,Constants.SetpointConstants.StrafeOffsets.leftL4));
-    // xboxA.and(noBumper).and(() -> algaeArm.hasAlgae()).and(this::getUpperTag).onTrue(
-    //   new ProcessorAlignmentSequence(coralArm, algaeArm, elevatorSub, swerveSubsystem));
-    xboxA.and(noBumper).and(hasAlgae).onTrue(
+      new L4AlignmentSequence(coralArm, algaeArm, elevatorSub,swerveSubsystem,Constants.SetpointConstants.StrafeOffsets.rightL4));
+    xboxA.and(noBumper).and(hasAlgae).and(hasTarget).onTrue(
+      new ProcessorAlignmentSequence(coralArm, algaeArm, elevatorSub, swerveSubsystem));
+    xboxA.and(noBumper).and(hasAlgae).and(hasTarget.negate()).onTrue(
       new ConfigSystem(Constants.SetpointConstants.Options.processor, coralArm, elevatorSub, algaeArm));
     xboxA.and(noBumper).and(hasAlgae.negate()).onTrue(
       new ConfigSystem(Constants.SetpointConstants.Options.driveConfig, coralArm, elevatorSub, algaeArm));

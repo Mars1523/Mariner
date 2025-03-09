@@ -138,6 +138,11 @@ public class ClimbSub extends SubsystemBase {
     climb2.set(0.9);
     }
 
+    public void climbDownSlow() {
+    // set climb motors to down
+    climb1.set(0.333);
+    climb2.set(0.333);
+    }
     // public void climbUp() {
     //     // set climb motors up??
     //     climb1.set(-0.8);
@@ -177,6 +182,9 @@ public class ClimbSub extends SubsystemBase {
 
     public Command climb(){
     return run(() -> climbDown());
+    }
+    public Command climbSlow(){
+    return run(() -> climbDownSlow());
     }
     public Command climbStopManual(){
         return run(() -> climbStop());
