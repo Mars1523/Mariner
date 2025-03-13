@@ -51,9 +51,7 @@ public class CoralArm extends SubsystemBase {
                 .absoluteEncoderPositionAlwaysOn(true);
         configWrist.encoder.positionConversionFactor(1.0 / 100.0);
         configWrist.absoluteEncoder
-                .startPulseUs(0)
-                .endPulseUs(4096)
-                .zeroOffset(.9)
+                .zeroOffset(1)
                 .zeroCentered(true);
         configWrist.closedLoop
                 .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
@@ -95,11 +93,11 @@ public class CoralArm extends SubsystemBase {
     // }
 
     public void intakeCoral() {
-        coralWheel.set(TalonSRXControlMode.PercentOutput, 0.5);
+        coralWheel.set(TalonSRXControlMode.PercentOutput, -0.5);
     }
 
     public void releaseCoral() {
-        coralWheel.set(TalonSRXControlMode.PercentOutput, -0.5);
+        coralWheel.set(TalonSRXControlMode.PercentOutput, 0.5);
     }
 
     public void stopCoralRoller() {

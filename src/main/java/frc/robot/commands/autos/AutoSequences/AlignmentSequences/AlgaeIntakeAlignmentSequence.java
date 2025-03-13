@@ -9,6 +9,7 @@ import frc.robot.Constants.SetpointConstants.ConfigOption;
 import frc.robot.NTDouble.NTD;
 import frc.robot.commands.Configuration.ConfigSystem;
 import frc.robot.commands.autos.AutoAlignReef;
+import frc.robot.commands.autos.AutoDrive;
 import frc.robot.commands.autos.AlgaeAutos.AutoAlgaeIntake;
 import frc.robot.subsystems.AlgaeArm;
 import frc.robot.subsystems.CoralArm;
@@ -25,6 +26,7 @@ public class AlgaeIntakeAlignmentSequence extends SequentialCommandGroup{
                 var stowAlgaeAlign = new AutoAlignReef(swerveSubsystem, Constants.SetpointConstants.StrafeOffsets.centerReef,Constants.SetpointConstants.DistanceOffsets.reefAlgaeStow, NTD.of(0), NTD.of(0.04), NTD.of(0.04));
                 var intakeAlign = new AutoAlignReef(swerveSubsystem, Constants.SetpointConstants.StrafeOffsets.centerReef, Constants.SetpointConstants.DistanceOffsets.algaeReefGrab, NTD.of(0), NTD.of(0.02), NTD.of(0.02));
                 var intakeAlgae = new AutoAlgaeIntake(algaeArm);
+                var autoDriveBack = new AutoDrive(swerveSubsystem, 1, -0.3);
         addCommands(
             // new ParallelCommandGroup(
                 configureAlign.andThen(Commands.print("aligned")),
@@ -33,7 +35,7 @@ public class AlgaeIntakeAlignmentSequence extends SequentialCommandGroup{
                     intakeAlign,
                     intakeAlgae.until(algaeArm::hasAlgae)
                 ).andThen(Commands.print("algaeIntaked")),
-                secondConfigureAlign.andThen(Commands.print("second aligned")),
+                autoDriveBack,
                 stow
                 //intakeAlign.andThen(Commands.print("intaked"))
             // ),
