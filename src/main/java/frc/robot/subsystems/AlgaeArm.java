@@ -59,7 +59,8 @@ public class AlgaeArm extends SubsystemBase {
             SparkMaxConfig configAlgaeSpinMotor = new SparkMaxConfig();
             configAlgaeSpinMotor
                 .inverted(false)
-                .idleMode(IdleMode.kBrake);
+                .idleMode(IdleMode.kBrake)
+                .smartCurrentLimit(20);
             algaeSpinner.configure(configAlgaeSpinMotor, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
             algaeWrist.getEncoder().setPosition(algaeWrist.getAbsoluteEncoder().getPosition());

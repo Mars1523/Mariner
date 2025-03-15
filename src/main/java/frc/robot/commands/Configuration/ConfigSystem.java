@@ -39,7 +39,7 @@ public class ConfigSystem extends Command{
         this.algaeArm = algaeArm;
         this.configOption = configOption;
 
-        Shuffleboard.getTab("Debug").addBoolean("configured" + i++, () -> isConfigured());
+        // Shuffleboard.getTab("Debug").addBoolean("configured" + i++, () -> isConfigured());
 
     }
 
@@ -56,7 +56,9 @@ public class ConfigSystem extends Command{
 
     @Override
     public boolean isFinished() {
-        return isConfigured();
+        var done = isConfigured();
+        System.out.println("Config done: " +  done + " coral " + coralArm.isReady() + " algae " + algaeArm.isReady() + " elevator " + elevator.isReady());
+        return done;
     }
 
     @Override

@@ -81,9 +81,9 @@ public class RobotContainer {
 
     swerveSubsystem.setDefaultCommand(swerve);
     configureBindings();
-    CameraServer.startAutomaticCapture();
+    // CameraServer.startAutomaticCapture();
 
-    Shuffleboard.getTab("Debug").add(pdh);
+    // Shuffleboard.getTab("Debug").add(pdh);
 
     // dependent on the alliance color
     // have to rotate to face april tag at each pos
@@ -100,62 +100,62 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
-    // new JoystickButton(primaryJoy, 0).onTrue(AutoNav.goTo(1));
+  //   // new JoystickButton(primaryJoy, 0).onTrue(AutoNav.goTo(1));
 
-    // new JoystickButton(secondaryController, XboxController.Button.kY.value)
-    //     .onTrue(Commands.parallel(elevatorSub.stow(), algaeSub.algaeArmUp(), coralArm.up()));
-    // new JoystickButton(secondaryController, XboxController.Button.kA.value)
-    //     .onTrue(elevatorSub.l1());
-    // new JoystickButton(primaryJoy, 3)
-    //     .onTrue(elevatorSub.l2());
-    // new JoystickButton(primaryJoy, 4)
-    //     .onTrue(elevatorSub.l3());
-    // new JoystickButton(secondaryController, XboxController.Button.kStart.value)
-    //     .onTrue(elevatorSub.l4());
-    // var button3 = new JoystickButton(primaryJoy, 3);
-    // var button4 = new JoystickButton(primaryJoy, 4);
+  //   // new JoystickButton(secondaryController, XboxController.Button.kY.value)
+  //   //     .onTrue(Commands.parallel(elevatorSub.stow(), algaeSub.algaeArmUp(), coralArm.up()));
+  //   // new JoystickButton(secondaryController, XboxController.Button.kA.value)
+  //   //     .onTrue(elevatorSub.l1());
+  //   // new JoystickButton(primaryJoy, 3)
+  //   //     .onTrue(elevatorSub.l2());
+  //   // new JoystickButton(primaryJoy, 4)
+  //   //     .onTrue(elevatorSub.l3());
+  //   // new JoystickButton(secondaryController, XboxController.Button.kStart.value)
+  //   //     .onTrue(elevatorSub.l4());
+  //   // var button3 = new JoystickButton(primaryJoy, 3);
+  //   // var button4 = new JoystickButton(primaryJoy, 4);
 
-    // button3.and(button4).onTrue(elevatorSub.algaeLow());
+  //   // button3.and(button4).onTrue(elevatorSub.algaeLow());
 
 
-    //new JoystickButton(secondaryController, XboxController.Button.kB.value)
-        //.onTrue(coralArm.lmid());
-    // new JoystickButton(secondaryController, XboxController.Button.kX.value)
-    //   .onTrue(algaeSub.algaeArmDown());
-    // new JoystickButton(secondaryController, XboxController.Button.kB.value)
-    //   .onTrue(algaeSub.algaeArmUp());
-    // new JoystickButton(secondaryController, XboxController.Button.kBack.value)
-    //   .onTrue(coralArm.coralStation());
+  //   //new JoystickButton(secondaryController, XboxController.Button.kB.value)
+  //       //.onTrue(coralArm.lmid());
+  //   // new JoystickButton(secondaryController, XboxController.Button.kX.value)
+  //   //   .onTrue(algaeSub.algaeArmDown());
+  //   // new JoystickButton(secondaryController, XboxController.Button.kB.value)
+  //   //   .onTrue(algaeSub.algaeArmUp());
+  //   // new JoystickButton(secondaryController, XboxController.Button.kBack.value)
+  //   //   .onTrue(coralArm.coralStation());
 
-    // new JoystickButton(secondaryController, XboxController.Button.kA.value)
-    //   .onTrue(algaeArm.algaeSpinIn())
-    //   .onFalse(algaeArm.algaeSpinStop());
-    // new JoystickButton(secondaryController, XboxController.Button.kB.value)
-    //   .onTrue(algaeArm.algaeSpinOut())
-    //   .onFalse(algaeArm.algaeSpinStop());
+  //   // new JoystickButton(secondaryController, XboxController.Button.kA.value)
+  //   //   .onTrue(algaeArm.algaeSpinIn())
+  //   //   .onFalse(algaeArm.algaeSpinStop());
+  //   // new JoystickButton(secondaryController, XboxController.Button.kB.value)
+  //   //   .onTrue(algaeArm.algaeSpinOut())
+  //   //   .onFalse(algaeArm.algaeSpinStop());
 
-    // new JoystickButton(secondaryController, XboxController.Button.kX.value)
-    //   .onTrue(coralArm.intakeCoralCommand())
-    //   .onFalse(coralArm.stopCoralSpin());
-    // new JoystickButton(secondaryController, XboxController.Button.kY.value)
-    //   .onTrue(coralArm.outtakeCoralCommand())
-    //   .onFalse(coralArm.stopCoralSpin());
+  //   // new JoystickButton(secondaryController, XboxController.Button.kX.value)
+  //   //   .onTrue(coralArm.intakeCoralCommand())
+  //   //   .onFalse(coralArm.stopCoralSpin());
+  //   // new JoystickButton(secondaryController, XboxController.Button.kY.value)
+  //   //   .onTrue(coralArm.outtakeCoralCommand())
+  //   //   .onFalse(coralArm.stopCoralSpin());
 
-    // new JoystickButton(primaryJoy, 7)
-    //   .onTrue(new ConfigSystem(Constants.SetpointConstants.Options.l4Left, coralArm, elevatorSub, algaeArm));
-    // new JoystickButton(primaryJoy, 9)
-    //   .onTrue(new ConfigSystem(Constants.SetpointConstants.Options.l3Left, coralArm, elevatorSub, algaeArm));
-    // new JoystickButton(primaryJoy, 11)
-    //   .onTrue(new ConfigSystem(Constants.SetpointConstants.Options.l2Left, coralArm, elevatorSub, algaeArm));
-    // //new JoystickButton(primaryJoy, 4)
-    // //  .onTrue(new ConfigSystem(Constants.SetpointConstants.Options.l1, coralArm, elevatorSub, algaeArm));
+  //   // new JoystickButton(primaryJoy, 7)
+  //   //   .onTrue(new ConfigSystem(Constants.SetpointConstants.Options.l4Left, coralArm, elevatorSub, algaeArm));
+  //   // new JoystickButton(primaryJoy, 9)
+  //   //   .onTrue(new ConfigSystem(Constants.SetpointConstants.Options.l3Left, coralArm, elevatorSub, algaeArm));
+  //   // new JoystickButton(primaryJoy, 11)
+  //   //   .onTrue(new ConfigSystem(Constants.SetpointConstants.Options.l2Left, coralArm, elevatorSub, algaeArm));
+  //   // //new JoystickButton(primaryJoy, 4)
+  //   // //  .onTrue(new ConfigSystem(Constants.SetpointConstants.Options.l1, coralArm, elevatorSub, algaeArm));
 
-    // new JoystickButton(primaryJoy, 10)
-    //   .onTrue(new ConfigSystem(Constants.SetpointConstants.Options.algaeLow, coralArm, elevatorSub, algaeArm));
-    // new JoystickButton(primaryJoy, 8)
-    //   .onTrue(new ConfigSystem(Constants.SetpointConstants.Options.algaeHigh, coralArm, elevatorSub, algaeArm));
-    // new JoystickButton(primaryJoy, 3)
-    //   .onTrue(new ConfigSystem(Constants.SetpointConstants.Options.coralStation, coralArm, elevatorSub, algaeArm));
+  //   // new JoystickButton(primaryJoy, 10)
+  //   //   .onTrue(new ConfigSystem(Constants.SetpointConstants.Options.algaeLow, coralArm, elevatorSub, algaeArm));
+  //   // new JoystickButton(primaryJoy, 8)
+  //   //   .onTrue(new ConfigSystem(Constants.SetpointConstants.Options.algaeHigh, coralArm, elevatorSub, algaeArm));
+  //   // new JoystickButton(primaryJoy, 3)
+  //   //   .onTrue(new ConfigSystem(Constants.SetpointConstants.Options.coralStation, coralArm, elevatorSub, algaeArm));
     
     primaryJoy.button(3)
       .onTrue(coralArm.intakeCoralCommand())
@@ -164,58 +164,53 @@ public class RobotContainer {
       .onTrue(coralArm.outtakeCoralCommand())
       .onFalse(coralArm.stopCoralSpin());
     primaryJoy.button(4)
-      // .onTrue(Commands.print("4 pressed"));
-      .onTrue(new AutoIntakeAlgae(coralArm, elevatorSub, algaeArm, swerveSubsystem));
-      Shuffleboard.getTab("Help"). add(new AutoIntakeAlgae(coralArm, elevatorSub, algaeArm, swerveSubsystem));
-
-      // .onTrue(new AutoIntakeAlgae(coralArm, elevatorSub, algaeArm, swerveSubsystem));
-      // .onTrue(algaeArm.algaeSpinIn())
-      // .onFalse(algaeArm.algaeSpinStop());
+      .onTrue(algaeArm.algaeSpinIn())
+      .onFalse(algaeArm.algaeSpinStop());
     primaryJoy.button(6)
       .onTrue(algaeArm.algaeSpinOut())
       .onFalse(algaeArm.algaeSpinStop());
-    primaryJoy.button(10)
-      .whileTrue(new AutoAlignReef(swerveSubsystem, NTD.of(0), NTD.of(0.75), NTD.of(0), NTD.of(0.02), NTD.of(0.02)).alongWith(Commands.print("aligning to center")));
-    // new JoystickButton(primaryJoy, 8)
-    //   .whileTrue(new AutoAlignTags(swerveSubsystem, 0.11, 0.5, 0));
-    // new JoystickButton(primaryJoy, 9)
-    //   .whileTrue(new AutoAlignTags(swerveSubsystem, -0.21, 0.5, 0));
-    primaryJoy.button(11)
-      .onTrue(climbSub.climbSlow().withTimeout(0.5).andThen(climbSub.climb()))
-      .onFalse(climbSub.climbStopManual());
-    //new JoystickButton(keyboard, 0);
-    // var button7 = new JoystickButton(primaryJoy, 7);
-    // var button8 = new JoystickButton(primaryJoy, 8);
-    // button7.and(button8).onTrue(coralArm.coralStation());
-    //new JoystickButton(primaryJoy, 6)
-     // .onTrue(new ConfigSystem(Constants.SetpointConstants.OptionArrays.positionList, 0, coralArm, elevatorSub, algaeSub));
+  //   primaryJoy.button(10)
+  //     .whileTrue(new AutoAlignReef(swerveSubsystem, NTD.of(0), NTD.of(0.75), NTD.of(0), NTD.of(0.02), NTD.of(0.02)).alongWith(Commands.print("aligning to center")));
+  //   // new JoystickButton(primaryJoy, 8)
+  //   //   .whileTrue(new AutoAlignTags(swerveSubsystem, 0.11, 0.5, 0));
+  //   // new JoystickButton(primaryJoy, 9)
+  //   //   .whileTrue(new AutoAlignTags(swerveSubsystem, -0.21, 0.5, 0));
+  //   primaryJoy.button(11)
+  //     .onTrue(climbSub.climbSlow().withTimeout(0.5).andThen(climbSub.climb()))
+  //     .onFalse(climbSub.climbStopManual());
+  //   //new JoystickButton(keyboard, 0);
+  //   // var button7 = new JoystickButton(primaryJoy, 7);
+  //   // var button8 = new JoystickButton(primaryJoy, 8);
+  //   // button7.and(button8).onTrue(coralArm.coralStation());
+  //   //new JoystickButton(primaryJoy, 6)
+  //    // .onTrue(new ConfigSystem(Constants.SetpointConstants.OptionArrays.positionList, 0, coralArm, elevatorSub, algaeSub));
 
-    // new JoystickButton(keyboard,8)
-    //   .onTrue(new ConfigSystem(Constants.SetpointConstants.Options.algaeHigh, coralArm, elevatorSub, algaeArm));
-    // new JoystickButton(keyboard,5)
-    //   .onTrue(new ConfigSystem(Constants.SetpointConstants.Options.algaeLow, coralArm, elevatorSub, algaeArm));
-    // new JoystickButton(keyboard,2)
-    //   .onTrue(new ConfigSystem(Constants.SetpointConstants.Options.l1, coralArm, elevatorSub, algaeArm));
-    // new JoystickButton(keyboard, 9)
-    //   .onTrue(new ConfigSystem(Constants.SetpointConstants.Options.l4, coralArm, elevatorSub, algaeArm));
-    // new JoystickButton(keyboard,6)
-    //   .onTrue(new ConfigSystem(Constants.SetpointConstants.Options.l3, coralArm, elevatorSub, algaeArm));
-    // new JoystickButton(keyboard, 3)
-    //   .onTrue(new ConfigSystem(Constants.SetpointConstants.Options.l2, coralArm, elevatorSub, algaeArm));
-    // new JoystickButton(keyboard, 7)
-    //   .onTrue(new ConfigSystem(Constants.SetpointConstants.Options.coralStation, coralArm, elevatorSub, algaeArm));
-    // new JoystickButton(keyboard, 4)
-    //   .onTrue(new ConfigSystem(Constants.SetpointConstants.Options.processor, coralArm, elevatorSub, algaeArm));
-    // //new JoystickButton(keyboard, 10)
-    // //  .onTrue(new ConfigSystem(Constants.SetpointConstants.Options.driveConfig, coralArm, elevatorSub, algaeArm));
-    // //new JoystickButton(primaryJoy, 4)
-    // //  .onTrue(climbSub.climbStopCommand());
-    // new JoystickButton(keyboard, 10).and(algaeArm::hasAlgae)
-    //  .onTrue(new ConfigSystem(Constants.SetpointConstants.Options.processor, coralArm, elevatorSub, algaeArm));
-    // new JoystickButton(keyboard, 10).and(() -> !algaeArm.hasAlgae())
-    //   .onTrue(new ConfigSystem(Constants.SetpointConstants.Options.driveConfig, coralArm, elevatorSub, algaeArm));
-    // new JoystickButton(primaryJoy, 9)
-    //   .onTrue(new ConfigSystem(Constants.SetpointConstants.Options.barge, coralArm, elevatorSub, algaeArm));
+  //   // new JoystickButton(keyboard,8)
+  //   //   .onTrue(new ConfigSystem(Constants.SetpointConstants.Options.algaeHigh, coralArm, elevatorSub, algaeArm));
+  //   // new JoystickButton(keyboard,5)
+  //   //   .onTrue(new ConfigSystem(Constants.SetpointConstants.Options.algaeLow, coralArm, elevatorSub, algaeArm));
+  //   // new JoystickButton(keyboard,2)
+  //   //   .onTrue(new ConfigSystem(Constants.SetpointConstants.Options.l1, coralArm, elevatorSub, algaeArm));
+  //   // new JoystickButton(keyboard, 9)
+  //   //   .onTrue(new ConfigSystem(Constants.SetpointConstants.Options.l4, coralArm, elevatorSub, algaeArm));
+  //   // new JoystickButton(keyboard,6)
+  //   //   .onTrue(new ConfigSystem(Constants.SetpointConstants.Options.l3, coralArm, elevatorSub, algaeArm));
+  //   // new JoystickButton(keyboard, 3)
+  //   //   .onTrue(new ConfigSystem(Constants.SetpointConstants.Options.l2, coralArm, elevatorSub, algaeArm));
+  //   // new JoystickButton(keyboard, 7)
+  //   //   .onTrue(new ConfigSystem(Constants.SetpointConstants.Options.coralStation, coralArm, elevatorSub, algaeArm));
+  //   // new JoystickButton(keyboard, 4)
+  //   //   .onTrue(new ConfigSystem(Constants.SetpointConstants.Options.processor, coralArm, elevatorSub, algaeArm));
+  //   // //new JoystickButton(keyboard, 10)
+  //   // //  .onTrue(new ConfigSystem(Constants.SetpointConstants.Options.driveConfig, coralArm, elevatorSub, algaeArm));
+  //   // //new JoystickButton(primaryJoy, 4)
+  //   // //  .onTrue(climbSub.climbStopCommand());
+  //   // new JoystickButton(keyboard, 10).and(algaeArm::hasAlgae)
+  //   //  .onTrue(new ConfigSystem(Constants.SetpointConstants.Options.processor, coralArm, elevatorSub, algaeArm));
+  //   // new JoystickButton(keyboard, 10).and(() -> !algaeArm.hasAlgae())
+  //   //   .onTrue(new ConfigSystem(Constants.SetpointConstants.Options.driveConfig, coralArm, elevatorSub, algaeArm));
+  //   // new JoystickButton(primaryJoy, 9)
+  //   //   .onTrue(new ConfigSystem(Constants.SetpointConstants.Options.barge, coralArm, elevatorSub, algaeArm));
 
     var leftBumper = new JoystickButton(secondaryController, XboxController.Button.kLeftBumper.value);
     var rightBumper = new JoystickButton(secondaryController, XboxController.Button.kRightBumper.value);
@@ -226,21 +221,21 @@ public class RobotContainer {
     var leftStick = new JoystickButton(secondaryController, XboxController.Button.kLeftStick.value);
     var rightStick = new JoystickButton(secondaryController, XboxController.Button.kRightStick.value);
     var xboxStart = new JoystickButton(secondaryController, XboxController.Button.kStart.value);
-    //var leftPOV = new JoystickButton(secondaryController, XboxController.Button.)
+  //   //var leftPOV = new JoystickButton(secondaryController, XboxController.Button.)
 
-    var stow = new ConfigSystem(Constants.SetpointConstants.Options.driveConfig, coralArm, elevatorSub, algaeArm);
+  //   var stow = new ConfigSystem(Constants.SetpointConstants.Options.driveConfig, coralArm, elevatorSub, algaeArm);
 
 
 
-    //leftBumper.onTrue(new AutoAlignTags(swerveSubsystem, 0.13, 0.6, 0).alongWith(Commands.print("aligning to x goal 0.11")));
-    //rightBumper.onTrue(new AutoAlignTags(swerveSubsystem, -0.2, 0.63, 0).alongWith(Commands.print("aligning to -0.21")));
+    // leftBumper.onTrue(new AutoAlignTags(swerveSubsystem, 0.13, 0.6, 0).alongWith(Commands.print("aligning to x goal 0.11")));
+    // rightBumper.onTrue(new AutoAlignTags(swerveSubsystem, -0.2, 0.63, 0).alongWith(Commands.print("aligning to -0.21")));
 
     var noBumper = leftBumper.or(rightBumper).negate();
     var hasAlgae = new Trigger(algaeArm::hasAlgae);
 
     var hasTarget = new Trigger(this::getUpperTag);
-    //xboxA.and(leftBumper).onTrue();
-    //xboxA.and(noBumper).onTrue(new PrintCommand("no bumper and button pressed"));
+  //   //xboxA.and(leftBumper).onTrue();
+  //   //xboxA.and(noBumper).onTrue(new PrintCommand("no bumper and button pressed"));
 
     xboxA.and(leftBumper).onTrue(
       new L1AlignmentSequence(coralArm, algaeArm, elevatorSub, swerveSubsystem, Constants.SetpointConstants.StrafeOffsets.l1Left, Constants.SetpointConstants.DistanceOffsets.l1, Constants.SetpointConstants.RotOffsets.l1Left));
@@ -273,10 +268,10 @@ public class RobotContainer {
       new AlgaeIntakeAlignmentSequence(coralArm, elevatorSub, algaeArm, swerveSubsystem, Constants.SetpointConstants.Options.algaeHigh));
     xboxStart.and(noBumper).onTrue(
       new ConfigSystem(Constants.SetpointConstants.Options.algaeGround, coralArm, elevatorSub, algaeArm)  );
-    //leftBumper.onTrue(new ConfigSystem(, coralArm, elevatorSub, algaeArm))
+  //   //leftBumper.onTrue(new ConfigSystem(, coralArm, elevatorSub, algaeArm))
     
   
-    //rightBumper.and(xboxA).onTrue(new ConfigSystem(Constants.SetpointConstants.Options.l1, coralArm, elevatorSub, algaeArm));
+  //   //rightBumper.and(xboxA).onTrue(new ConfigSystem(Constants.SetpointConstants.Options.l1, coralArm, elevatorSub, algaeArm));
 
     
   

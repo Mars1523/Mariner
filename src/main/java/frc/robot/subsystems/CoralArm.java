@@ -4,6 +4,7 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 import com.ctre.phoenix.motorcontrol.VictorSPXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLimitSwitch;
@@ -15,6 +16,7 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -46,19 +48,21 @@ public class CoralArm extends SubsystemBase {
         SparkMaxConfig configWrist = new SparkMaxConfig();
         configWrist
                 .inverted(false)
-                .idleMode(SparkMaxConfig.IdleMode.kBrake);
+                .idleMode(SparkMaxConfig.IdleMode.kBrake)
+                .smartCurrentLimit(20);
         configWrist.signals
                 .absoluteEncoderPositionAlwaysOn(true);
         configWrist.encoder.positionConversionFactor(1.0 / 100.0);
         configWrist.absoluteEncoder.inverted(true)
-                .zeroOffset(0.593)
+                .zeroOffset(0.412)
                 .zeroCentered(true);
         configWrist.closedLoop
                 .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
-                .pid(1.5, 0.0001, 0.001)
+                .pid(2, 0.0001, 0.001)
                 .outputRange(-0.8, 0.7);
         coralWrist.configure(configWrist, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
+        
         // coralWrist.getEncoder().setPosition(coralWrist.getAbsoluteEncoder().getPosition());
 
         // SparkMaxConfig configWheel = new SparkMaxConfig();
@@ -72,17 +76,29 @@ public class CoralArm extends SubsystemBase {
         // Constants.configMotor(coralWheel, true);
 
         coralWristController = coralWrist.getClosedLoopController();
-        coralWristController.setReference(0, ControlType.kPosition);
+        coralWristController.setReference(Constants.SetpointConstants.CoralPivotAngles.up.get(), ControlType.kPosition);
 
+        coralWheel.setInverted(true);
         coralWheel.setSelectedSensorPosition(0);
 
 
         // coralWheel.getSensorCollection().getp
 
-        Shuffleboard.getTab("Debug").addDouble("Coral Wrist Setpoint", () -> coralWristSetpoint);
-        Shuffleboard.getTab("Debug").addDouble("Coral Wrist Encoder Abs", () -> coralWrist.getAbsoluteEncoder().getPosition());
-        Shuffleboard.getTab("Debug").addDouble("Coral Wrist Encoder", () -> coralWrist.getEncoder().getPosition());
-        Shuffleboard.getTab("Debug").addDouble("Coral Wrist Power", () -> coralWrist.getAppliedOutput());
+        // Shuffleboard.getTab("Debug").addDouble("cwsetpoint", () -> coralWristSetpoint);
+        // Shuffleboard.getTab("Debug").addDouble("Cweabs", () -> coralWrist.getAbsoluteEncoder().getPosition());
+        // Shuffleboard.getTab("Debug").addDouble("test", () -> 0.01);
+        // Shuffleboard.getTab("Debug").addDouble("cwe", () -> coralWrist.getEncoder().getPosition());
+        // Shuffleboard.getTab("Debug").addDouble("Coral Wrist Power", () -> coralWrist.getAppliedOutput());
+    }
+
+    @Override
+    public void periodic() {
+        var inst = NetworkTableInstance.getDefault();
+        inst.getEntry("/Debug/CoralArm/cwsetpoint").setDouble(coralWristSetpoint);
+        inst.getEntry("/Debug/CoralArm/Cweabs").setDouble(coralWrist.getAbsoluteEncoder().getPosition());
+        inst.getEntry("/Debug/CoralArm/test").setDouble( 0.01);
+        inst.getEntry("/Debug/CoralArm/cwe").setDouble( coralWrist.getEncoder().getPosition());
+        inst.getEntry("/Debug/CoralArm/Coral Wrist Power").setDouble( coralWrist.getAppliedOutput());
     }
 
     // @Override
@@ -93,11 +109,11 @@ public class CoralArm extends SubsystemBase {
     // }
 
     public void intakeCoral() {
-        coralWheel.set(TalonSRXControlMode.PercentOutput, -0.5);
+        coralWheel.set(TalonSRXControlMode.PercentOutput, 0.9);
     }
 
     public void releaseCoral() {
-        coralWheel.set(TalonSRXControlMode.PercentOutput, 0.5);
+        coralWheel.set(TalonSRXControlMode.PercentOutput, -0.9);
     }
 
     public void stopCoralRoller() {
@@ -115,7 +131,7 @@ public class CoralArm extends SubsystemBase {
     }
 
     public boolean isReady(){
-        double coralPosition = coralWrist.getEncoder().getPosition();
+        double coralPosition = coralWrist.getAbsoluteEncoder().getPosition();
         return coralPosition > (coralWristSetpoint - 0.1) && coralPosition < (coralWristSetpoint + 0.1);
     }
 

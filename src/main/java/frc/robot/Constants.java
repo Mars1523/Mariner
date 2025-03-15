@@ -147,7 +147,7 @@ public final class Constants {
     public class ElevatorSetpoints {
       public static NTDouble l1 = new NTDouble(0, "l1", "ElevatorSetpoints");
       public static NTDouble l2 = new NTDouble(0.36, "l2", "ElevatorSetpoints");
-      public static NTDouble l3 = new NTDouble(0.92, "l3", "ElevatorSetpoints");
+      public static NTDouble l3 = new NTDouble(0.75, "l3", "ElevatorSetpoints");
       public static NTDouble l4 = new NTDouble(1.25, "l4", "ElevatorSetpoints");
 
       public static NTDouble groundLevel = new NTDouble(0, "groundLevel", "ElevatorSetpoints");
@@ -167,18 +167,18 @@ public final class Constants {
 
     public class CoralPivotAngles {
       // angle of release
-      public static NTDouble l1 = new NTDouble(0.22, "l1", "CoralPivotAngles"); // reef l1
-      public static NTDouble lmid = new NTDouble(0.32, "lmid", "CoralPivotAngles"); // reef l2 and l3
-      public static NTDouble l4 = new NTDouble(0.33, "l4", "CoralPivotAngles"); // reef l4
-      public static NTDouble CoralSt = new NTDouble(0.12, "CoralSt", "CoralPivotAngles"); // pointing up to recieve coral from hp
-      public static NTDouble up = new NTDouble(0, "up", "CoralPivotAngles"); // out of the way for intaking algae
+      public static NTDouble l1 = new NTDouble(-0.03, "l1", "CoralPivotAngles"); // reef l1
+      public static NTDouble lmid = new NTDouble(0.084, "lmid", "CoralPivotAngles"); // reef l2 and l3
+      public static NTDouble l4 = new NTDouble(0.12, "l4", "CoralPivotAngles"); // reef l4
+      public static NTDouble CoralSt = new NTDouble(-0.13, "CoralSt", "CoralPivotAngles"); // pointing up to recieve coral from hp
+      public static NTDouble up = new NTDouble(-0.24, "up", "CoralPivotAngles"); // out of the way for intaking algae
     }
 
     public class StrafeOffsets {
       //static double l1 = 0;
       public static NTDouble leftReef = new NTDouble(0.16, "leftReef", "StrafeOffsets");
       public static NTDouble leftL4 = new NTDouble(0.11, "leftL4", "StrafeOffsets");
-      public static NTDouble rightReef = new NTDouble(-0.24, "rightReef", "StrafeOffsets");
+      public static NTDouble rightReef = new NTDouble(-0.18, "rightReef", "StrafeOffsets");
       public static NTDouble rightL4 = new NTDouble(-0.3, "rightL4", "StrafeOffsets");
       public static NTDouble centerReef = new NTDouble(0, "centerReef", "StrafeOffsets");
       public static NTDouble processor = new NTDouble(0, "processor", "StrafeOffsets");
@@ -190,7 +190,7 @@ public final class Constants {
 
     public class DistanceOffsets {
       public static NTDouble leftReefScore = new NTDouble(0.5, "leftReefScore", "DistanceOffsets");
-      public static NTDouble rightReefScore = new NTDouble(0.45, "rightReefScore", "DistanceOffsets");
+      public static NTDouble rightReefScore = new NTDouble(0.55, "rightReefScore", "DistanceOffsets");
       public static NTDouble L4score = new NTDouble(0.5, "L4score", "DistanceOffsets");
       public static NTDouble algaeReefGrab = new NTDouble(0.42, "algaeReefGrab", "DistanceOffsets");
       public static NTDouble reefCoralConfigure = new NTDouble(0.75, "reefCoralConfigure", "DistanceOffsets");

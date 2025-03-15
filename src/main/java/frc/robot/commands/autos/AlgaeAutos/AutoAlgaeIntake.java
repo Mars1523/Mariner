@@ -7,7 +7,7 @@ public class AutoAlgaeIntake extends Command {
         AlgaeArm algaeSub;
 
         public AutoAlgaeIntake(AlgaeArm algaeSub) {
-            addRequirements(algaeSub);
+            // addRequirements(algaeSub);
             this.algaeSub = algaeSub;
         }
 
@@ -20,9 +20,9 @@ public class AutoAlgaeIntake extends Command {
         @Override
         public void end(boolean interrupted) {
             if (interrupted)
-                System.out.println("Config Interrupted");
+                System.out.println("Algae Interrupted");
             else
-                System.out.println("Config Done");
+                System.out.println("Algae Done");
             algaeSub.stop();
         }
 

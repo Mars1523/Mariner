@@ -53,6 +53,7 @@ public class AutoDrive extends Command {
     public boolean isFinished() {
 
         double dist = swerveSub.getPose().getTranslation().getDistance(startPosition);
+        System.out.println("distance: " + dist);
         if (goalDistance < dist) {
             return true;
 

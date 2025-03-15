@@ -7,7 +7,7 @@ public class AutoAlgaeScore extends Command{
         AlgaeArm algaeArm;
 
         public AutoAlgaeScore(AlgaeArm algaeArm) {
-            addRequirements(algaeArm);
+            // addRequirements(algaeArm);
             this.algaeArm = algaeArm;
         }
 

@@ -152,14 +152,14 @@ public class SwerveModule {
                 turningEncoder.setPosition(scaleSwerve(turningMotor.getAnalog().getVoltage() - voltageOffset));
                 pidController = turningMotor.getClosedLoopController();
 
-                Shuffleboard.getTab("Debug").addDouble("SwerveTurnAbsRot " + turningMotorID,
-                                                () -> scale(scaleSwerve(turningMotor.getAnalog().getVoltage() - voltageOffset), 0,
-                                                Math.PI * 2, 0,
-                                                1));
-                Shuffleboard.getTab("Debug").addDouble("SwerveTurnRelRot " + turningMotorID,
-                                () -> Units.radiansToRotations(turningEncoder.getPosition()));
-                Shuffleboard.getTab("Debug").addDouble("SwerveTurnAbsVolts " + turningMotorID,
-                                () -> turningMotor.getAnalog().getVoltage());
+                // Shuffleboard.getTab("Debug").addDouble("SwerveTurnAbsRot " + turningMotorID,
+                //                                 () -> scale(scaleSwerve(turningMotor.getAnalog().getVoltage() - voltageOffset), 0,
+                //                                 Math.PI * 2, 0,
+                //                                 1));
+                // Shuffleboard.getTab("Debug").addDouble("SwerveTurnRelRot " + turningMotorID,
+                //                 () -> Units.radiansToRotations(turningEncoder.getPosition()));
+                // Shuffleboard.getTab("Debug").addDouble("SwerveTurnAbsVolts " + turningMotorID,
+                //                 () -> turningMotor.getAnalog().getVoltage());
         }
 
         private static double scale(double value, double min, double max, double a, double b) {
