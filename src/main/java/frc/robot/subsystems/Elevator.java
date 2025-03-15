@@ -27,31 +27,35 @@ public class Elevator extends SubsystemBase {
     private SparkClosedLoopController elevatorController;
     private SparkClosedLoopController elevatorController2;
     private double currentSetpoint;
-    private TrapezoidProfile trapezoidProfile = new TrapezoidProfile(new Constraints(10, 1.5));
-    private double positionFactor = (1.0 / 5.0)*Math.PI*1.0*0.0254;
+    private TrapezoidProfile trapezoidProfile = new TrapezoidProfile(new Constraints(1, .8/60));
+    private double positionFactor = (1.0 / 5.0) * Math.PI * 1.0 * 0.0254;
 
     TrapezoidProfile.State trapezoidSetpoint = new TrapezoidProfile.State();
 
-    // public SparkMaxConfig configElevatorMotor(boolean Inverted, double kP, double kI, double kD) {
-    //     SparkMaxConfig config = new SparkMaxConfig();
-    //     config
-    //             .inverted(Inverted)
-    //             .idleMode(SparkMaxConfig.IdleMode.kCoast);
-    //     config.closedLoop
-    //             .pid(kP, kI, kD)
-    //             .outputRange(-1, 1);
-    //     return config;
+    // public SparkMaxConfig configElevatorMotor(boolean Inverted, double kP, double
+    // kI, double kD) {
+    // SparkMaxConfig config = new SparkMaxConfig();
+    // config
+    // .inverted(Inverted)
+    // .idleMode(SparkMaxConfig.IdleMode.kCoast);
+    // config.closedLoop
+    // .pid(kP, kI, kD)
+    // .outputRange(-1, 1);
+    // return config;
     // }
 
     public Elevator() {
         SparkMaxConfig configLead = new SparkMaxConfig();
         configLead
                 .inverted(true)
-                .idleMode(IdleMode.kBrake);
-        configLead.encoder.positionConversionFactor(positionFactor);
+                .idleMode(IdleMode.kBrake)
+                .smartCurrentLimit(50);
+        configLead.encoder
+                .positionConversionFactor(positionFactor)
+                .velocityConversionFactor(positionFactor / 60);
         configLead.closedLoop
                 .pid(4, 0, 0)
-                .outputRange(-0.25, 0.4);
+                .outputRange(-0.5, 0.85);
         // .feedbackSensor(FeedbackSensor.kPrimaryEncoder);
         configLead.closedLoop.maxMotion
                 .maxVelocity(1)
@@ -60,11 +64,14 @@ public class Elevator extends SubsystemBase {
         SparkMaxConfig configFollow = new SparkMaxConfig();
         configFollow
                 .inverted(false)
-                .idleMode(IdleMode.kBrake);
-        configFollow.encoder.positionConversionFactor(positionFactor);
+                .idleMode(IdleMode.kBrake)
+                .smartCurrentLimit(50);
+        configFollow.encoder
+            .positionConversionFactor(positionFactor)
+            .velocityConversionFactor(positionFactor/60);
         configFollow.closedLoop
                 .pid(4, 0, 0)
-                .outputRange(-0.25, 0.4);
+                .outputRange(-0.5, 0.85);
         // .feedbackSensor(FeedbackSensor.`);
         // configFollow.follow(elevator1, true);
         elevator2.configure(configFollow, ResetMode.kResetSafeParameters,
@@ -80,8 +87,9 @@ public class Elevator extends SubsystemBase {
         elevator1.getEncoder().setPosition(0);
         elevator2.getEncoder().setPosition(0);
 
-        Shuffleboard.getTab("Debug").addDouble("Current Elevator Setpoint", () -> currentSetpoint);
+        Shuffleboard.getTab("Debug").addDouble("Current Elevator goal", () -> currentSetpoint);
         Shuffleboard.getTab("Debug").addDouble("Current elevator position", () -> elevator1.getEncoder().getPosition());
+        Shuffleboard.getTab("Debug").addDouble("Current elevator setpoint", () -> trapezoidSetpoint.position);
         // Shuffleboard.getTab("Debug").addDouble("Current Setpoint",
         // elevatorController.);
     }
@@ -93,17 +101,19 @@ public class Elevator extends SubsystemBase {
         // elevatorController2.setReference(setpoint, ControlType.kPosition);
     }
 
-    public boolean isReady(){
+    public boolean isReady() {
         double elevator1Position = elevator1.getEncoder().getPosition();
         double elevator2Position = elevator2.getEncoder().getPosition();
-        boolean elevator1Ready = elevator1Position > (currentSetpoint - 0.1) && elevator1Position < (currentSetpoint + 0.1);
-        boolean elevator2Ready = elevator2Position > (currentSetpoint - 0.1) && elevator2Position < (currentSetpoint + 0.1);
+        boolean elevator1Ready = elevator1Position > (currentSetpoint - 0.1)
+                && elevator1Position < (currentSetpoint + 0.1);
+        boolean elevator2Ready = elevator2Position > (currentSetpoint - 0.1)
+                && elevator2Position < (currentSetpoint + 0.1);
         return elevator1Ready && elevator2Ready;
     }
-    
+
     // public boolean tooHigh() {
-    //     boolean tooHigh = currentSetpoint>0.5;
-    //     return tooHigh;
+    // boolean tooHigh = currentSetpoint>0.5;
+    // return tooHigh;
     // }
 
     @Override

@@ -157,27 +157,27 @@ public class AlgaeArm extends SubsystemBase {
     }
 
     public Command algaeArmDown(){
-        return run(() -> setAlgaeSetpoint(Constants.SetpointConstants.AlgaeArmAngles.down.get()));
+        return runOnce(() -> setAlgaeSetpoint(Constants.SetpointConstants.AlgaeArmAngles.down.get()));
     }
 
     public Command algaeArmUp() {
-        return run(() -> setAlgaeSetpoint(Constants.SetpointConstants.AlgaeArmAngles.up.get()));
+        return runOnce(() -> setAlgaeSetpoint(Constants.SetpointConstants.AlgaeArmAngles.up.get()));
     }
 
     public Command algaeArmStop(){
-        return run(() -> stopWrist());
+        return runOnce(() -> stopWrist());
     }
 
     public Command algaeSpinIn(){
-        return run(() -> grab()).until(this::hasAlgae);
+        return runOnce(() -> grab()).until(this::hasAlgae).finallyDo(this::algaeSpinStop);
     }
 
     public Command algaeSpinOut(){
-        return run(()-> release()).until(this::hasNoAlgae);
+        return runOnce(()-> release()).until(this::hasNoAlgae).finallyDo(this::algaeSpinStop);
     }
 
     public Command algaeSpinStop(){
-        return run(()-> stop());
+        return runOnce(()-> stop());
     }
 
     // public Command algaeArmStop(){

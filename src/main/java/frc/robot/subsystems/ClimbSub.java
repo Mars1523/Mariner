@@ -50,6 +50,7 @@ public class ClimbSub extends SubsystemBase {
 
         SparkMaxConfig configLeader = new SparkMaxConfig();
         configLeader
+                .openLoopRampRate(.5)
                 .inverted(true)
                 .idleMode(SparkMaxConfig.IdleMode.kCoast);
         configLeader.closedLoop
@@ -62,6 +63,7 @@ public class ClimbSub extends SubsystemBase {
 
         SparkMaxConfig config2 = new SparkMaxConfig();
         config2
+                .openLoopRampRate(.5)
                 .inverted(false)
                 .idleMode(SparkMaxConfig.IdleMode.kCoast);
         config2.closedLoop

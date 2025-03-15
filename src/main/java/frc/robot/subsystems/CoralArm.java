@@ -1,6 +1,9 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+
+import java.util.Optional;
+
 import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 import com.ctre.phoenix.motorcontrol.VictorSPXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
@@ -43,7 +46,10 @@ public class CoralArm extends SubsystemBase {
 
     private final PIDController coralWristPID = new PIDController(0.1, 0, 0);
 
-    public CoralArm() {
+    private Elevator elevator;
+
+    public CoralArm(Elevator elevator) {
+        this.elevator = elevator;
         Shuffleboard.getTab("PID").add("Coral", coralWristPID);
         SparkMaxConfig configWrist = new SparkMaxConfig();
         configWrist
@@ -91,14 +97,30 @@ public class CoralArm extends SubsystemBase {
         // Shuffleboard.getTab("Debug").addDouble("Coral Wrist Power", () -> coralWrist.getAppliedOutput());
     }
 
+    private Optional<Double> restoreSetpoint = Optional.empty();
     @Override
     public void periodic() {
+        if(!elevator.isReady()) {
+            if (restoreSetpoint.isEmpty() && Math.abs(coralWrist.getAbsoluteEncoder().getPosition()) < .12) {
+                System.out.println("Saving setpoint " + coralWristSetpoint);
+                restoreSetpoint = Optional.of(coralWristSetpoint);
+                setCoralWristSetpoint(0);
+            }
+        } else {
+            if (restoreSetpoint.isPresent()) {
+                System.out.println("Restoring setpoint " + restoreSetpoint.get());
+                setCoralWristSetpoint(restoreSetpoint.get());
+                restoreSetpoint = Optional.empty();
+            }
+        }
+
         var inst = NetworkTableInstance.getDefault();
         inst.getEntry("/Debug/CoralArm/cwsetpoint").setDouble(coralWristSetpoint);
         inst.getEntry("/Debug/CoralArm/Cweabs").setDouble(coralWrist.getAbsoluteEncoder().getPosition());
         inst.getEntry("/Debug/CoralArm/test").setDouble( 0.01);
         inst.getEntry("/Debug/CoralArm/cwe").setDouble( coralWrist.getEncoder().getPosition());
         inst.getEntry("/Debug/CoralArm/Coral Wrist Power").setDouble( coralWrist.getAppliedOutput());
+
     }
 
     // @Override
@@ -109,11 +131,11 @@ public class CoralArm extends SubsystemBase {
     // }
 
     public void intakeCoral() {
-        coralWheel.set(TalonSRXControlMode.PercentOutput, 0.9);
+        coralWheel.set(TalonSRXControlMode.PercentOutput, 0.5);
     }
 
     public void releaseCoral() {
-        coralWheel.set(TalonSRXControlMode.PercentOutput, -0.9);
+        coralWheel.set(TalonSRXControlMode.PercentOutput, -0.3);
     }
 
     public void stopCoralRoller() {

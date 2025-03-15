@@ -6,8 +6,20 @@ package frc.robot;
 
 import javax.print.attribute.standard.JobHoldUntil;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.path.PathPlannerPath;
 
+import edu.wpi.first.apriltag.AprilTag;
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Transform3d;
 
 //import org.littletonrobotics.urcl.URCL;
 
@@ -27,6 +39,7 @@ import frc.robot.NTDouble.NTD;
 import frc.robot.commands.DefaultSwerve;
 import frc.robot.commands.Configuration.ConfigSystem;
 import frc.robot.commands.autos.AutoAlignReef;
+import frc.robot.commands.autos.AlgaeAutos.AutoAlgaeIntake;
 import frc.robot.commands.autos.AutoSequences.AlignmentSequences.AlgaeIntakeAlignmentSequence;
 import frc.robot.commands.autos.AutoSequences.AlignmentSequences.AutoIntakeAlgae;
 import frc.robot.commands.autos.AutoSequences.AlignmentSequences.CoralStationSequence;
@@ -53,7 +66,7 @@ public class RobotContainer {
   // CoralArm coralArm = new CoralArm();
   AlgaeArm algaeArm = new AlgaeArm();
   // ClimbSub climbSub = new ClimbSub();
-  CoralArm coralArm = new CoralArm();
+  CoralArm coralArm = new CoralArm(elevatorSub);
 
   ClimbSub climbSub = new ClimbSub();
   
@@ -163,9 +176,9 @@ public class RobotContainer {
     primaryJoy.button(5)
       .onTrue(coralArm.outtakeCoralCommand())
       .onFalse(coralArm.stopCoralSpin());
-    primaryJoy.button(4)
-      .onTrue(algaeArm.algaeSpinIn())
-      .onFalse(algaeArm.algaeSpinStop());
+    // primaryJoy.button(4)
+    // .onTrue(algaeArm.algaeSpinIn())
+    // .onFalse(algaeArm.algaeSpinStop());
     primaryJoy.button(6)
       .onTrue(algaeArm.algaeSpinOut())
       .onFalse(algaeArm.algaeSpinStop());
@@ -175,9 +188,9 @@ public class RobotContainer {
   //   //   .whileTrue(new AutoAlignTags(swerveSubsystem, 0.11, 0.5, 0));
   //   // new JoystickButton(primaryJoy, 9)
   //   //   .whileTrue(new AutoAlignTags(swerveSubsystem, -0.21, 0.5, 0));
-  //   primaryJoy.button(11)
-  //     .onTrue(climbSub.climbSlow().withTimeout(0.5).andThen(climbSub.climb()))
-  //     .onFalse(climbSub.climbStopManual());
+  primaryJoy.button(11).and(primaryJoy.button(7))
+      .onTrue(climbSub.climbSlow().withTimeout(0.5).andThen(climbSub.climb()))
+      .onFalse(climbSub.climbStopManual());
   //   //new JoystickButton(keyboard, 0);
   //   // var button7 = new JoystickButton(primaryJoy, 7);
   //   // var button8 = new JoystickButton(primaryJoy, 8);
@@ -221,6 +234,7 @@ public class RobotContainer {
     var leftStick = new JoystickButton(secondaryController, XboxController.Button.kLeftStick.value);
     var rightStick = new JoystickButton(secondaryController, XboxController.Button.kRightStick.value);
     var xboxStart = new JoystickButton(secondaryController, XboxController.Button.kStart.value);
+    var xboxBack = new JoystickButton(secondaryController, XboxController.Button.kBack.value);
   //   //var leftPOV = new JoystickButton(secondaryController, XboxController.Button.)
 
   //   var stow = new ConfigSystem(Constants.SetpointConstants.Options.driveConfig, coralArm, elevatorSub, algaeArm);
@@ -267,14 +281,42 @@ public class RobotContainer {
     xboxY.and(noBumper).onTrue(
       new AlgaeIntakeAlignmentSequence(coralArm, elevatorSub, algaeArm, swerveSubsystem, Constants.SetpointConstants.Options.algaeHigh));
     xboxStart.and(noBumper).onTrue(
-      new ConfigSystem(Constants.SetpointConstants.Options.algaeGround, coralArm, elevatorSub, algaeArm)  );
-  //   //leftBumper.onTrue(new ConfigSystem(, coralArm, elevatorSub, algaeArm))
-    
-  
-  //   //rightBumper.and(xboxA).onTrue(new ConfigSystem(Constants.SetpointConstants.Options.l1, coralArm, elevatorSub, algaeArm));
+        new ConfigSystem(Constants.SetpointConstants.Options.algaeGround, coralArm, elevatorSub, algaeArm));
 
-    
-  
+    primaryJoy
+        .button(4)
+        // AutoIntakeAlgae(coralArm,elevatorSub,algaeArm,swerveSubsystem));
+        .whileTrue(Commands.sequence(
+            new ConfigSystem(Constants.SetpointConstants.Options.algaeGround, coralArm, elevatorSub, algaeArm),
+            algaeArm.algaeSpinIn().withTimeout(1),
+            new ConfigSystem(Constants.SetpointConstants.Options.processor, coralArm,
+                elevatorSub, algaeArm)));
+
+    xboxBack.and(xboxA).onTrue(
+        new ConfigSystem(Constants.SetpointConstants.Options.driveConfig, coralArm, elevatorSub, algaeArm));
+    xboxBack.and(xboxX).onTrue(
+        new ConfigSystem(Constants.SetpointConstants.Options.l3, coralArm, elevatorSub, algaeArm));
+    xboxBack.and(xboxY).onTrue(
+        new ConfigSystem(Constants.SetpointConstants.Options.l4first, coralArm, elevatorSub, algaeArm));
+  }
+
+  public Command simple() {
+    var pose = swerveSubsystem.getPose();
+    // pose.plus(new Transform2d(.5, 0, new Rotation2d()));
+    return AutoBuilder.pathfindToPose(
+        pose,
+        new PathConstraints(1, 1, 1, 1),
+        0);
+  }
+
+public void help() {
+  var field = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);
+  var pose = field.getTagPose(1).get();
+  pose.plus(new Transform3d(0, 1, 0, new Rotation3d()));
+  AutoBuilder.pathfindToPose(
+      pose.toPose2d(),
+      new PathConstraints(1, 1, 1, 1),
+      0);
   }
 
 
