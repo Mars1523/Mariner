@@ -1,22 +1,15 @@
 package frc.robot.subsystems;
 
-import com.revrobotics.spark.SparkLowLevel.MotorType;
-
-import java.util.Optional;
-
 import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
-import com.ctre.phoenix.motorcontrol.VictorSPXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
-import com.ctre.phoenix.motorcontrol.can.VictorSPX;
-import com.revrobotics.spark.SparkClosedLoopController;
-import com.revrobotics.spark.SparkLimitSwitch;
-import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
-import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.SparkClosedLoopController;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
+import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -36,6 +29,7 @@ public class CoralArm extends SubsystemBase {
     // sensor coralSensor = new Sensor();
 
     private double coralWristSetpoint;
+    private boolean needsRestoreSetpoint = false;
 
     // SparkMax coralWheel = new SparkMax(100, MotorType.kBrushless);
     // SparkMax coralWrist = new SparkMax(1001, MotorType.kBrushless);
@@ -64,7 +58,7 @@ public class CoralArm extends SubsystemBase {
                 .zeroCentered(true);
         configWrist.closedLoop
                 .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
-                .pid(2, 0.0001, 0.001)
+                .pid(3, 0.0001, 0.001)
                 .outputRange(-0.8, 0.7);
         coralWrist.configure(configWrist, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
@@ -97,20 +91,20 @@ public class CoralArm extends SubsystemBase {
         // Shuffleboard.getTab("Debug").addDouble("Coral Wrist Power", () -> coralWrist.getAppliedOutput());
     }
 
-    private Optional<Double> restoreSetpoint = Optional.empty();
     @Override
     public void periodic() {
         if(!elevator.isReady()) {
-            if (restoreSetpoint.isEmpty() && Math.abs(coralWrist.getAbsoluteEncoder().getPosition()) < .12) {
+            // if coral arm setpoint is below horizontal and will hit the elevator
+            if (!needsRestoreSetpoint && coralWristSetpoint > 0) {
                 System.out.println("Saving setpoint " + coralWristSetpoint);
-                restoreSetpoint = Optional.of(coralWristSetpoint);
-                setCoralWristSetpoint(0);
+                needsRestoreSetpoint = true;
+                applyWristSetpointToMotor(0);
             }
         } else {
-            if (restoreSetpoint.isPresent()) {
-                System.out.println("Restoring setpoint " + restoreSetpoint.get());
-                setCoralWristSetpoint(restoreSetpoint.get());
-                restoreSetpoint = Optional.empty();
+            if (needsRestoreSetpoint) {
+                System.out.println("Restoring setpoint " + coralWristSetpoint);
+                needsRestoreSetpoint = false;
+                applyWristSetpointToMotor(coralWristSetpoint);
             }
         }
 
@@ -149,6 +143,10 @@ public class CoralArm extends SubsystemBase {
     public void setCoralWristSetpoint(double setpoint) {
         coralWristSetpoint = setpoint;
         // coralWristPID.setSetpoint(setpoint);
+        applyWristSetpointToMotor(setpoint);
+    }
+
+    private void applyWristSetpointToMotor(double setpoint) {
         coralWristController.setReference(setpoint, ControlType.kPosition);
     }
 
