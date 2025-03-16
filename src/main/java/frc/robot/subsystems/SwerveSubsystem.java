@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import static edu.wpi.first.units.Units.Volts;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
@@ -21,6 +23,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.LimelightHelpers;
@@ -294,5 +297,28 @@ public class SwerveSubsystem extends SubsystemBase {
                 Shuffleboard.getTab("Debug").addDouble("yaw offset", () -> yawOffset.getDegrees());
                 Shuffleboard.getTab("Debug").add(field);
 
+                var sysIdRoutine = new SysIdRoutine(
+                                new SysIdRoutine.Config(),
+                                new SysIdRoutine.Mechanism(
+                                                (voltage) -> this.runVolts(voltage.in(Volts)),
+                                                null, // No log consumer, since data is recorded by URCL
+                                                this));
+
+                Shuffleboard.getTab("SysId").add("Quasi Forward Swerve",
+                                sysIdRoutine.quasistatic(SysIdRoutine.Direction.kForward));
+                Shuffleboard.getTab("SysId").add("Quasi Backward Swerve",
+                                sysIdRoutine.quasistatic(SysIdRoutine.Direction.kReverse));
+                Shuffleboard.getTab("SysId").add("Dynamic Forward Swerve",
+                                sysIdRoutine.dynamic(SysIdRoutine.Direction.kForward));
+                Shuffleboard.getTab("SysId").add("Dynamic Backaward Swerve",
+                                sysIdRoutine.dynamic(SysIdRoutine.Direction.kReverse));
+
         }
+
+        private void runVolts(double in) {
+                fLSwerve.runVolts(in);
+                fRSwerve.runVolts(in);
+                bLSwerve.runVolts(in);
+                bRSwerve.runVolts(in);
+                                                        }
 }

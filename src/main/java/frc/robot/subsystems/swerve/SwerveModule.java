@@ -226,6 +226,10 @@ public class SwerveModule {
         public void resetEncoders() {
                 driveEncoder.setPosition(0);
         }
+
+        public void runVolts(double in) {
+                driveMotor.setVoltage(in);
+        }
 }
 
 // but im a CounterClockwise_Positive

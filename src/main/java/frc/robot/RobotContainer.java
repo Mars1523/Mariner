@@ -4,55 +4,40 @@
 
 package frc.robot;
 
-import javax.print.attribute.standard.JobHoldUntil;
+import java.util.HashMap;
+
+import org.littletonrobotics.urcl.URCL;
 
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathConstraints;
-import com.pathplanner.lib.path.PathPlannerPath;
 
-import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
-import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
-
-//import org.littletonrobotics.urcl.URCL;
-
 import edu.wpi.first.wpilibj.DataLogManager;
-import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PowerDistribution;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.NTDouble.NTD;
 import frc.robot.commands.DefaultSwerve;
 import frc.robot.commands.Configuration.ConfigSystem;
-import frc.robot.commands.autos.AutoAlignReef;
-import frc.robot.commands.autos.AlgaeAutos.AutoAlgaeIntake;
 import frc.robot.commands.autos.AutoSequences.AlignmentSequences.AlgaeIntakeAlignmentSequence;
-import frc.robot.commands.autos.AutoSequences.AlignmentSequences.AutoIntakeAlgae;
 import frc.robot.commands.autos.AutoSequences.AlignmentSequences.CoralStationSequence;
 import frc.robot.commands.autos.AutoSequences.AlignmentSequences.L1AlignmentSequence;
 import frc.robot.commands.autos.AutoSequences.AlignmentSequences.L4AlignmentSequence;
 import frc.robot.commands.autos.AutoSequences.AlignmentSequences.LeftAlignmentSequence;
 import frc.robot.commands.autos.AutoSequences.AlignmentSequences.ProcessorAlignmentSequence;
 import frc.robot.commands.autos.AutoSequences.AlignmentSequences.RightAlignmentSequence;
+import frc.robot.subsystems.AlgaeArm;
+import frc.robot.subsystems.ClimbSub;
 import frc.robot.subsystems.CoralArm;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.SwerveSubsystem;
-import frc.robot.subsystems.AlgaeArm;
-import frc.robot.subsystems.ClimbSub;
 
 public class RobotContainer {
 
@@ -94,6 +79,23 @@ public class RobotContainer {
 
     swerveSubsystem.setDefaultCommand(swerve);
     configureBindings();
+
+    if (false) {
+      DataLogManager.start();
+      var sparks = new HashMap<Integer, String>();
+      sparks.put(10, "SwerveTurnBR");
+      sparks.put(11, "SwerveDriveBR");
+      sparks.put(12, "SwerveTurnFR");
+      sparks.put(13, "SwerveDriveFR");
+      sparks.put(14, "SwerveTurnFL");
+      sparks.put(15, "SwerveDriveFL");
+      sparks.put(16, "SwerveTurnBL");
+      sparks.put(17, "SwerveDriveBL");
+
+      sparks.put(59, "Elevator1");
+      sparks.put(60, "Elevator2");
+      URCL.start(sparks);
+    }
     // CameraServer.startAutomaticCapture();
 
     // Shuffleboard.getTab("Debug").add(pdh);
@@ -105,7 +107,7 @@ public class RobotContainer {
     // right coral station (2, 1.7)
     // processor (6.3, 1.55)
     // }
-  }
+  }  
 
   
   private boolean getUpperTag(){
@@ -296,8 +298,8 @@ public class RobotContainer {
         new ConfigSystem(Constants.SetpointConstants.Options.driveConfig, coralArm, elevatorSub, algaeArm));
     xboxBack.and(xboxX).onTrue(
         new ConfigSystem(Constants.SetpointConstants.Options.l3, coralArm, elevatorSub, algaeArm));
-    //xboxBack.and(xboxY).onTrue(
-    //    new ConfigSystem(Constants.SetpointConstants.Options.l4, coralArm, elevatorSub, algaeArm));
+    xboxBack.and(xboxY).onTrue(
+        new ConfigSystem(Constants.SetpointConstants.Options.l4, coralArm, elevatorSub, algaeArm));
   }
 
   public Command simple() {
