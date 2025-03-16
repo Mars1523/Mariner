@@ -296,8 +296,8 @@ public class RobotContainer {
         new ConfigSystem(Constants.SetpointConstants.Options.driveConfig, coralArm, elevatorSub, algaeArm));
     xboxBack.and(xboxX).onTrue(
         new ConfigSystem(Constants.SetpointConstants.Options.l3, coralArm, elevatorSub, algaeArm));
-    xboxBack.and(xboxY).onTrue(
-        new ConfigSystem(Constants.SetpointConstants.Options.l4first, coralArm, elevatorSub, algaeArm));
+    //xboxBack.and(xboxY).onTrue(
+    //    new ConfigSystem(Constants.SetpointConstants.Options.l4, coralArm, elevatorSub, algaeArm));
   }
 
   public Command simple() {
