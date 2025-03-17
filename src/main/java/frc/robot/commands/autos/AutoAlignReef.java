@@ -90,9 +90,11 @@ public class AutoAlignReef extends Command {
         distancePID.setIntegratorRange(-15, 15);
         strafePID.setIntegratorRange(-15, 15);
 
-        Shuffleboard.getTab("Tune").add(distancePID);
-        Shuffleboard.getTab("Tune").add(strafePID);
-        Shuffleboard.getTab("Tune").add(rotationPID);
+        if (tune) {
+            Shuffleboard.getTab("Tune").add(distancePID);
+            Shuffleboard.getTab("Tune").add(strafePID);
+            Shuffleboard.getTab("Tune").add(rotationPID);
+        }
     }
 
     @Override
