@@ -34,6 +34,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.SetpointConstants.ConfigOption;
 import frc.robot.commands.DefaultSwerve;
+import frc.robot.commands.GoTo;
 import frc.robot.commands.Configuration.ConfigSystem;
 import frc.robot.commands.autos.AutoSequences.AlignmentSequences.AbortAbortReef;
 import frc.robot.commands.autos.AutoSequences.AlignmentSequences.AbortAbortUpper;
@@ -70,6 +71,8 @@ public class RobotContainer {
 
 
   PowerDistribution pdh = new PowerDistribution(1, ModuleType.kRev);
+
+  GoTo goTo = new GoTo();
 
   private void isOffset(boolean isOffset){
     this.isOffset = isOffset;
@@ -126,6 +129,18 @@ public class RobotContainer {
   }
   private boolean getLowerTag(){
     return LimelightHelpers.getTV(Constants.ReefLimelightName);
+  }
+  private boolean getNoTag(){
+    return !getLowerTag() && !getUpperTag();
+  }
+
+  private Pose2d inFrontOfTag(int id){
+    Transform2d rot180 = new Transform2d(Translation2d.kZero, Rotation2d.k180deg);
+    var field = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);
+    var tag8 = field.getTagPose(id).get().toPose2d();
+    var offset = new Transform2d(1, 0, new Rotation2d());
+    Pose2d infrontOfTag = tag8.plus(offset).transformBy(rot180);
+    return infrontOfTag;
   }
 
   private void configureBindings() {
@@ -334,14 +349,19 @@ public class RobotContainer {
         new ConfigSystem(Constants.SetpointConstants.Options.l4, coralArm, elevatorSub, algaeArm));
 
     var constraints = new PathConstraints(1.75, 2, 360, 360);
-    Transform2d rot180 = new Transform2d(Translation2d.kZero, Rotation2d.k180deg);
-    var field = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);
-    var tag8 = field.getTagPose(8).get().toPose2d();
-    var offset = new Transform2d(1, 0, new Rotation2d());
-    Pose2d infrontOfTag8 = tag8.plus(offset).transformBy(rot180);
+    // Transform2d rot180 = new Transform2d(Translation2d.kZero, Rotation2d.k180deg);
+    // var field = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);
+    // var tag8 = field.getTagPose(8).get().toPose2d();
+    // var offset = new Transform2d(1, 0, new Rotation2d());
+    // Pose2d infrontOfTag8 = tag8.plus(offset).transformBy(rot180);
+    Pose2d infrontOfTag8 = inFrontOfTag(8);
+
     Shuffleboard.getTab("PathPlanner").add(
         "Goto Before 8",
         AutoBuilder.pathfindToPose(infrontOfTag8, constraints));
+    Shuffleboard.getTab("PathPlanner").add(
+        "class go to before 8",
+        goTo.testTag8());
   }
 
   public class MyCommandShouldHaveAName extends SequentialCommandGroup {
