@@ -147,8 +147,8 @@ public final class Constants {
 
     public class ElevatorSetpoints {
       public static NTDouble l1 = new NTDouble(0, "l1", "ElevatorSetpoints");
-      public static NTDouble l2 = new NTDouble(0.4, "l2", "ElevatorSetpoints");
-      public static NTDouble l3 = new NTDouble(0.8, "l3", "ElevatorSetpoints");
+      public static NTDouble l2 = new NTDouble(0.47, "l2", "ElevatorSetpoints");
+      public static NTDouble l3 = new NTDouble(0.81, "l3", "ElevatorSetpoints");
       public static NTDouble l4 = new NTDouble(1.36, "l4", "ElevatorSetpoints");
 
       public static NTDouble groundLevel = new NTDouble(0, "groundLevel", "ElevatorSetpoints");
@@ -182,7 +182,7 @@ public final class Constants {
       //static double l1 = 0;
       public static NTDouble leftReef = new NTDouble(0.12, "leftReef", "StrafeOffsets");
       public static NTDouble leftL4 = new NTDouble(0.11, "leftL4", "StrafeOffsets");
-      public static NTDouble rightReef = new NTDouble(-0.21, "rightReef", "StrafeOffsets");
+      public static NTDouble rightReef = new NTDouble(-0.20, "rightReef", "StrafeOffsets");
       public static NTDouble rightL4 = new NTDouble(-0.2, "rightL4", "StrafeOffsets");
       public static NTDouble centerReef = new NTDouble(-0.05, "centerReef", "StrafeOffsets");
       public static NTDouble processor = new NTDouble(0, "processor", "StrafeOffsets");
