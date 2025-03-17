@@ -280,6 +280,7 @@ public class RobotContainer {
 
     var hasUpperTarget = new Trigger(this::getUpperTag);
     var hasLowerTarget = new Trigger(this::getLowerTag);
+    var hasNoTarget = new Trigger(this::getNoTag);
 
   //   //xboxA.and(leftBumper).onTrue();
   //   //xboxA.and(noBumper).onTrue(new PrintCommand("no bumper and button pressed"));
@@ -309,7 +310,7 @@ public class RobotContainer {
       new AbortAbortUpper(coralArm, algaeArm, elevatorSub, swerveSubsystem));
     xboxA.and(noBumper).and(hasAlgae).and(hasUpperTarget.negate()).onTrue(
       new ConfigSystem(Constants.SetpointConstants.Options.processor, coralArm, elevatorSub, algaeArm));
-    xboxA.and(noBumper).and(hasAlgae.negate()).onTrue(
+    xboxA.and(noBumper).and(hasAlgae.negate()).and(hasNoTarget).onTrue(
       new ConfigSystem(Constants.SetpointConstants.Options.driveConfig, coralArm, elevatorSub, algaeArm));
     xboxB.and(noBumper).onTrue(
       new CoralStationSequence(coralArm, algaeArm, elevatorSub, swerveSubsystem));
