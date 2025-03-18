@@ -75,8 +75,8 @@ public class AutoAlignUpper extends Command {
 
         strafePID = new ProfiledPIDController(3.5 * .9, .8 * .7, .8 * .125,
                 new TrapezoidProfile.Constraints(Constants.DriveConstants.MaxVelocityMetersPerSecond / 3.0, 3.0 / 1.5));
-        distancePID = new ProfiledPIDController(3.5 * .75, .8 * .7, .8 * .135,
-                new TrapezoidProfile.Constraints(Constants.DriveConstants.MaxVelocityMetersPerSecond / 2.0, .3));
+        distancePID = new ProfiledPIDController(3.5 * .9, .8 * .7, .8 * .1,
+                new TrapezoidProfile.Constraints(Constants.DriveConstants.MaxVelocityMetersPerSecond / 3.0, 1.4));
         rotationPID = new ProfiledPIDController(3.5 * .9, .8 * .7, .8 * .125,
                 new TrapezoidProfile.Constraints(Constants.DriveConstants.MaxAngularVelocityRadiansPerSecond / 3.0,
                         3.0 / 1.5));
@@ -96,6 +96,7 @@ public class AutoAlignUpper extends Command {
 
     @Override
     public void initialize() {
+        firstRun = true;
         // LimelightHelpers.SetFiducialIDFiltersOverride("limelight-back", new
         // int[]{4,7});
         // distancePID.reset(distanceGoal.get());
@@ -141,7 +142,7 @@ public class AutoAlignUpper extends Command {
         if (firstRun) {
             firstRun = false;
 
-            distancePID.reset(-target.getZ());
+            distancePID.reset(target.getZ());
             strafePID.reset(target.getX());
             rotationPID.reset(target.getRotation().getZ());
         }
