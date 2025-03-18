@@ -15,62 +15,60 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 
-public class GoTo{
-    
-    public int reefNTagID;
-    public int reefNETagID;
-    public int reefNWTagID;
-    public int reefSTagID;
-    public int reefSETagID;
-    public int reefSWTagID;
-    public int csLeftTagID;
-    public int csRightTagID;
-    public int processorTagID;
+public class GoTo {
+
+    private int reefNTagID;
+    private int reefNETagID;
+    private int reefNWTagID;
+    private int reefSTagID;
+    private int reefSETagID;
+    private int reefSWTagID;
+    private int csLeftTagID;
+    private int csRightTagID;
+    private int processorTagID;
 
     Optional<Alliance> alliance = DriverStation.getAlliance();
 
-    public GoTo(){
-        if (alliance.isPresent()){
-            if(alliance.get() == Alliance.Red){
-                reefNTagID = 0;
-                reefNETagID = 0;
-                reefNWTagID = 0;
-                reefNTagID = 0;
-                reefNETagID = 0;
-                reefNWTagID = 0;
-                csLeftTagID = 0;
-                csRightTagID = 0;
-                processorTagID = 0;
+    public GoTo() {
+        if (alliance.isPresent()) {
+            if (alliance.get() == Alliance.Red) {
+                reefNTagID = 10;
+                reefNETagID = 9;
+                reefNWTagID = 11;
+                reefSTagID = 7;
+                reefSETagID = 8;
+                reefSWTagID = 6;
+                csLeftTagID = 1;
+                csRightTagID = 2;
+                processorTagID = 3;
             }
-            if(alliance.get() == Alliance.Blue){
-                reefNTagID = 0;
-                reefNETagID = 0;
-                reefNWTagID = 0;
-                reefNTagID = 0;
-                reefNETagID = 0;
-                reefNWTagID = 0;
-                csLeftTagID = 0;
-                csRightTagID = 0;
-                processorTagID = 0;
+            if (alliance.get() == Alliance.Blue) {
+                reefNTagID = 21;
+                reefNETagID = 22;
+                reefNWTagID = 20;
+                reefSTagID = 18;
+                reefSETagID = 17;
+                reefSWTagID = 19;
+                csLeftTagID = 13;
+                csRightTagID = 12;
+                processorTagID = 16;
             }
+        } else {
+            reefNTagID = 21;
+            reefNETagID = 22;
+            reefNWTagID = 20;
+            reefSTagID = 18;
+            reefSETagID = 17;
+            reefSWTagID = 19;
+            csLeftTagID = 13;
+            csRightTagID = 12;
+            processorTagID = 16;
         }
-        else{
-            reefNTagID = 0;
-            reefNETagID = 0;
-            reefNWTagID = 0;
-            reefNTagID = 0;
-            reefNETagID = 0;
-            reefNWTagID = 0;
-            csLeftTagID = 0;
-            csRightTagID = 0;
-            processorTagID = 0;
-        }
-    }   
+    }
 
     public PathConstraints constraints = new PathConstraints(1.75, 2, 360, 360);
 
-
-    private Pose2d inFrontOfTag(int id){
+    private Pose2d inFrontOfTag(int id) {
         Transform2d rot180 = new Transform2d(Translation2d.kZero, Rotation2d.k180deg);
         var field = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);
         var tag = field.getTagPose(id).get().toPose2d();
@@ -79,36 +77,45 @@ public class GoTo{
         return infrontOfTag;
     }
 
-
-    public Command reefN(){
+    public Command reefN() {
         return AutoBuilder.pathfindToPose(inFrontOfTag(reefNTagID), constraints);
     }
-    public Command reefNE(){
+
+    public Command reefNE() {
         return AutoBuilder.pathfindToPose(inFrontOfTag(reefNETagID), constraints);
     }
-    public Command reefNW(){
+
+    public Command reefNW() {
         return AutoBuilder.pathfindToPose(inFrontOfTag(reefNWTagID), constraints);
     }
-    public Command reefS(){
+
+    public Command reefS() {
         return AutoBuilder.pathfindToPose(inFrontOfTag(reefSTagID), constraints);
     }
-    public Command reefSE(){
+
+    public Command reefSE() {
         return AutoBuilder.pathfindToPose(inFrontOfTag(reefSETagID), constraints);
     }
-    public Command reefSW(){
+
+    public Command reefSW() {
         return AutoBuilder.pathfindToPose(inFrontOfTag(reefSWTagID), constraints);
     }
-    public Command coralStationLeft(){
+
+    public Command coralStationLeft() {
         return AutoBuilder.pathfindToPose(inFrontOfTag(csLeftTagID), constraints);
     }
-    public Command coralStationRight(){
+
+    public Command coralStationRight() {
         return AutoBuilder.pathfindToPose(inFrontOfTag(csRightTagID), constraints);
     }
-    public Command processor(){
+
+    public Command processor() {
         return AutoBuilder.pathfindToPose(inFrontOfTag(processorTagID), constraints);
     }
-    public Command testTag8(){
+
+    public Command testTag8() {
         return AutoBuilder.pathfindToPose(inFrontOfTag(8), constraints);
+
     }
-    
+
 }
