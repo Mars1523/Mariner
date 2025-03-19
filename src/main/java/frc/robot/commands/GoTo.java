@@ -115,7 +115,6 @@ public class GoTo {
 
     public Command testTag8() {
         return AutoBuilder.pathfindToPose(inFrontOfTag(8), constraints);
-
     }
 
 }
