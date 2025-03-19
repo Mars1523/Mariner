@@ -16,7 +16,6 @@ public class DefaultSwerve extends Command {
 
     public DefaultSwerve(Joystick joy, SwerveSubsystem swerveSub, Elevator elevator) {
         addRequirements(swerveSub);
-        addRequirements(elevator);
         this.swerveSub = swerveSub;
         this.joy = joy;
         this.elevator = elevator;
