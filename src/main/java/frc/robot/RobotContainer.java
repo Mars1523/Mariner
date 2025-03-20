@@ -372,8 +372,11 @@ public class RobotContainer {
                 xboxA.and(noBumper).and(hasAlgae.negate()).onTrue(
                                 new ConfigSystem(Constants.SetpointConstants.Options.driveConfig, coralArm, elevatorSub,
                                                 algaeArm));
-                xboxB.and(noBumper).onTrue(
+                xboxB.and(noBumper).and(xboxStart.negate()).onTrue(
                                 new CoralStationSequence(coralArm, algaeArm, elevatorSub, swerveSubsystem));
+                xboxB.and(noBumper).and(xboxStart).onTrue(
+                                new ConfigSystem(Constants.SetpointConstants.Options.coralStationManual, coralArm,
+                                                elevatorSub, algaeArm));
                 xboxX.and(noBumper).onTrue(
                                 new AlgaeIntakeAlignmentSequence(coralArm, elevatorSub, algaeArm, swerveSubsystem,
                                                 Constants.SetpointConstants.Options.algaeLow));

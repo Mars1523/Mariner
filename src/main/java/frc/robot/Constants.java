@@ -228,7 +228,7 @@ public final class Constants {
       public static NTDouble processorScore = new NTDouble(0.5, "processorScore", "DistanceOffsets");
       public static NTDouble l1 = new NTDouble(0.5, "l1", "DistanceOffsets");
       public static NTDouble csConfigure = new NTDouble(0.7, "CoralStationConfigure", "DistanceOffsets");
-      public static NTDouble csIntake = new NTDouble(0.6, "CoralStationIntake", "DistanceOffsets");
+      public static NTDouble csIntake = new NTDouble(0.7, "CoralStationIntake", "DistanceOffsets");
     }
 
     public class RotOffsets {
@@ -299,8 +299,11 @@ public final class Constants {
       public static ConfigOption coralPrep = new ConfigOption(CoralPivotAngles.up,
           NTD.of(ElevatorSetpoints.coralStation.get() + .2),
           AlgaeArmAngles.up);
-      public static ConfigOption coralStation = new ConfigOption(CoralPivotAngles.CoralSt,
+      public static ConfigOption coralStationManual = new ConfigOption(CoralPivotAngles.CoralSt,
           ElevatorSetpoints.coralStation,
+          AlgaeArmAngles.up);
+      public static ConfigOption coralStationAuto = new ConfigOption(CoralPivotAngles.CoralSt,
+          NTD.of(0.13),
           AlgaeArmAngles.up);
       public static ConfigOption processor = new ConfigOption(CoralPivotAngles.down, ElevatorSetpoints.processor,
           AlgaeArmAngles.processor);
