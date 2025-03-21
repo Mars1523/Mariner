@@ -88,7 +88,10 @@ public class Elevator extends SubsystemBase {
         elevator2.getEncoder().setPosition(0);
 
         Shuffleboard.getTab("Debug").addDouble("Current Elevator goal", () -> currentSetpoint);
-        Shuffleboard.getTab("Debug").addDouble("Current elevator position", () -> elevator1.getEncoder().getPosition());
+        Shuffleboard.getTab("Debug").addDouble("Current elevator motor 1 position",
+                () -> elevator1.getEncoder().getPosition());
+        Shuffleboard.getTab("Debug").addDouble("Current elevator motor 2 position",
+                () -> elevator2.getEncoder().getPosition());
         Shuffleboard.getTab("Debug").addDouble("Current elevator setpoint", () -> trapezoidSetpoint.position);
         // Shuffleboard.getTab("Debug").addDouble("Current Setpoint",
         // elevatorController.);
