@@ -4,10 +4,15 @@
 
 package frc.robot;
 
+import static edu.wpi.first.units.Units.Rotation;
+
+import java.lang.StackWalker.Option;
 import java.util.HashMap;
+import java.util.Optional;
 
 import org.littletonrobotics.urcl.URCL;
 
+import com.ctre.phoenix6.swerve.jni.SwerveJNI.DriveState;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathConstraints;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
@@ -19,10 +24,12 @@ import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -39,6 +46,7 @@ import frc.robot.commands.GoTo;
 import frc.robot.commands.Configuration.ConfigSystem;
 import frc.robot.commands.autos.AutoDrive;
 import frc.robot.commands.autos.AutoSequences.CenterAuto;
+import frc.robot.commands.autos.AutoSequences.Forward;
 import frc.robot.commands.autos.AutoSequences.LeftAuto;
 import frc.robot.commands.autos.AutoSequences.RightAuto;
 import frc.robot.commands.autos.AutoSequences.Test;
@@ -78,8 +86,6 @@ public class RobotContainer {
 
         PowerDistribution pdh = new PowerDistribution(1, ModuleType.kRev);
 
-        GoTo goTo = new GoTo();
-
         private void isOffset(boolean isOffset) {
                 this.isOffset = isOffset;
         }
@@ -95,21 +101,40 @@ public class RobotContainer {
         // AutoNav autoNav = new AutoNav();
 
         // Elevator elevator = new Elevator();
+        enum StartingPlace {
+                Left, Right, Center
+        }
 
         SendableChooser<Command> autoChooser = AutoBuilder.buildAutoChooser();
+        SendableChooser<StartingPlace> poseChooser = new SendableChooser<>();
+        // GoTo goTo = new GoTo(sideChooser);
 
         public RobotContainer() {
                 // if start lowercase, its object
+                // NOT USED
+                Optional<Alliance> alliance = null;
                 LiveWindow.enableTelemetry(CommandScheduler.getInstance());
                 // URCL.start();
-                autoChooser.addOption("left", new LeftAuto(coralArm, algaeArm, elevatorSub, swerveSubsystem));
-                autoChooser.addOption("center", new CenterAuto(coralArm, algaeArm, elevatorSub, swerveSubsystem));
+                autoChooser.addOption("left",
+                                new LeftAuto(coralArm, algaeArm, elevatorSub, swerveSubsystem, alliance));
+                autoChooser.addOption("center",
+                                new CenterAuto(coralArm, algaeArm, elevatorSub, swerveSubsystem, alliance));
                 autoChooser.addOption("right", new RightAuto(coralArm, algaeArm, elevatorSub, swerveSubsystem));
                 autoChooser.addOption("testRight", new Test(coralArm, algaeArm, elevatorSub, swerveSubsystem));
                 autoChooser.addOption("testRightwithGoTo",
-                                new TestGoTo(coralArm, algaeArm, elevatorSub, swerveSubsystem));
+                                new TestGoTo(coralArm, algaeArm, elevatorSub, swerveSubsystem, alliance));
+                autoChooser.addOption("goforward", new Forward(swerveSubsystem));
                 autoChooser.setDefaultOption("Do Nothing", Commands.none());
                 Shuffleboard.getTab("auto").add(autoChooser);
+
+                poseChooser.addOption("Left", StartingPlace.Left);
+                poseChooser.addOption("Center", StartingPlace.Center);
+                poseChooser.addOption("Right", StartingPlace.Right);
+
+                // sideChooser.addOption("Red", GoTo.side.Red);
+                // sideChooser.addOption("Blue", GoTo.side.Blue);
+                Shuffleboard.getTab("pose").add(poseChooser);
+                // Shuffleboard.getTab("side").add(sideChooser);
 
                 swerveSubsystem.setDefaultCommand(swerve);
                 configureBindings();
@@ -260,6 +285,7 @@ public class RobotContainer {
                 primaryJoy.button(11).and(primaryJoy.button(7))
                                 .onTrue(climbSub.climbSlow().withTimeout(0.5).andThen(climbSub.climb()))
                                 .onFalse(climbSub.climbStopManual());
+                primaryJoy.button(10).onTrue(Commands.runOnce(() -> CommandScheduler.getInstance().cancelAll()));
                 // primaryJoy.button(10).and(primaryJoy.button(7))
                 // .onTrue(climbSub.climb())
                 // .onFalse(climbSub.climbStopManual());
@@ -449,9 +475,9 @@ public class RobotContainer {
                 Shuffleboard.getTab("PathPlanner").add(
                                 "Goto Before 8",
                                 AutoBuilder.pathfindToPose(infrontOfTag8, constraints));
-                Shuffleboard.getTab("PathPlanner").add(
-                                "class go to before 8",
-                                goTo.testTag8());
+                // Shuffleboard.getTab("PathPlanner").add(
+                // "class go to before 8",
+                // goTo.testTag8());
         }
 
         public class MyCommandShouldHaveAName extends SequentialCommandGroup {
@@ -499,6 +525,35 @@ public class RobotContainer {
                         return command;
                 } else {
                         return Commands.none();
+                }
+        }
+
+        public void setStartingPose() {
+                Rotation2d rot = new Rotation2d();
+                if (DriverStation.getAlliance().get() == Alliance.Red)
+                        switch (poseChooser.getSelected()) {
+                                case Left:
+                                        swerveSubsystem.resetOmetry(new Pose2d(9.5, 0.7, new Rotation2d(0.58)));
+                                        break;
+                                case Center:
+                                        swerveSubsystem.resetOmetry(new Pose2d(9.5, 4, new Rotation2d()));
+                                        break;
+                                case Right:
+                                        swerveSubsystem.resetOmetry(new Pose2d(9.5, 7.1, new Rotation2d(-0.58)));
+                                        break;
+                        }
+                else if (DriverStation.getAlliance().get() == Alliance.Blue) {
+                        switch (poseChooser.getSelected()) {
+                                case Left:
+                                        swerveSubsystem.resetOmetry(new Pose2d(8.1, 7.3, new Rotation2d(0.58)));
+                                        break;
+                                case Center:
+                                        swerveSubsystem.resetOmetry(new Pose2d(8, 4, new Rotation2d()));
+                                        break;
+                                case Right:
+                                        swerveSubsystem.resetOmetry(new Pose2d(8, 0.7, new Rotation2d(-0.58)));
+                                        break;
+                        }
                 }
         }
 }

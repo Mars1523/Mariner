@@ -1,7 +1,11 @@
 package frc.robot.commands.autos.AutoSequences;
 
+import java.util.Optional;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
@@ -24,7 +28,8 @@ public class TestGoTo extends SequentialCommandGroup {
         final Elevator elevator;
         final SwerveSubsystem swerveSubsystem;
 
-        public TestGoTo(CoralArm coralArm, AlgaeArm algaeArm, Elevator elevator, SwerveSubsystem swerve) {
+        public TestGoTo(CoralArm coralArm, AlgaeArm algaeArm, Elevator elevator, SwerveSubsystem swerve,
+                        Optional<Alliance> alliance) {
                 this.coralArm = coralArm;
                 this.algaeArm = algaeArm;
                 this.elevator = elevator;
@@ -32,16 +37,16 @@ public class TestGoTo extends SequentialCommandGroup {
 
                 addCommands(
                                 new AutoDrive(swerve, 2, 0.5),
-                                new AutoRotate(swerve, 90, 0.5),
-                                new GoTo().reefN(),
+                                // new AutoRotate(swerve, 90, 0.5),
+                                new GoTo(alliance).reefN(),
                                 new L4AlignmentSequence(coralArm, algaeArm, elevator, swerve,
                                                 Constants.SetpointConstants.StrafeOffsets.leftL4),
-                                new GoTo().coralStationLeft(),
+                                new GoTo(alliance).coralStationLeft(),
                                 new CoralStationSequence(coralArm, algaeArm, elevator, swerve),
-                                new GoTo().reefSW(),
+                                new GoTo(alliance).reefSW(),
                                 new L4AlignmentSequence(coralArm, algaeArm, elevator, swerve,
                                                 Constants.SetpointConstants.StrafeOffsets.leftL4),
-                                new GoTo().coralStationLeft(),
+                                new GoTo(alliance).coralStationLeft(),
                                 new CoralStationSequence(coralArm, algaeArm, elevator, swerve)
 
                 // new ParallelCommandGroup(new AutoNav(), ConfigSystem)

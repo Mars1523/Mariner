@@ -1,11 +1,16 @@
 package frc.robot.commands.autos.AutoSequences;
 
+import java.util.Optional;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
+import frc.robot.commands.GoTo;
 import frc.robot.commands.Configuration.ConfigSystem;
 import frc.robot.commands.autos.AutoSequences.AlignmentSequences.CoralStationSequence;
 import frc.robot.commands.autos.AutoSequences.AlignmentSequences.L4AlignmentSequence;
@@ -22,26 +27,23 @@ public class LeftAuto extends SequentialCommandGroup {
         final CoralArm coralArm;
         final Elevator elevator;
 
-        public LeftAuto(CoralArm coralArm, AlgaeArm algaeArm, Elevator elevator, SwerveSubsystem swerve) {
+        public LeftAuto(CoralArm coralArm, AlgaeArm algaeArm, Elevator elevator, SwerveSubsystem swerve,
+                        Optional<Alliance> alliance) {
                 this.coralArm = coralArm;
                 this.algaeArm = algaeArm;
                 this.elevator = elevator;
                 this.swerveSubsystem = swerve;
 
                 addCommands(
-                                AutoBuilder.pathfindToPose(Constants.WaypointConstants.ReefNW,
-                                                Constants.AutoConstants.constantConstraints),
+                                new GoTo(alliance).reefNW(),
                                 new L4AlignmentSequence(coralArm, algaeArm, elevator, swerve,
                                                 Constants.SetpointConstants.StrafeOffsets.leftL4),
-                                AutoBuilder.pathfindToPose(Constants.WaypointConstants.CoralStationLeft,
-                                                Constants.AutoConstants.constantConstraints),
+                                new GoTo(alliance).coralStationLeft(),
                                 new CoralStationSequence(coralArm, algaeArm, elevator, swerve),
-                                AutoBuilder.pathfindToPose(Constants.WaypointConstants.ReefSW,
-                                                Constants.AutoConstants.constantConstraints),
+                                new GoTo(alliance).reefSW(),
                                 new L4AlignmentSequence(coralArm, algaeArm, elevator, swerve,
                                                 Constants.SetpointConstants.StrafeOffsets.leftL4),
-                                AutoBuilder.pathfindToPose(Constants.WaypointConstants.CoralStationLeft,
-                                                Constants.AutoConstants.constantConstraints),
+                                new GoTo(alliance).coralStationLeft(),
                                 new CoralStationSequence(coralArm, algaeArm, elevator, swerve));
         }
 }

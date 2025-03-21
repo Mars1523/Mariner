@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import java.lang.StackWalker.Option;
 import java.util.Optional;
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -13,6 +14,8 @@ import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class GoTo {
@@ -27,14 +30,18 @@ public class GoTo {
     private int csRightTagID;
     private int processorTagID;
 
-    Optional<Alliance> alliance = DriverStation.getAlliance();
+    public static Alliance getAlliance() {
+        System.out.println("returning alliance: " + DriverStation.getAlliance());
+        return DriverStation.getAlliance().orElse(Alliance.Blue);
+    }
 
-    public GoTo() {
+    public GoTo(Optional<Alliance> alliance) {
+        // alliance not used, delete
     }
 
     public void setAllianceIDs() {
-        if (alliance.isPresent()) {
-            if (alliance.get() == Alliance.Red) {
+        if (true) {
+            if (getAlliance() == Alliance.Red) {
                 reefNTagID = 10;
                 reefNETagID = 9;
                 reefNWTagID = 11;
@@ -44,7 +51,7 @@ public class GoTo {
                 csLeftTagID = 1;
                 csRightTagID = 2;
                 processorTagID = 3;
-            } else if (alliance.get() == Alliance.Blue) {
+            } else if (getAlliance() == Alliance.Blue) {
                 reefNTagID = 21;
                 reefNETagID = 22;
                 reefNWTagID = 20;
@@ -66,6 +73,43 @@ public class GoTo {
             csRightTagID = 12;
             processorTagID = 16;
         }
+        // switch (side.getSelected()) {
+        // case Red:
+        // reefNTagID = 10;
+        // reefNETagID = 9;
+        // reefNWTagID = 11;
+        // reefSTagID = 7;
+        // reefSETagID = 8;
+        // reefSWTagID = 6;
+        // csLeftTagID = 1;
+        // csRightTagID = 2;
+        // processorTagID = 3;
+        // break;
+
+        // case Blue:
+        // reefNTagID = 21;
+        // reefNETagID = 22;
+        // reefNWTagID = 20;
+        // reefSTagID = 18;
+        // reefSETagID = 17;
+        // reefSWTagID = 19;
+        // csLeftTagID = 13;
+        // csRightTagID = 12;
+        // processorTagID = 16;
+        // break;
+
+        // default:
+        // reefNTagID = 21;
+        // reefNETagID = 22;
+        // reefNWTagID = 20;
+        // reefSTagID = 18;
+        // reefSETagID = 17;
+        // reefSWTagID = 19;
+        // csLeftTagID = 13;
+        // csRightTagID = 12;
+        // processorTagID = 16;
+        // break;
+        // }
     }
 
     public PathConstraints constraints = new PathConstraints(1.75, 2, 360, 360);
