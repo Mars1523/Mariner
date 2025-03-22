@@ -545,7 +545,6 @@ public class RobotContainer {
         }
 
         public void setStartingPose() {
-                Rotation2d rot = new Rotation2d();
                 if (GoTo.getAlliance() == Alliance.Red) {
                         switch (poseChooser.getSelected()) {
                                 case Left:
@@ -564,7 +563,7 @@ public class RobotContainer {
                                         swerveSubsystem.resetOmetry(new Pose2d(8.1, 7.3, new Rotation2d(0.58)));
                                         break;
                                 case Center:
-                                        swerveSubsystem.resetOmetry(new Pose2d(8, 4, new Rotation2d()));
+                                        swerveSubsystem.resetOmetry(new Pose2d(8, 4, Rotation2d.k180deg));
                                         break;
                                 case Right:
                                         swerveSubsystem.resetOmetry(new Pose2d(8, 0.7, new Rotation2d(-0.58)));

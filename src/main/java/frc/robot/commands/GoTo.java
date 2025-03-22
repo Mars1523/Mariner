@@ -22,24 +22,24 @@ import edu.wpi.first.wpilibj2.command.Commands;
 
 public class GoTo {
 
-    private int redReefNTagID = 10;
-    private int redReefNETagID = 9;
-    private int redReefNWTagID = 11;
-    private int redReefSTagID = 7;
-    private int redReefSETagID = 8;
-    private int redReefSWTagID = 6;
-    private int redCsLeftTagID = 1;
-    private int redCsRightTagID = 2;
-    private int redProcessorTagID = 3;
-    private int blueReefNTagID = 21;
-    private int blueReefNETagID = 22;
-    private int blueReefNWTagID = 20;
-    private int blueReefSTagID = 18;
-    private int blueReefSETagID = 17;
-    private int blueReefSWTagID = 19;
-    private int blueCsLeftTagID = 13;
-    private int blueCsRightTagID = 12;
-    private int blueProcessorTagID = 16;
+    private final static int redReefNTagID = 10;
+    private final static int redReefNETagID = 9;
+    private final static int redReefNWTagID = 11;
+    private final static int redReefSTagID = 7;
+    private final static int redReefSETagID = 8;
+    private final static int redReefSWTagID = 6;
+    private final static int redCsLeftTagID = 1;
+    private final static int redCsRightTagID = 2;
+    private final static int redProcessorTagID = 3;
+    private final static int blueReefNTagID = 21;
+    private final static int blueReefNETagID = 22;
+    private final static int blueReefNWTagID = 20;
+    private final static int blueReefSTagID = 18;
+    private final static int blueReefSETagID = 17;
+    private final static int blueReefSWTagID = 19;
+    private final static int blueCsLeftTagID = 13;
+    private final static int blueCsRightTagID = 12;
+    private final static int blueProcessorTagID = 16;
 
     public boolean isRed() {
         return getAlliance() == Alliance.Red;
