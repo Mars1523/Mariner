@@ -383,10 +383,12 @@ public class RobotContainer {
                 // pressed"));
 
                 xboxA.and(leftBumper).onTrue(
-                                new L1AlignmentSequence(coralArm, algaeArm, elevatorSub, swerveSubsystem,
-                                                Constants.SetpointConstants.StrafeOffsets.l1Left,
-                                                Constants.SetpointConstants.DistanceOffsets.l1,
-                                                Constants.SetpointConstants.RotOffsets.l1Left));
+                                // new L1AlignmentSequence(coralArm, algaeArm, elevatorSub, swerveSubsystem,
+                                // Constants.SetpointConstants.StrafeOffsets.l1Left,
+                                // Constants.SetpointConstants.DistanceOffsets.l1,
+                                // Constants.SetpointConstants.RotOffsets.l1Left));
+                                new ConfigSystem(Constants.SetpointConstants.Options.l1, coralArm, elevatorSub,
+                                                algaeArm));
                 xboxB.and(leftBumper).onTrue(
                                 new LeftAlignmentSequence(coralArm, algaeArm, elevatorSub, swerveSubsystem,
                                                 Constants.SetpointConstants.Options.l2));
@@ -399,10 +401,12 @@ public class RobotContainer {
                 // new
                 // LeftAlignmentSequence(coralArm,algaeArm,elevatorSub,swerveSubsystem,Constants.SetpointConstants.Options.l4));
                 xboxA.and(rightBumper).onTrue(
-                                new L1AlignmentSequence(coralArm, algaeArm, elevatorSub, swerveSubsystem,
-                                                Constants.SetpointConstants.StrafeOffsets.l1Right,
-                                                Constants.SetpointConstants.DistanceOffsets.l1,
-                                                Constants.SetpointConstants.RotOffsets.l1Right));
+                                // new L1AlignmentSequence(coralArm, algaeArm, elevatorSub, swerveSubsystem,
+                                // Constants.SetpointConstants.StrafeOffsets.l1Right,
+                                // Constants.SetpointConstants.DistanceOffsets.l1,
+                                // Constants.SetpointConstants.RotOffsets.l1Right));
+                                new ConfigSystem(Constants.SetpointConstants.Options.l1, coralArm, elevatorSub,
+                                                algaeArm));
                 xboxB.and(rightBumper).onTrue(
                                 new RightAlignmentSequence(coralArm, algaeArm, elevatorSub, swerveSubsystem,
                                                 Constants.SetpointConstants.Options.l2));
@@ -542,7 +546,7 @@ public class RobotContainer {
 
         public void setStartingPose() {
                 Rotation2d rot = new Rotation2d();
-                if (DriverStation.getAlliance().get() == Alliance.Red)
+                if (GoTo.getAlliance() == Alliance.Red) {
                         switch (poseChooser.getSelected()) {
                                 case Left:
                                         swerveSubsystem.resetOmetry(new Pose2d(9.5, 0.7, new Rotation2d(0.58)));
@@ -554,7 +558,7 @@ public class RobotContainer {
                                         swerveSubsystem.resetOmetry(new Pose2d(9.5, 7.1, new Rotation2d(-0.58)));
                                         break;
                         }
-                else if (DriverStation.getAlliance().get() == Alliance.Blue) {
+                } else {
                         switch (poseChooser.getSelected()) {
                                 case Left:
                                         swerveSubsystem.resetOmetry(new Pose2d(8.1, 7.3, new Rotation2d(0.58)));
