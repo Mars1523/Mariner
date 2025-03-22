@@ -52,7 +52,7 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.schedule();
     }
 
-    // m_robotContainer.setStartingPose();
+    m_robotContainer.setStartingPose();
   }
 
   @Override
