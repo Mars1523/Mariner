@@ -240,6 +240,7 @@ public final class Constants {
 
     public class AlgaeArmAngles {
       public static NTDouble up = new NTDouble(0, "up", "AlgaeArmAngles"); // hold algae in
+      public static NTDouble in = new NTDouble(0.05, "in", "AlgaeArmAngles");
       public static NTDouble down = new NTDouble(-0.3, "down", "AlgaeArmAngles"); // intake or outtake algae
       public static NTDouble processor = new NTDouble(-0.13, "processor", "AlgaeArmAngles");
       public static NTDouble groundPickUp = new NTDouble(-0.25, "ground pick up", "AlgaeArmAngles");
@@ -313,6 +314,8 @@ public final class Constants {
           AlgaeArmAngles.barge);
       public static ConfigOption coralAlign = new ConfigOption(CoralPivotAngles.up, ElevatorSetpoints.l3,
           AlgaeArmAngles.up);
+      public static ConfigOption defenseConfig = new ConfigOption(CoralPivotAngles.down, ElevatorSetpoints.groundLevel,
+          AlgaeArmAngles.in);
 
       // to hold everything in while sitting there
 
