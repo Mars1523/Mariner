@@ -380,8 +380,10 @@ public class RobotContainer {
         }
 
         public void setStartingPose() {
+                var poseChooserState = poseChooser.getSelected();
+                var selectedStartingPose = poseChooserState == null ? StartingPlace.Center : poseChooserState;
                 if (GoTo.getAlliance() == Alliance.Red) {
-                        switch (poseChooser.getSelected()) {
+                        switch (selectedStartingPose) {
                                 case Left:
                                         swerveSubsystem.resetOmetry(new Pose2d(9.5, 0.7, new Rotation2d(0.58)));
                                         break;
@@ -393,7 +395,7 @@ public class RobotContainer {
                                         break;
                         }
                 } else {
-                        switch (poseChooser.getSelected()) {
+                        switch (selectedStartingPose) {
                                 case Left:
                                         swerveSubsystem.resetOmetry(new Pose2d(8.1, 7.3, new Rotation2d(0.58)));
                                         break;
