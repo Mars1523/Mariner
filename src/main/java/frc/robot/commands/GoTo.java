@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.Constants;
 
 public class GoTo {
 
@@ -131,8 +132,7 @@ public class GoTo {
 
         private Pose2d inFrontOfTag(int id) {
                 Transform2d rot180 = new Transform2d(Translation2d.kZero, Rotation2d.k180deg);
-                var field = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);
-                var tag = field.getTagPose(id).get().toPose2d();
+                var tag = Constants.kField.getTagPose(id).get().toPose2d();
                 var offset = new Transform2d(1, 0, new Rotation2d());
                 Pose2d infrontOfTag = tag.plus(offset).transformBy(rot180);
                 return infrontOfTag;

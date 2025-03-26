@@ -3,8 +3,6 @@ package frc.robot.commands.autos;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import edu.wpi.first.apriltag.AprilTagFieldLayout;
-import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.XboxController;
@@ -54,7 +52,6 @@ public class AutoAlignReefEstimation extends Command {
                 rot.getY(), rot.getZ());
     }
 
-    AprilTagFieldLayout field = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);
     NetworkTableEntry lastAprilTagEntry = NetworkTableInstance.getDefault().getEntry("/Debug/LastAprilTagSeen");
 
     final Optional<Pose3d> getTargetPose() {
@@ -68,7 +65,7 @@ public class AutoAlignReefEstimation extends Command {
             lastAprilTagEntry.setDouble(lastApriltag);
             System.out.println("last april tag " + lastApriltag);
 
-            var targetAbsPose = field.getTagPose(lastApriltag).get();
+            var targetAbsPose = Constants.kField.getTagPose(lastApriltag).get();
 
             var targetPoseRelativeToField = targetAbsPose.relativeTo(robotAbsPose);
             var targetPoseRelativeToRobot = targetPoseRelativeToField.rotateBy(robotAbsPose.getRotation().unaryMinus());

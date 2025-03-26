@@ -197,15 +197,6 @@ public class RobotContainer {
                 return !getLowerTag() && !getUpperTag();
         }
 
-        private Pose2d inFrontOfTag(int id) {
-                Transform2d rot180 = new Transform2d(Translation2d.kZero, Rotation2d.k180deg);
-                var field = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);
-                var tag8 = field.getTagPose(id).get().toPose2d();
-                var offset = new Transform2d(1, 0, new Rotation2d());
-                Pose2d infrontOfTag = tag8.plus(offset).transformBy(rot180);
-                return infrontOfTag;
-        }
-
         private void configureBindings() {
 
                 primaryJoy.button(3)
@@ -312,23 +303,6 @@ public class RobotContainer {
                 xboxBack.and(xboxY).onTrue(
                                 new ConfigSystem(Constants.SetpointConstants.Options.l4, coralArm, elevatorSub,
                                                 algaeArm));
-
-                var constraints = new PathConstraints(1.75, 2, 360, 360);
-                // Transform2d rot180 = new Transform2d(Translation2d.kZero,
-                // Rotation2d.k180deg);
-                // var field =
-                // AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);
-                // var tag8 = field.getTagPose(8).get().toPose2d();
-                // var offset = new Transform2d(1, 0, new Rotation2d());
-                // Pose2d infrontOfTag8 = tag8.plus(offset).transformBy(rot180);
-                Pose2d infrontOfTag8 = inFrontOfTag(8);
-
-                Shuffleboard.getTab("PathPlanner").add(
-                                "Goto Before 8",
-                                AutoBuilder.pathfindToPose(infrontOfTag8, constraints));
-                // Shuffleboard.getTab("PathPlanner").add(
-                // "class go to before 8",
-                // goTo.testTag8());
         }
 
         public class MyCommandShouldHaveAName extends SequentialCommandGroup {
@@ -355,16 +329,6 @@ public class RobotContainer {
                 // pose.plus(new Transform2d(.5, 0, new Rotation2d()));
                 return AutoBuilder.pathfindToPose(
                                 pose,
-                                new PathConstraints(1, 1, 1, 1),
-                                0);
-        }
-
-        public void help() {
-                var field = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);
-                var pose = field.getTagPose(1).get();
-                pose.plus(new Transform3d(0, 1, 0, new Rotation3d()));
-                AutoBuilder.pathfindToPose(
-                                pose.toPose2d(),
                                 new PathConstraints(1, 1, 1, 1),
                                 0);
         }

@@ -13,6 +13,8 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -43,7 +45,8 @@ import frc.robot.subsystems.CoralArm;
 public final class Constants {
   public static String ReefLimelightName = "limelight-front";
   public static String UpperLimelightName = "limelight-upper";
-  public static String VisionLimelightName = "limelight-vision";
+
+  public static AprilTagFieldLayout kField = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);
 
   public static final class AutoConstants {
     public static double kPYController = 3;
