@@ -319,7 +319,7 @@ public class SwerveSubsystem extends SubsystemBase {
                 var sysIdRoutine = new SysIdRoutine(
                                 new SysIdRoutine.Config(),
                                 new SysIdRoutine.Mechanism(
-                                                (voltage) -> this.runVolts(voltage.in(Volts)),
+                                                (voltage) -> this.runCharacterization(voltage.in(Volts)),
                                                 null, // No log consumer, since data is recorded by URCL
                                                 this));
 
@@ -334,10 +334,10 @@ public class SwerveSubsystem extends SubsystemBase {
 
         }
 
-        private void runVolts(double in) {
-                fLSwerve.runVolts(in);
-                fRSwerve.runVolts(in);
-                bLSwerve.runVolts(in);
-                bRSwerve.runVolts(in);
+        private void runCharacterization(double in) {
+                fLSwerve.runCharacterization(in);
+                fRSwerve.runCharacterization(in);
+                bLSwerve.runCharacterization(in);
+                bRSwerve.runCharacterization(in);
         }
 }

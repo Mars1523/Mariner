@@ -227,8 +227,9 @@ public class SwerveModule {
                 driveEncoder.setPosition(0);
         }
 
-        public void runVolts(double in) {
+        public void runCharacterization(double in) {
                 driveMotor.setVoltage(in);
+                pidController.setReference(0, ControlType.kPosition);
         }
 }
 
