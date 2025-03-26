@@ -26,6 +26,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistribution;
+import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.XboxController;
@@ -68,6 +69,7 @@ public class RobotContainer {
         CommandJoystick primaryJoy = new CommandJoystick(0);
         XboxController secondaryController = new XboxController(1);
         // GenericHID keyboard = new GenericHID(1);
+        Servo servo = new Servo(0);
 
         SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
         Elevator elevatorSub = new Elevator();
@@ -218,6 +220,9 @@ public class RobotContainer {
                 primaryJoy.button(6)
                                 .onTrue(algaeArm.algaeSpinOut())
                                 .onFalse(algaeArm.algaeSpinStop());
+                primaryJoy.button(9)
+                                .onTrue(Commands.runOnce(() -> servo.set(0)))
+                                .onFalse(Commands.runOnce(() -> servo.set(1)));
                 primaryJoy.button(11).and(primaryJoy.button(7))
                                 .onTrue(climbSub.climbSlow().withTimeout(0.5).andThen(climbSub.climb()))
                                 .onFalse(climbSub.climbStopManual());
