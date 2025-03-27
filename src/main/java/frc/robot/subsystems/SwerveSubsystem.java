@@ -9,6 +9,7 @@ import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.studica.frc.AHRS;
 import com.studica.frc.AHRS.NavXComType;
 
+import dev.doglog.DogLog;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.filter.SlewRateLimiter;
@@ -212,6 +213,10 @@ public class SwerveSubsystem extends SubsystemBase {
                 );
 
                 field.setRobotPose(getPose());
+                DogLog.log("robot pose", getPose());
+                DogLog.log("Module States", getModuleStates());
+                DogLog.log("Current Rotation", getRotation());
+
         }
 
         public Pose2d getPose() {

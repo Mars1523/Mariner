@@ -26,6 +26,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     Photon.getInstance().update();
+    m_robotContainer.periodic();
     CommandScheduler.getInstance().run();
     Souffle.update();
   }

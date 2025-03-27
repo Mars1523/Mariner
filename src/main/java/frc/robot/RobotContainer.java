@@ -15,9 +15,12 @@ import org.littletonrobotics.urcl.URCL;
 import com.ctre.phoenix6.swerve.jni.SwerveJNI.DriveState;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathConstraints;
+
+import dev.doglog.DogLog;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform2d;
@@ -183,6 +186,16 @@ public class RobotContainer {
 
                 var scheduler = CommandScheduler.getInstance();
                 Shuffleboard.getTab("Drive").addBoolean("Is Auto", () -> !scheduler.isScheduled(swerve));
+        }
+
+        public void periodic() {
+                var results = Photon.getInstance().getLastResult();
+                if (results.hasTargets()) {
+                        var cameraToTarget = results.getBestTarget().getBestCameraToTarget();
+                        var transform = Constants.robotToCamera.plus(cameraToTarget);
+                        var fieldToRobot = new Pose3d(swerveSubsystem.getPose());
+                        DogLog.log("PhotonBestTarget", fieldToRobot.transformBy(transform));
+                }
         }
 
         private boolean getUpperTag() {

@@ -55,15 +55,19 @@ public class AutoAlignUpper extends Command {
         }
     }
 
-    public static final Optional<Pose3d> getTargetPosePhoton() {
+    public final Optional<Pose3d> getTargetPosePhoton() {
         var results = Photon.getInstance().getLastResult();
         if (results.hasTargets()) {
             var cameraToTarget = results.getBestTarget().getBestCameraToTarget();
             System.out.println("Camera to Target" + cameraToTarget);
             var transform = Constants.robotToCamera.plus(cameraToTarget);
-            System.out.println("robot to camera" + Constants.robotToCamera);
-            System.out.println("final offset: " + transform.getTranslation());
-            System.out.println("final rotation: " + transform.getRotation());
+            var fieldToRobot = new Pose3d(swerveSub.getPose());
+            DogLog.log("RobotToCamera", fieldToRobot.transformBy(Constants.robotToCamera));
+            DogLog.log("PhotonFinalOffset", fieldToRobot.transformBy(transform));
+
+            // System.out.println("robot to camera" + Constants.robotToCamera);
+            // System.out.println("final offset: " + transform.getTranslation());
+            // System.out.println("final rotation: " + transform.getRotation());
             return Optional.of(new Pose3d(transform.getTranslation(), transform.getRotation()));
         } else {
             return Optional.empty();
@@ -94,13 +98,15 @@ public class AutoAlignUpper extends Command {
                 new TrapezoidProfile.Constraints(Constants.DriveConstants.MaxVelocityMetersPerSecond / 3.0, 3.0 / 1.5));
         distancePID = new ProfiledPIDController(3.65 * .9, .8 * .7, .8 * .1,
                 new TrapezoidProfile.Constraints(Constants.DriveConstants.MaxVelocityMetersPerSecond / 3.0, 1.4));
-        rotationPID = new ProfiledPIDController(1 * .5, 0, 0,
+        rotationPID = new ProfiledPIDController(3.65 * .9, .8 * .7, .8 * .1,
                 new TrapezoidProfile.Constraints(Constants.DriveConstants.MaxAngularVelocityRadiansPerSecond / 3.0,
                         3.0 / 1.5));
+        rotationPID.enableContinuousInput(-Math.PI, Math.PI);
 
         distanceGoal.subscribe(goal -> distancePID.setGoal(goal));
         strafeGoal.subscribe(goal -> strafePID.setGoal(goal));
-        rotationGoal.subscribe(goal -> rotationPID.setGoal(goal));
+        // rotationGoal.subscribe(goal -> rotationPID.setGoal(goal));
+        rotationPID.setGoal(Math.PI);
         distancePID.setIntegratorRange(-15, 15);
         strafePID.setIntegratorRange(-15, 15);
 
@@ -174,12 +180,9 @@ public class AutoAlignUpper extends Command {
         strafeSpeed = MathUtil.clamp(strafeSpeed, -DriveConstants.MaxVelocityMetersPerSecond / 5,
                 DriveConstants.MaxVelocityMetersPerSecond / 5);
 
-        double rot = rotationPID.calculate(target.getRotation().getZ());
+        double rot = -rotationPID.calculate(target.getRotation().getZ());
         rot = MathUtil.clamp(rot, -DriveConstants.MaxAngularVelocityRadiansPerSecond / 3.5,
                 DriveConstants.MaxAngularVelocityRadiansPerSecond / 3.5);
-        rot = 0;
-
-        Souffle.log("Poses/PVTuneTarget", target);
 
         nt.getEntry("/Shuffleboard/Tune/AutoAlignTags/LL Distance").setDouble(target.getX());
         nt.getEntry("/Shuffleboard/Tune/AutoAlignTags/PID Distance Out").setDouble(distanceSpeed);
@@ -187,7 +190,7 @@ public class AutoAlignUpper extends Command {
                 .setDouble(distancePID.getSetpoint().position);
         nt.getEntry("/Shuffleboard/Tune/AutoAlignTags/PID Distance Goal").setDouble(distancePID.getGoal().position);
         nt.getEntry("/Shuffleboard/Tune/AutoAlignTags/PID Distance Error")
-                .setDouble(distancePID.getSetpoint().position - target.getZ());
+                .setDouble(distancePID.getSetpoint().position - target.getX());
         nt.getEntry("/Shuffleboard/Tune/AutoAlignTags/LL Strafe").setDouble(target.getY());
         nt.getEntry("/Shuffleboard/Tune/AutoAlignTags/PID Strafe Setpoint").setDouble(strafePID.getSetpoint().position);
         nt.getEntry("/Shuffleboard/Tune/AutoAlignTags/PID Strafe Goal").setDouble(strafePID.getGoal().position);
@@ -195,10 +198,15 @@ public class AutoAlignUpper extends Command {
         nt.getEntry("/Shuffleboard/Tune/AutoAlignTags/LL rotation yaw").setDouble(target.getRotation().getZ());
         nt.getEntry("/Shuffleboard/Tune/AutoAlignTags/PID rotation out").setDouble(rot);
         System.out.println("supposed yaw: " + target.getRotation().getZ());
-        System.out.println("supposed Distance: " + target.getX());
-        System.out.println("supposed Strafe: " + target.getY());
-        System.out.println("supposed Height: " + target.getZ());
-        System.out.println("camera to target" + target.getZ());
+
+        DogLog.log("AutoAlignTags/StrafeError", strafeGoal.get() - target.getY());
+        DogLog.log("AutoAlignTags/DistanceError", distanceGoal.get() - target.getX());
+        DogLog.log("AutoAlignTags/RotationError", rotationGoal.get() - target.getRotation().getZ());
+
+        // System.out.println("supposed Distance: " + target.getX());
+        // System.out.println("supposed Strafe: " + target.getY());
+        // System.out.println("supposed Height: " + target.getZ());
+        // System.out.println("camera to target" + target.getZ());
 
         swerveSub.drive(distanceSpeed / DriveConstants.MaxVelocityMetersPerSecond,
                 strafeSpeed / DriveConstants.MaxVelocityMetersPerSecond,

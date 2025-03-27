@@ -53,7 +53,7 @@ public final class Constants {
   public static Translation3d robotToCameraTrl = new Translation3d(.261, .326, 1.016);
   // and pitched 15 degrees up.
   public static Rotation3d robotToCameraRot = new Rotation3d(0, Math.toRadians(-35.5),
-      Math.toRadians(-50));
+      Math.toRadians(-40));
   public static Transform3d robotToCamera = new Transform3d(robotToCameraTrl, robotToCameraRot);
 
   public static AprilTagFieldLayout kField = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);
