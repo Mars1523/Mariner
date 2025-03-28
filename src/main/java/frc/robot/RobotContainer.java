@@ -228,6 +228,11 @@ public class RobotContainer {
                 var xboxY = new JoystickButton(secondaryController, XboxController.Button.kY.value);
                 var leftStick = new JoystickButton(secondaryController, XboxController.Button.kLeftStick.value);
                 var rightStick = new JoystickButton(secondaryController, XboxController.Button.kRightStick.value);
+                var leftPOV = new Trigger(() -> secondaryController.getPOV() == 270);
+                var rightPOV = new Trigger(() -> secondaryController.getPOV() == 90);
+                var upPOV = new Trigger(() -> secondaryController.getPOV() == 0);
+                var downPOV = new Trigger(() -> secondaryController.getPOV() == 180);
+
                 var xboxStart = new JoystickButton(secondaryController, XboxController.Button.kStart.value);
                 var xboxBack = new JoystickButton(secondaryController, XboxController.Button.kBack.value);
                 var noBumper = leftBumper.or(rightBumper).negate();
@@ -281,9 +286,43 @@ public class RobotContainer {
                 xboxY.and(noBumper).onTrue(
                                 new AlgaeIntakeAlignmentSequence(coralArm, elevatorSub, algaeArm, swerveSubsystem,
                                                 Constants.SetpointConstants.Options.algaeHigh));
-                xboxStart.and(noBumper).onTrue(
+                rightStick.and(noBumper).onTrue(
                                 new ConfigSystem(Constants.SetpointConstants.Options.algaeGround, coralArm, elevatorSub,
                                                 algaeArm));
+
+                // waypoints
+                /*
+                 * Start pressed:
+                 * Left POV = reef north west
+                 * Up POV = reef north\
+                 * Right POV = reef north east
+                 * Down POV = coralstation left
+                 * 
+                 * Back Pressed:
+                 * Left POV = reef south west
+                 * Up POV = reef south
+                 * Right POV = reef south east
+                 * Down POV= right coral station
+                 * 
+                 * start and left button = processor
+                 */
+
+                upPOV.and(xboxStart).whileTrue(
+                                GoTo.reefN());
+                downPOV.and(xboxStart).whileTrue(
+                                GoTo.coralStationRight());
+                leftPOV.and(xboxStart).whileTrue(
+                                GoTo.reefNE());
+                rightPOV.and(xboxStart).whileTrue(
+                                GoTo.reefNW());
+                upPOV.and(xboxBack).whileTrue(
+                                GoTo.reefS());
+                downPOV.and(xboxBack).whileTrue(
+                                GoTo.coralStationLeft());
+                leftPOV.and(xboxBack).whileTrue(
+                                GoTo.reefSW());
+                rightPOV.and(xboxBack).whileTrue(
+                                GoTo.reefSE());
 
                 // CommandScheduler.getInstance().onCommandInitialize((c) ->
                 // System.out.println("initalizing: "+c.getName()));

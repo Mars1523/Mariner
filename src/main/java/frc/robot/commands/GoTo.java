@@ -51,7 +51,7 @@ public class GoTo {
                 return DriverStation.getAlliance().orElse(Alliance.Blue);
         }
 
-        public static PathConstraints constraints = new PathConstraints(1.75, 2, 360, 360);
+        public static PathConstraints constraints = new PathConstraints(2, 2.35, 360, 360);
 
         private static Pose2d inFrontOfTag(int id) {
                 Transform2d rot180 = new Transform2d(Translation2d.kZero, Rotation2d.k180deg);
@@ -150,9 +150,8 @@ public class GoTo {
                                 GoTo::isRed);
         }
 
-        // public Command testTag8() {
-        // setAllianceIDs();
-        // return AutoBuilder.pathfindToPose(inFrontOfTag(8), constraints);
-        // }
+        public Command testTag8() {
+                return AutoBuilder.pathfindToPose(inFrontOfTag(8), constraints);
+        }
 
 }

@@ -23,6 +23,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
@@ -330,13 +331,17 @@ public class SwerveSubsystem extends SubsystemBase {
                                                 this));
 
                 Shuffleboard.getTab("SysId").add("Quasi Forward Swerve",
-                                sysIdRoutine.quasistatic(SysIdRoutine.Direction.kForward));
+                                Commands.run(() -> this.runCharacterization(0)).withTimeout(1).andThen(
+                                                sysIdRoutine.quasistatic(SysIdRoutine.Direction.kForward)));
                 Shuffleboard.getTab("SysId").add("Quasi Backward Swerve",
-                                sysIdRoutine.quasistatic(SysIdRoutine.Direction.kReverse));
+                                Commands.run(() -> this.runCharacterization(0)).withTimeout(1).andThen(
+                                                sysIdRoutine.quasistatic(SysIdRoutine.Direction.kReverse)));
                 Shuffleboard.getTab("SysId").add("Dynamic Forward Swerve",
-                                sysIdRoutine.dynamic(SysIdRoutine.Direction.kForward));
+                                Commands.run(() -> this.runCharacterization(0)).withTimeout(1).andThen(
+                                                sysIdRoutine.dynamic(SysIdRoutine.Direction.kForward)));
                 Shuffleboard.getTab("SysId").add("Dynamic Backaward Swerve",
-                                sysIdRoutine.dynamic(SysIdRoutine.Direction.kReverse));
+                                Commands.run(() -> this.runCharacterization(0)).withTimeout(1).andThen(
+                                                sysIdRoutine.dynamic(SysIdRoutine.Direction.kReverse)));
 
         }
 
