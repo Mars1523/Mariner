@@ -73,7 +73,7 @@ public class RobotContainer {
 
         ClimbSub climbSub = new ClimbSub();
 
-        DefaultSwerve swerve = new DefaultSwerve(primaryJoy.getHID(), secondaryController, swerveSubsystem,
+        DefaultSwerve swerve = new DefaultSwerve(primaryJoy.getHID(), swerveSubsystem,
                         elevatorSub);
 
         PowerDistribution pdh = new PowerDistribution(1, ModuleType.kRev);
