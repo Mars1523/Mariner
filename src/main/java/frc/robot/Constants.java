@@ -224,7 +224,7 @@ public final class Constants {
       public static NTDouble processor = new NTDouble(-0.05, "processor", "StrafeOffsets");
       public static NTDouble l1Left = new NTDouble(0.10, "l1Left", "StrafeOffsets");
       public static NTDouble l1Right = new NTDouble(0.10, "l1Right", "StrafeOffsets");
-      public static NTDouble csStrafe = new NTDouble(-0.015, "Coral Station Strafe", "StrafeOffsets");
+      public static NTDouble csStrafe = new NTDouble(0.19, "Coral Station Strafe", "StrafeOffsets");
       // static double CoralSt = 0;
     }
 
