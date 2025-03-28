@@ -322,7 +322,8 @@ public class SwerveSubsystem extends SubsystemBase {
                 Shuffleboard.getTab("Debug").add(field);
 
                 var sysIdRoutine = new SysIdRoutine(
-                                new SysIdRoutine.Config(),
+                                new SysIdRoutine.Config(null, null, null,
+                                                (state) -> DogLog.log("SysIdTestState", state.toString())),
                                 new SysIdRoutine.Mechanism(
                                                 (voltage) -> this.runCharacterization(voltage.in(Volts)),
                                                 null, // No log consumer, since data is recorded by URCL

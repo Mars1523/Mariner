@@ -3,6 +3,9 @@ package frc.robot.subsystems;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkMaxConfig;
+
+import dev.doglog.DogLog;
+
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import static edu.wpi.first.units.Units.Volts;
@@ -98,7 +101,8 @@ public class Elevator extends SubsystemBase {
                 // Shuffleboard.getTab("Debug").addDouble("Current Setpoint",
                 // elevatorController.);
                 var sysIdRoutine = new SysIdRoutine(
-                                new SysIdRoutine.Config(),
+                                new SysIdRoutine.Config(null, null, null,
+                                                (state) -> DogLog.log("SysIdTestState", state.toString())),
                                 new SysIdRoutine.Mechanism(
                                                 (voltage) -> this.runVolts(voltage.in(Volts)),
                                                 null, // No log consumer, since data is recorded by URCL
