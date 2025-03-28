@@ -150,7 +150,9 @@ public class AutoAlignUpper extends Command {
         // var id = LimelightHelpers.getFiducialID("limelight-back");
         var target_opt = getTargetPosePhoton();
         if (target_opt.isEmpty()) {
-            swerveSub.stop();
+            // swerveSub.stop();
+            // Call drive so that the slew rate limiters apply
+            swerveSub.drive(0, 0, 0, false);
             return;
         }
         var target = target_opt.get();
