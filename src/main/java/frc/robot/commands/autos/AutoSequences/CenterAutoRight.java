@@ -33,15 +33,15 @@ public class CenterAutoRight extends SequentialCommandGroup {
                 this.swerveSubsystem = swerve;
 
                 addCommands(
-                                new GoTo().reefN(),
+                                GoTo.reefN(),
                                 new L4AlignmentSequence(coralArm, algaeArm, elevator, swerve,
                                                 Constants.SetpointConstants.StrafeOffsets.leftL4),
-                                new GoTo().coralStationRight(),
+                                GoTo.coralStationRight(),
                                 new CoralStationSequence(coralArm, algaeArm, elevator, swerve),
-                                new GoTo().reefSE(),
+                                GoTo.reefSE(),
                                 new L4AlignmentSequence(coralArm, algaeArm, elevator, swerve,
                                                 Constants.SetpointConstants.StrafeOffsets.leftL4),
-                                new GoTo().coralStationRight(),
+                                GoTo.coralStationRight(),
                                 new CoralStationSequence(coralArm, algaeArm, elevator, swerve)
 
                 // new ParallelCommandGroup(new AutoNav(), ConfigSystem)

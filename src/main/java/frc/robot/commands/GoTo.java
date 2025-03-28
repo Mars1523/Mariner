@@ -42,7 +42,7 @@ public class GoTo {
         private final static int blueCsRightTagID = 12;
         private final static int blueProcessorTagID = 16;
 
-        public boolean isRed() {
+        public static boolean isRed() {
                 return getAlliance() == Alliance.Red;
         }
 
@@ -51,86 +51,9 @@ public class GoTo {
                 return DriverStation.getAlliance().orElse(Alliance.Blue);
         }
 
-        public GoTo() {
-                // alliance not used, delete
-        }
+        public static PathConstraints constraints = new PathConstraints(1.75, 2, 360, 360);
 
-        // public void setAllianceIDs() {
-        // if (true) {
-        // if (getAlliance() == Alliance.Red) {
-        // reefNTagID = 10;
-        // reefNETagID = 9;
-        // reefNWTagID = 11;
-        // reefSTagID = 7;
-        // reefSETagID = 8;
-        // reefSWTagID = 6;
-        // csLeftTagID = 1;
-        // csRightTagID = 2;
-        // processorTagID = 3;
-        // } else if (getAlliance() == Alliance.Blue) {
-        // reefNTagID = 21;
-        // reefNETagID = 22;
-        // reefNWTagID = 20;
-        // reefSTagID = 18;
-        // reefSETagID = 17;
-        // reefSWTagID = 19;
-        // csLeftTagID = 13;
-        // csRightTagID = 12;
-        // processorTagID = 16;
-        // }
-        // } else {
-        // reefNTagID = 21;
-        // reefNETagID = 22;
-        // reefNWTagID = 20;
-        // reefSTagID = 18;
-        // reefSETagID = 17;
-        // reefSWTagID = 19;
-        // csLeftTagID = 13;
-        // csRightTagID = 12;
-        // processorTagID = 16;
-        // }
-        // switch (side.getSelected()) {
-        // case Red:
-        // reefNTagID = 10;
-        // reefNETagID = 9;
-        // reefNWTagID = 11;
-        // reefSTagID = 7;
-        // reefSETagID = 8;
-        // reefSWTagID = 6;
-        // csLeftTagID = 1;
-        // csRightTagID = 2;
-        // processorTagID = 3;
-        // break;
-
-        // case Blue:
-        // reefNTagID = 21;
-        // reefNETagID = 22;
-        // reefNWTagID = 20;
-        // reefSTagID = 18;
-        // reefSETagID = 17;
-        // reefSWTagID = 19;
-        // csLeftTagID = 13;
-        // csRightTagID = 12;
-        // processorTagID = 16;
-        // break;
-
-        // default:
-        // reefNTagID = 21;
-        // reefNETagID = 22;
-        // reefNWTagID = 20;
-        // reefSTagID = 18;
-        // reefSETagID = 17;
-        // reefSWTagID = 19;
-        // csLeftTagID = 13;
-        // csRightTagID = 12;
-        // processorTagID = 16;
-        // break;
-        // }
-        // }
-
-        public PathConstraints constraints = new PathConstraints(1.75, 2, 360, 360);
-
-        private Pose2d inFrontOfTag(int id) {
+        private static Pose2d inFrontOfTag(int id) {
                 Transform2d rot180 = new Transform2d(Translation2d.kZero, Rotation2d.k180deg);
                 var tag = Constants.kField.getTagPose(id).get().toPose2d();
                 var offset = new Transform2d(1, 0, new Rotation2d());
@@ -138,7 +61,7 @@ public class GoTo {
                 return infrontOfTag;
         }
 
-        public Command reefN() {
+        public static Command reefN() {
                 // setAllianceIDs();
                 // return AutoBuilder.pathfindToPose(inFrontOfTag(reefNTagID), constraints);
                 // var redReefNTagID = 1;
@@ -148,28 +71,28 @@ public class GoTo {
                                                 .alongWith(Commands.print("going to tag ID" + redReefNTagID)),
                                 AutoBuilder.pathfindToPose(inFrontOfTag(blueReefNTagID), constraints)
                                                 .alongWith(Commands.print("going to tag ID" + blueReefNTagID)),
-                                this::isRed);
+                                GoTo::isRed);
         }
 
-        public Command reefNE() {
+        public static Command reefNE() {
                 return Commands.either(
                                 AutoBuilder.pathfindToPose(inFrontOfTag(redReefNETagID), constraints)
                                                 .alongWith(Commands.print("going to tag ID" + redReefNETagID)),
                                 AutoBuilder.pathfindToPose(inFrontOfTag(blueReefNETagID), constraints)
                                                 .alongWith(Commands.print("going to tag ID" + blueReefNETagID)),
-                                this::isRed);
+                                GoTo::isRed);
         }
 
-        public Command reefNW() {
+        public static Command reefNW() {
                 return Commands.either(
                                 AutoBuilder.pathfindToPose(inFrontOfTag(redReefNWTagID), constraints)
                                                 .alongWith(Commands.print("going to tag ID" + redReefNWTagID)),
                                 AutoBuilder.pathfindToPose(inFrontOfTag(blueReefNWTagID), constraints)
                                                 .alongWith(Commands.print("going to tag ID" + blueReefNWTagID)),
-                                this::isRed);
+                                GoTo::isRed);
         }
 
-        public Command reefS() {
+        public static Command reefS() {
                 // setAllianceIDs();
                 // return AutoBuilder.pathfindToPose(inFrontOfTag(reefSTagID), constraints);
                 // var redReefSTagID = 1;
@@ -179,52 +102,52 @@ public class GoTo {
                                                 .alongWith(Commands.print("going to tag ID " + redReefSTagID)),
                                 AutoBuilder.pathfindToPose(inFrontOfTag(blueReefSTagID), constraints)
                                                 .alongWith(Commands.print("going to tag ID " + blueReefSTagID)),
-                                this::isRed);
+                                GoTo::isRed);
         }
 
-        public Command reefSE() {
+        public static Command reefSE() {
                 return Commands.either(
                                 AutoBuilder.pathfindToPose(inFrontOfTag(redReefSETagID), constraints)
                                                 .alongWith(Commands.print("going to tag ID " + redReefSETagID)),
                                 AutoBuilder.pathfindToPose(inFrontOfTag(blueReefSETagID), constraints)
                                                 .alongWith(Commands.print("going to tag ID " + blueReefSETagID)),
-                                this::isRed);
+                                GoTo::isRed);
         }
 
-        public Command reefSW() {
+        public static Command reefSW() {
                 return Commands.either(
                                 AutoBuilder.pathfindToPose(inFrontOfTag(redReefSWTagID), constraints)
                                                 .alongWith(Commands.print("going to tag ID " + redReefSWTagID)),
                                 AutoBuilder.pathfindToPose(inFrontOfTag(blueReefSWTagID), constraints)
                                                 .alongWith(Commands.print("going to tag ID " + blueReefSWTagID)),
-                                this::isRed);
+                                GoTo::isRed);
         }
 
-        public Command coralStationLeft() {
+        public static Command coralStationLeft() {
                 return Commands.either(
                                 AutoBuilder.pathfindToPose(inFrontOfTag(redCsLeftTagID), constraints)
                                                 .alongWith(Commands.print("going to tag ID " + redCsLeftTagID)),
                                 AutoBuilder.pathfindToPose(inFrontOfTag(blueCsLeftTagID), constraints)
                                                 .alongWith(Commands.print("going to tag ID " + blueCsLeftTagID)),
-                                this::isRed);
+                                GoTo::isRed);
         }
 
-        public Command coralStationRight() {
+        public static Command coralStationRight() {
                 return Commands.either(
                                 AutoBuilder.pathfindToPose(inFrontOfTag(redCsRightTagID), constraints)
                                                 .alongWith(Commands.print("going to tag ID " + redCsRightTagID)),
                                 AutoBuilder.pathfindToPose(inFrontOfTag(blueCsRightTagID), constraints)
                                                 .alongWith(Commands.print("going to tag ID " + blueCsRightTagID)),
-                                this::isRed);
+                                GoTo::isRed);
         }
 
-        public Command processor() {
+        public static Command processor() {
                 return Commands.either(
                                 AutoBuilder.pathfindToPose(inFrontOfTag(redProcessorTagID), constraints)
                                                 .alongWith(Commands.print("going to tag ID " + redProcessorTagID)),
                                 AutoBuilder.pathfindToPose(inFrontOfTag(blueProcessorTagID), constraints)
                                                 .alongWith(Commands.print("going to tag ID " + blueProcessorTagID)),
-                                this::isRed);
+                                GoTo::isRed);
         }
 
         // public Command testTag8() {

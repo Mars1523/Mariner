@@ -34,15 +34,15 @@ public class LeftAuto extends SequentialCommandGroup {
                 this.swerveSubsystem = swerve;
 
                 addCommands(
-                                new GoTo().reefNW(),
+                                GoTo.reefNW(),
                                 new L4AlignmentSequence(coralArm, algaeArm, elevator, swerve,
                                                 Constants.SetpointConstants.StrafeOffsets.leftL4),
-                                new GoTo().coralStationLeft(),
+                                GoTo.coralStationLeft(),
                                 new CoralStationSequence(coralArm, algaeArm, elevator, swerve),
-                                new GoTo().reefSW(),
+                                GoTo.reefSW(),
                                 new L4AlignmentSequence(coralArm, algaeArm, elevator, swerve,
                                                 Constants.SetpointConstants.StrafeOffsets.leftL4),
-                                new GoTo().coralStationLeft(),
+                                GoTo.coralStationLeft(),
                                 new CoralStationSequence(coralArm, algaeArm, elevator, swerve));
         }
 }

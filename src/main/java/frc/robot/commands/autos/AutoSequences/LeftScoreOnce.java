@@ -28,7 +28,7 @@ public class LeftScoreOnce extends SequentialCommandGroup {
 
         addCommands(
                 new AutoDrive(swerveSubsystem, 1, 0.5),
-                new GoTo().reefNW(),
+                GoTo.reefNW(),
                 new L4AlignmentSequence(coralArm, algaeArm, elevator, swerveSubsystem,
                         Constants.SetpointConstants.StrafeOffsets.leftL4));
 

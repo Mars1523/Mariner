@@ -28,7 +28,7 @@ public class RightScoreOnce extends SequentialCommandGroup {
 
         addCommands(
                 new AutoDrive(swerveSubsystem, 1, 0.5),
-                new GoTo().reefNE(),
+                GoTo.reefNE(),
                 new L4AlignmentSequence(coralArm, algaeArm, elevator, swerveSubsystem,
                         Constants.SetpointConstants.StrafeOffsets.leftL4)
 

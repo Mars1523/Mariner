@@ -36,15 +36,15 @@ public class RightAuto extends SequentialCommandGroup {
 
                 addCommands(
                                 // new AutoRotate(swerve, 90, 0.5),
-                                new GoTo().reefNE(),
+                                GoTo.reefNE(),
                                 new L4AlignmentSequence(coralArm, algaeArm, elevator, swerve,
                                                 Constants.SetpointConstants.StrafeOffsets.leftL4),
-                                new GoTo().coralStationRight(),
+                                GoTo.coralStationRight(),
                                 new CoralStationSequence(coralArm, algaeArm, elevator, swerve),
-                                new GoTo().reefSE(),
+                                GoTo.reefSE(),
                                 new L4AlignmentSequence(coralArm, algaeArm, elevator, swerve,
                                                 Constants.SetpointConstants.StrafeOffsets.leftL4),
-                                new GoTo().coralStationRight(),
+                                GoTo.coralStationRight(),
                                 new CoralStationSequence(coralArm, algaeArm, elevator, swerve)
 
                 // new ParallelCommandGroup(new AutoNav(), ConfigSystem)
