@@ -233,7 +233,7 @@ public final class Constants {
       public static NTDouble rightReefScore = new NTDouble(0.6, "rightReefScore", "DistanceOffsets");
       // public static NTDouble L4score = new NTDouble(0.35, "L4score",
       // "DistanceOffsets");
-      public static NTDouble algaeReefGrab = new NTDouble(0.5, "algaeReefGrab", "DistanceOffsets");
+      public static NTDouble algaeReefGrab = new NTDouble(0.45, "algaeReefGrab", "DistanceOffsets");
       public static NTDouble reefCoralConfigure = new NTDouble(0.8, "reefCoralConfigure", "DistanceOffsets");
       public static NTDouble reefAlgaeConfigure = new NTDouble(0.9, "reefAlgaeConfigure", "DistanceOffsets");
       public static NTDouble reefAlgaeStow = new NTDouble(1.3, "reefAlgaeStow", "DistanceOffsets");

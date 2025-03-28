@@ -92,10 +92,10 @@ public class AutoAlignUpper extends Command {
         this.strafeError = strafeError;
         this.distanceError = distanceError;
 
-        strafePID = new ProfiledPIDController(4, .8 * .7, .1 * .125,
-                new TrapezoidProfile.Constraints(Constants.DriveConstants.MaxVelocityMetersPerSecond / 3.0, 3.0));
-        distancePID = new ProfiledPIDController(3.9, .8 * .7, .1 * .1,
-                new TrapezoidProfile.Constraints(Constants.DriveConstants.MaxVelocityMetersPerSecond / 3.0, 3.5));
+        strafePID = new ProfiledPIDController(4.4, .8 * .7, .1 * .125,
+                new TrapezoidProfile.Constraints(Constants.DriveConstants.MaxVelocityMetersPerSecond / 3.0, 3.2));
+        distancePID = new ProfiledPIDController(4.55, .8 * .7, .1 * .1,
+                new TrapezoidProfile.Constraints(Constants.DriveConstants.MaxVelocityMetersPerSecond / 3.0, 3.85));
         rotationPID = new ProfiledPIDController(3.8 * .9, .8 * .7, .8 * .1,
                 new TrapezoidProfile.Constraints(Constants.DriveConstants.MaxAngularVelocityRadiansPerSecond / 3.0,
                         3.0 / 1.5));
