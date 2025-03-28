@@ -44,7 +44,6 @@ public class CoralArm extends SubsystemBase {
 
     public CoralArm(Elevator elevator) {
         this.elevator = elevator;
-        Shuffleboard.getTab("PID").add("Coral", coralWristPID);
         SparkMaxConfig configWrist = new SparkMaxConfig();
         configWrist
                 .inverted(false)
