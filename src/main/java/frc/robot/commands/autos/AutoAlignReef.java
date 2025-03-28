@@ -36,7 +36,6 @@ public class AutoAlignReef extends Command {
     // private static double rot;
     // private static double distanceSpeed;
 
-    private boolean tune;
     // static double getZontal() {
     // return (LimelightHelpers.getTX("limelight-back") / 27);
     // // return (x.getDouble(160)/160)-1;
@@ -67,7 +66,7 @@ public class AutoAlignReef extends Command {
     }
 
     public AutoAlignReef(SwerveSubsystem swerveSub, NTDouble strafeGoal, NTDouble distanceGoal, NTDouble rotationGoal,
-            NTDouble strafeError, NTDouble distanceError, boolean tune) {
+            NTDouble strafeError, NTDouble distanceError, boolean slow) {
         addRequirements(swerveSub);
         this.swerveSub = swerveSub;
         this.strafeGoal = strafeGoal;
@@ -75,15 +74,18 @@ public class AutoAlignReef extends Command {
         this.rotationGoal = rotationGoal;
         this.strafeError = strafeError;
         this.distanceError = distanceError;
-        this.tune = tune;
 
+        double maxAccel = 3.0 / 1.5;
+        if (slow) {
+            maxAccel *= 0.2;
+        }
         strafePID = new ProfiledPIDController(4.1 * .9, .8 * .7, .85 * .125,
-                new TrapezoidProfile.Constraints(Constants.DriveConstants.MaxVelocityMetersPerSecond / 3, 3 / 1.5));
+                new TrapezoidProfile.Constraints(Constants.DriveConstants.MaxVelocityMetersPerSecond / 3, maxAccel));
         distancePID = new ProfiledPIDController(4.3 * .9, .8 * .7, .85 * .125,
-                new TrapezoidProfile.Constraints(Constants.DriveConstants.MaxVelocityMetersPerSecond / 3, 3 / 1.5));
+                new TrapezoidProfile.Constraints(Constants.DriveConstants.MaxVelocityMetersPerSecond / 3, maxAccel));
         rotationPID = new ProfiledPIDController(3.95 * .9, .8 * .7, .85 * .125,
                 new TrapezoidProfile.Constraints(Constants.DriveConstants.MaxAngularVelocityRadiansPerSecond / 3,
-                        3 / 1.5));
+                        maxAccel));
 
         distanceGoal.subscribe(goal -> distancePID.setGoal(goal));
         strafeGoal.subscribe(goal -> strafePID.setGoal(goal));
@@ -91,11 +93,11 @@ public class AutoAlignReef extends Command {
         distancePID.setIntegratorRange(-15, 15);
         strafePID.setIntegratorRange(-15, 15);
 
-        if (tune) {
-            Shuffleboard.getTab("Tune").add(distancePID);
-            Shuffleboard.getTab("Tune").add(strafePID);
-            Shuffleboard.getTab("Tune").add(rotationPID);
-        }
+        // if (tune) {
+        // Shuffleboard.getTab("Tune").add(distancePID);
+        // Shuffleboard.getTab("Tune").add(strafePID);
+        // Shuffleboard.getTab("Tune").add(rotationPID);
+        // }
     }
 
     @Override
