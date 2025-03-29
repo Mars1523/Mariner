@@ -205,6 +205,11 @@ public class RobotContainer {
                 return LimelightHelpers.getTV(Constants.UpperLimelightName);
         }
 
+        private boolean getUpperTagPhoton() {
+                var results = Photon.getInstance().getLastResult();
+                return results.hasTargets();
+        }
+
         private boolean getLowerTag() {
                 return LimelightHelpers.getTV(Constants.ReefLimelightName);
         }
@@ -259,7 +264,7 @@ public class RobotContainer {
                 var noBumper = leftBumper.or(rightBumper).negate();
                 var hasAlgae = new Trigger(algaeArm::hasAlgae);
 
-                var hasUpperTarget = new Trigger(this::getUpperTag);
+                var hasUpperTarget = new Trigger(this::getUpperTagPhoton);
                 var hasLowerTarget = new Trigger(this::getLowerTag);
                 var hasNoTarget = new Trigger(this::getNoTag);
 
