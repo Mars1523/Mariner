@@ -79,11 +79,9 @@ public class AutoAlignTest extends Command {
         if (slow) {
             maxAccel *= 0.2;
         }
-        strafePID = new ProfiledPIDController(0.2 * 20, (0.4 * 20) / 0.76667,
-                0.0667 * 20 * 0.76667,
+        strafePID = new ProfiledPIDController(4.3 * 0.9, 0, 0.125 * 0.85,
                 new TrapezoidProfile.Constraints(Constants.DriveConstants.MaxVelocityMetersPerSecond / 3, maxAccel));
-        distancePID = new ProfiledPIDController(0.2 * 10, (0.4 * 10) / 0.76667,
-                0.0667 * 20 * 0.76667,
+        distancePID = new ProfiledPIDController(4.3 * 0.9, 0, 0.125 * 0.85,
                 new TrapezoidProfile.Constraints(Constants.DriveConstants.MaxVelocityMetersPerSecond / 3, maxAccel));
         rotationPID = new ProfiledPIDController(3.95 * .9, 0, 0,
                 new TrapezoidProfile.Constraints(Constants.DriveConstants.MaxVelocityMetersPerSecond / 3,

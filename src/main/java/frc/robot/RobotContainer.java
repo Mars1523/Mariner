@@ -320,9 +320,9 @@ public class RobotContainer {
                 downPOV.and(xboxStart).whileTrue(
                                 GoTo.coralStationRight());
                 leftPOV.and(xboxStart).whileTrue(
-                                GoTo.reefNE());
-                rightPOV.and(xboxStart).whileTrue(
                                 GoTo.reefNW());
+                rightPOV.and(xboxStart).whileTrue(
+                                GoTo.reefNE());
                 upPOV.and(xboxBack).whileTrue(
                                 GoTo.reefS());
                 downPOV.and(xboxBack).whileTrue(
