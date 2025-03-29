@@ -10,6 +10,7 @@ import org.littletonrobotics.urcl.URCL;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.util.PathPlannerLogging;
 
 import dev.doglog.DogLog;
 import dev.doglog.DogLogOptions;
@@ -105,6 +106,18 @@ public class RobotContainer {
 
         public RobotContainer() {
                 DogLog.setOptions(new DogLogOptions().withCaptureDs(true).withCaptureConsole(true).withCaptureNt(true));
+                // Logging of autonomous paths
+                // Logging callback for current robot pose
+                PathPlannerLogging.setLogCurrentPoseCallback(
+                                pose -> DogLog.log("PathFollowing/currentPose", pose));
+
+                // Logging callback for target robot pose
+                PathPlannerLogging.setLogTargetPoseCallback(
+                                pose -> DogLog.log("PathFollowing/targetPose", pose));
+
+                // Logging callback for the active path, this is sent as a list of poses
+                PathPlannerLogging.setLogActivePathCallback(
+                                poses -> DogLog.log("PathFollowing/activePath", poses.toArray(new Pose2d[0])));
 
                 var sparks = new HashMap<Integer, String>();
                 sparks.put(10, "SwerveTurnBR");
