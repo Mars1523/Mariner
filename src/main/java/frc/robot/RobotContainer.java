@@ -35,6 +35,8 @@ import frc.robot.NTDouble.NTD;
 import frc.robot.commands.DefaultSwerve;
 import frc.robot.commands.GoTo;
 import frc.robot.commands.Configuration.ConfigSystem;
+import frc.robot.commands.autos.AutoAlignReef;
+import frc.robot.commands.autos.AutoAlignTest;
 import frc.robot.commands.autos.AutoAlignUpper;
 import frc.robot.commands.autos.AutoSequences.CenterAutoLeft;
 import frc.robot.commands.autos.AutoSequences.CenterAutoRight;
@@ -212,6 +214,12 @@ public class RobotContainer {
                 primaryJoy.button(6)
                                 .onTrue(algaeArm.algaeSpinOut())
                                 .onFalse(algaeArm.algaeSpinStop());
+                primaryJoy.button(8).whileTrue(
+                                new AutoAlignTest(swerveSubsystem, NTD.of(0.0), NTD.of(0.75), NTD.of(0), NTD.of(0.02),
+                                                NTD.of(0.02)));
+                primaryJoy.button(7).whileTrue(
+                                new AutoAlignReef(swerveSubsystem, NTD.of(-0.3), NTD.of(0.75), NTD.of(0), NTD.of(0),
+                                                NTD.of(0)));
                 primaryJoy.button(9)
                                 .onTrue(Commands.runOnce(() -> servo.set(0)))
                                 .onFalse(Commands.runOnce(() -> servo.set(1)));
