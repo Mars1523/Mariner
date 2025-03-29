@@ -208,8 +208,8 @@ public final class Constants {
       public static NTDouble l1 = new NTDouble(-0.03, "l1", "CoralPivotAngles"); // reef l1
       public static NTDouble lmid = new NTDouble(0.084, "lmid", "CoralPivotAngles"); // reef l2 and l3
       public static NTDouble l4 = new NTDouble(0.1, "l4", "CoralPivotAngles"); // reef l4
-      public static NTDouble CoralSt = new NTDouble(-0.122, "CoralSt", "CoralPivotAngles"); // pointing up to recieve
-                                                                                            // coral from hp
+      public static NTDouble CoralSt = new NTDouble(-0.11, "CoralSt", "CoralPivotAngles"); // pointing up to recieve
+                                                                                           // coral from hp
       public static NTDouble up = new NTDouble(-0.24, "up", "CoralPivotAngles"); // out of the way for intaking algae
       public static NTDouble down = new NTDouble(-0.24, "down", "CoralPivotAngles");
     }
