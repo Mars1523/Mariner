@@ -76,7 +76,7 @@ public class Elevator extends SubsystemBase {
                                 .velocityConversionFactor(positionFactor / 60);
                 configFollow.closedLoop
                                 .pid(4, 0, 0)
-                                .outputRange(-0.5, 0.85);
+                                .outputRange(-0.4, 0.85);
                 // .feedbackSensor(FeedbackSensor.`);
                 // configFollow.follow(elevator1, true);
                 elevator2.configure(configFollow, ResetMode.kResetSafeParameters,
