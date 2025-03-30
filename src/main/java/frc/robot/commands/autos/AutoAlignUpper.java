@@ -179,19 +179,17 @@ public class AutoAlignUpper extends Command {
         rot = MathUtil.clamp(rot, -DriveConstants.MaxAngularVelocityRadiansPerSecond / 3.5,
                 DriveConstants.MaxAngularVelocityRadiansPerSecond / 3.5);
 
-        nt.getEntry("/Shuffleboard/Tune/AutoAlignTags/LL Distance").setDouble(target.getX());
-        nt.getEntry("/Shuffleboard/Tune/AutoAlignTags/PID Distance Out").setDouble(distanceSpeed);
-        nt.getEntry("/Shuffleboard/Tune/AutoAlignTags/PID Distance Setpoint")
-                .setDouble(distancePID.getSetpoint().position);
-        nt.getEntry("/Shuffleboard/Tune/AutoAlignTags/PID Distance Goal").setDouble(distancePID.getGoal().position);
-        nt.getEntry("/Shuffleboard/Tune/AutoAlignTags/PID Distance Error")
-                .setDouble(distancePID.getSetpoint().position - target.getX());
-        nt.getEntry("/Shuffleboard/Tune/AutoAlignTags/LL Strafe").setDouble(target.getY());
-        nt.getEntry("/Shuffleboard/Tune/AutoAlignTags/PID Strafe Setpoint").setDouble(strafePID.getSetpoint().position);
-        nt.getEntry("/Shuffleboard/Tune/AutoAlignTags/PID Strafe Goal").setDouble(strafePID.getGoal().position);
-        nt.getEntry("/Shuffleboard/Tune/AutoAlignTags/PID Strafe Out").setDouble(strafeSpeed);
-        nt.getEntry("/Shuffleboard/Tune/AutoAlignTags/LL rotation yaw").setDouble(target.getRotation().getZ());
-        nt.getEntry("/Shuffleboard/Tune/AutoAlignTags/PID rotation out").setDouble(rot);
+        DogLog.log("/Shuffleboard/Tune/AutoAlignTags/UpperAlign/LL Distance", target.getX());
+        DogLog.log("AutoAlignTags/UpperAlign/PID Distance Out", distanceSpeed);
+        DogLog.log("AutoAlignTags/UpperAlign/PID Distance Setpoint",
+                distancePID.getSetpoint().position);
+        DogLog.log("AutoAlignTags/UpperAlign/PID Distance Goal", distancePID.getGoal().position);
+        DogLog.log("AutoAlignTags/UpperAlign/LL Strafe", target.getY());
+        DogLog.log("AutoAlignTags/UpperAlign/PID Strafe Setpoint", strafePID.getSetpoint().position);
+        DogLog.log("AutoAlignTags/UpperAlign/PID Strafe Goal", strafePID.getGoal().position);
+        DogLog.log("AutoAlignTags/UpperAlign/PID Strafe Out", strafeSpeed);
+        DogLog.log("AutoAlignTags/UpperAlign/LL rotation yaw", target.getRotation().getZ());
+        DogLog.log("AutoAlignTags/UpperAlign/PID rotation out", rot);
         System.out.println("supposed yaw: " + target.getRotation().getZ());
 
         DogLog.log("AutoAlignTags/StrafeError", strafeGoal.get() - target.getY());
