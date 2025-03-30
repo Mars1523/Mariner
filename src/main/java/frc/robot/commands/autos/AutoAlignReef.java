@@ -47,6 +47,8 @@ public class AutoAlignReef extends Command {
     static final Optional<Pose3d> getTargetPose() {
         if (LimelightHelpers.getTV(Constants.ReefLimelightName)) {
             return Optional.of(LimelightHelpers.getTargetPose3d_RobotSpace(Constants.ReefLimelightName));
+        } else if (LimelightHelpers.getTV(Constants.LeftReefLimelightName)) {
+            return Optional.of(LimelightHelpers.getTargetPose3d_RobotSpace(Constants.LeftReefLimelightName));
         } else {
             return Optional.empty();
         }

@@ -46,6 +46,7 @@ import frc.robot.subsystems.CoralArm;
 public final class Constants {
   public static String ReefLimelightName = "limelight-front";
   public static String UpperLimelightName = "limelight-upper";
+  public static String LeftReefLimelightName = "limelight-left";
 
   // .2627m forward
   // .3321m left
