@@ -97,13 +97,12 @@ public class AutoAlignReef extends Command {
     }
 
     final Optional<Pose3d> getTargetPose() {
-        if (LimelightHelpers.getTV(llName)) {
-            System.out.println("using " + llName);
-            return Optional.of(LimelightHelpers.getTargetPose3d_RobotSpace(llName));
-            // } else if (LimelightHelpers.getTV(Constants.LeftReefLimelightName)) {
-            // System.out.println("using left limelight");
-            // return
-            // Optional.of(LimelightHelpers.getTargetPose3d_RobotSpace(Constants.LeftReefLimelightName));
+        if (LimelightHelpers.getTV(Constants.ReefLimelightName)) {
+            System.out.println("using " + Constants.ReefLimelightName);
+            return Optional.of(LimelightHelpers.getTargetPose3d_RobotSpace(Constants.ReefLimelightName));
+        } else if (LimelightHelpers.getTV(Constants.LeftReefLimelightName)) {
+            System.out.println("using left limelight");
+            return Optional.of(LimelightHelpers.getTargetPose3d_RobotSpace(Constants.LeftReefLimelightName));
         } else {
             System.out.println("no tags detected");
             return Optional.empty();

@@ -186,7 +186,7 @@ public final class Constants {
     public class ElevatorSetpoints {
       public static NTDouble l1 = new NTDouble(0, "l1", "ElevatorSetpoints");
       public static NTDouble l2 = new NTDouble(0.4, "l2", "ElevatorSetpoints");
-      public static NTDouble l3 = new NTDouble(0.76, "l3", "ElevatorSetpoints");
+      public static NTDouble l3 = new NTDouble(0.77, "l3", "ElevatorSetpoints");
       public static NTDouble l4 = new NTDouble(1.31, "l4", "ElevatorSetpoints");
 
       public static NTDouble groundLevel = new NTDouble(0, "groundLevel", "ElevatorSetpoints");
@@ -230,7 +230,7 @@ public final class Constants {
     }
 
     public class DistanceOffsets {
-      public static NTDouble leftReefScore = new NTDouble(0.6, "leftReefScore", "DistanceOffsets");
+      public static NTDouble leftReefScore = new NTDouble(0.58, "leftReefScore", "DistanceOffsets");
       public static NTDouble rightReefScore = new NTDouble(0.6, "rightReefScore", "DistanceOffsets");
       // public static NTDouble L4score = new NTDouble(0.35, "L4score",
       // "DistanceOffsets");
