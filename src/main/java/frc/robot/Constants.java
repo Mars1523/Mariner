@@ -217,10 +217,10 @@ public final class Constants {
 
     public class StrafeOffsets {
       // static double l1 = 0;
-      public static NTDouble leftReef = new NTDouble(0.17, "leftReef", "StrafeOffsets");
-      public static NTDouble leftL4 = new NTDouble(0.18, "leftL4", "StrafeOffsets");
+      public static NTDouble leftReef = new NTDouble(0.165, "leftReef", "StrafeOffsets");
+      public static NTDouble leftL4 = new NTDouble(0.16, "leftL4", "StrafeOffsets");
       public static NTDouble rightReef = new NTDouble(-0.15, "rightReef", "StrafeOffsets");
-      public static NTDouble rightL4 = new NTDouble(-0.16, "rightL4", "StrafeOffsets");
+      public static NTDouble rightL4 = new NTDouble(-0.18, "rightL4", "StrafeOffsets");
       public static NTDouble centerReef = new NTDouble(0.00, "centerReef", "StrafeOffsets");
       public static NTDouble processor = new NTDouble(-0.05, "processor", "StrafeOffsets");
       public static NTDouble l1Left = new NTDouble(0.10, "l1Left", "StrafeOffsets");
@@ -231,7 +231,7 @@ public final class Constants {
 
     public class DistanceOffsets {
       public static NTDouble leftReefScore = new NTDouble(0.58, "leftReefScore", "DistanceOffsets");
-      public static NTDouble rightReefScore = new NTDouble(0.6, "rightReefScore", "DistanceOffsets");
+      public static NTDouble rightReefScore = new NTDouble(0.59, "rightReefScore", "DistanceOffsets");
       // public static NTDouble L4score = new NTDouble(0.35, "L4score",
       // "DistanceOffsets");
       public static NTDouble algaeReefGrab = new NTDouble(0.42, "algaeReefGrab", "DistanceOffsets");
