@@ -54,7 +54,7 @@ public final class Constants {
   public static Translation3d robotToCameraTrl = new Translation3d(.261, -.326, 1.016);
   // and pitched 15 degrees up.
   public static Rotation3d robotToCameraRot = new Rotation3d(0, Math.toRadians(-35.5),
-      Math.toRadians(40));
+      Math.toRadians(44));
   public static Transform3d robotToCamera = new Transform3d(robotToCameraTrl, robotToCameraRot);
 
   public static AprilTagFieldLayout kField = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);
@@ -192,7 +192,7 @@ public final class Constants {
       public static NTDouble groundLevel = new NTDouble(0, "groundLevel", "ElevatorSetpoints");
       public static NTDouble algaeLow = new NTDouble(0.85, "algaeLow", "ElevatorSetpoints");
       public static NTDouble algaeHigh = new NTDouble(1.17, "algaeHigh", "ElevatorSetpoints");
-      public static NTDouble coralStation = new NTDouble(0.155, "coralStation", "ElevatorSetpoints");
+      public static NTDouble coralStation = new NTDouble(0.33, "coralStation", "ElevatorSetpoints");
       public static NTDouble processor = new NTDouble(0.1, "processor", "ElevatorSetpoints");
       public static NTDouble groundAlgae = new NTDouble(0.2, "algaeGround", "ElevatorSetpoints");
 
@@ -242,7 +242,7 @@ public final class Constants {
       public static NTDouble processorScore = new NTDouble(0.55, "processorScore", "DistanceOffsets");
       public static NTDouble l1 = new NTDouble(0.5, "l1", "DistanceOffsets");
       public static NTDouble csConfigure = new NTDouble(0.7, "CoralStationConfigure", "DistanceOffsets");
-      public static NTDouble csIntake = new NTDouble(0.58, "CoralStationIntake", "DistanceOffsets");
+      public static NTDouble csIntake = new NTDouble(0.62, "CoralStationIntake", "DistanceOffsets");
     }
 
     public class RotOffsets {
