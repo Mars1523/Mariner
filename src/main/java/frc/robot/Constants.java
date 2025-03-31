@@ -51,10 +51,10 @@ public final class Constants {
   // .2627m forward
   // .3321m left
   // 1.016 up
-  public static Translation3d robotToCameraTrl = new Translation3d(.261, .326, 1.016);
+  public static Translation3d robotToCameraTrl = new Translation3d(.261, -.326, 1.016);
   // and pitched 15 degrees up.
   public static Rotation3d robotToCameraRot = new Rotation3d(0, Math.toRadians(-35.5),
-      Math.toRadians(-40));
+      Math.toRadians(40));
   public static Transform3d robotToCamera = new Transform3d(robotToCameraTrl, robotToCameraRot);
 
   public static AprilTagFieldLayout kField = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);
@@ -234,7 +234,7 @@ public final class Constants {
       public static NTDouble rightReefScore = new NTDouble(0.6, "rightReefScore", "DistanceOffsets");
       // public static NTDouble L4score = new NTDouble(0.35, "L4score",
       // "DistanceOffsets");
-      public static NTDouble algaeReefGrab = new NTDouble(0.45, "algaeReefGrab", "DistanceOffsets");
+      public static NTDouble algaeReefGrab = new NTDouble(0.42, "algaeReefGrab", "DistanceOffsets");
       public static NTDouble reefCoralConfigure = new NTDouble(0.8, "reefCoralConfigure", "DistanceOffsets");
       public static NTDouble reefAlgaeConfigure = new NTDouble(0.9, "reefAlgaeConfigure", "DistanceOffsets");
       public static NTDouble reefAlgaeStow = new NTDouble(1.3, "reefAlgaeStow", "DistanceOffsets");

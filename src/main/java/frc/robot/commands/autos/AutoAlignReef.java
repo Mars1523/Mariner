@@ -35,6 +35,7 @@ public class AutoAlignReef extends Command {
     private boolean lowSpeed;
     private NTDouble strafeError;
     private NTDouble distanceError;
+    private String llName;
     // private static double rot;
     // private static double distanceSpeed;
 
@@ -44,33 +45,23 @@ public class AutoAlignReef extends Command {
     // // horizontal offset
     // }
 
-    static final Optional<Pose3d> getTargetPose() {
-        if (LimelightHelpers.getTV(Constants.ReefLimelightName)) {
-            return Optional.of(LimelightHelpers.getTargetPose3d_RobotSpace(Constants.ReefLimelightName));
-        } else if (LimelightHelpers.getTV(Constants.LeftReefLimelightName)) {
-            return Optional.of(LimelightHelpers.getTargetPose3d_RobotSpace(Constants.LeftReefLimelightName));
-        } else {
-            return Optional.empty();
-        }
-
-        // Streamllresults.targets_Fiducials[0].getTargetPose_RobotSpace();
-        // return (x.getDouble(160)/160)-1;
-        // whatever the distance is
-        // returns the specific distance value we want so we can pid it???
-        // why is everything so
-    }
+    // Streamllresults.targets_Fiducials[0].getTargetPose_RobotSpace();
+    // return (x.getDouble(160)/160)-1;
+    // whatever the distance is
+    // returns the specific distance value we want so we can pid it???
+    // why is everything so
 
     public static boolean speakerAimReady() {
         return LimelightHelpers.getTV(Constants.ReefLimelightName);
     }
 
     public AutoAlignReef(SwerveSubsystem swerveSub, NTDouble strafeGoal, NTDouble distanceGoal, NTDouble rotationGoal,
-            NTDouble strafeError, NTDouble distanceError) {
-        this(swerveSub, strafeGoal, distanceGoal, rotationGoal, strafeError, distanceError, false);
+            NTDouble strafeError, NTDouble distanceError, String llName) {
+        this(swerveSub, strafeGoal, distanceGoal, rotationGoal, strafeError, distanceError, llName, false);
     }
 
     public AutoAlignReef(SwerveSubsystem swerveSub, NTDouble strafeGoal, NTDouble distanceGoal, NTDouble rotationGoal,
-            NTDouble strafeError, NTDouble distanceError, boolean slow) {
+            NTDouble strafeError, NTDouble distanceError, String llName, boolean slow) {
         addRequirements(swerveSub);
         this.swerveSub = swerveSub;
         this.strafeGoal = strafeGoal;
@@ -78,6 +69,7 @@ public class AutoAlignReef extends Command {
         this.rotationGoal = rotationGoal;
         this.strafeError = strafeError;
         this.distanceError = distanceError;
+        this.llName = llName;
 
         double maxAccel = 3.0 / 1.5;
         if (slow) {
@@ -102,6 +94,20 @@ public class AutoAlignReef extends Command {
         // Shuffleboard.getTab("Tune").add(strafePID);
         // Shuffleboard.getTab("Tune").add(rotationPID);
         // }
+    }
+
+    final Optional<Pose3d> getTargetPose() {
+        if (LimelightHelpers.getTV(llName)) {
+            System.out.println("using " + llName);
+            return Optional.of(LimelightHelpers.getTargetPose3d_RobotSpace(llName));
+            // } else if (LimelightHelpers.getTV(Constants.LeftReefLimelightName)) {
+            // System.out.println("using left limelight");
+            // return
+            // Optional.of(LimelightHelpers.getTargetPose3d_RobotSpace(Constants.LeftReefLimelightName));
+        } else {
+            System.out.println("no tags detected");
+            return Optional.empty();
+        }
     }
 
     @Override
@@ -185,7 +191,6 @@ public class AutoAlignReef extends Command {
         DogLog.log("AutoAlignTags/ReefAlign/PID Strafe Out", strafeSpeed);
         DogLog.log("AutoAlignTags/ReefAlign/LL rotation yaw", target.getRotation().getZ());
         DogLog.log("AutoAlignTags/ReefAlign/PID rotation out", rot);
-        System.out.println("supposed yaw: " + target.getRotation().getZ());
 
         DogLog.log("AutoAlignTags/StrafeError", strafeGoal.get() - target.getY());
         DogLog.log("AutoAlignTags/DistanceError", distanceGoal.get() - target.getX());
