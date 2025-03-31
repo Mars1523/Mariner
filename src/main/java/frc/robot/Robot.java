@@ -34,7 +34,7 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledInit() {
     LimelightHelpers.getLimelightNTTableEntry(Constants.ReefLimelightName, "throttle_set").setDouble(150);
-    LimelightHelpers.getLimelightNTTableEntry(Constants.UpperLimelightName, "throttle_set").setDouble(150);
+    LimelightHelpers.getLimelightNTTableEntry(Constants.LeftReefLimelightName, "throttle_set").setDouble(150);
   }
 
   @Override
@@ -43,12 +43,12 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledExit() {
+    LimelightHelpers.getLimelightNTTableEntry(Constants.ReefLimelightName, "throttle_set").setDouble(0);
+    LimelightHelpers.getLimelightNTTableEntry(Constants.LeftReefLimelightName, "throttle_set").setDouble(0);
   }
 
   @Override
   public void autonomousInit() {
-    LimelightHelpers.getLimelightNTTableEntry(Constants.ReefLimelightName, "throttle_set").setDouble(0);
-    LimelightHelpers.getLimelightNTTableEntry(Constants.UpperLimelightName, "throttle_set").setDouble(0);
 
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
@@ -69,8 +69,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    LimelightHelpers.getLimelightNTTableEntry(Constants.ReefLimelightName, "throttle_set").setDouble(0);
-    LimelightHelpers.getLimelightNTTableEntry(Constants.UpperLimelightName, "throttle_set").setDouble(0);
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }

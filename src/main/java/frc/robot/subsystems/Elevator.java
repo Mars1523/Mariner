@@ -59,7 +59,7 @@ public class Elevator extends SubsystemBase {
                                 .positionConversionFactor(positionFactor)
                                 .velocityConversionFactor(positionFactor / 60);
                 configLead.closedLoop
-                                .pid(8, 0, 0)
+                                .pid(20, 0, 0)
                                 .outputRange(-0.4, 0.9);
                 // .feedbackSensor(FeedbackSensor.kPrimaryEncoder);
                 // configLead.closedLoop.maxMotion
@@ -75,7 +75,7 @@ public class Elevator extends SubsystemBase {
                                 .positionConversionFactor(positionFactor)
                                 .velocityConversionFactor(positionFactor / 60);
                 configFollow.closedLoop
-                                .pid(8, 0, 0)
+                                .pid(20, 0, 0)
                                 .outputRange(-0.4, 0.9);
                 // .feedbackSensor(FeedbackSensor.`);
                 // configFollow.follow(elevator1, true);

@@ -10,6 +10,7 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
+import dev.doglog.DogLog;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.networktables.NetworkTableEvent;
@@ -32,7 +33,7 @@ public class ClimbSub extends SubsystemBase {
     double climbSetpoint2 = 0;
     SparkClosedLoopController climbController1;
     SparkClosedLoopController climbController2;
-    private final SparkMax climb1 = new SparkMax(58, MotorType.kBrushless); // short arm
+    private final SparkMax climb1 = new SparkMax(57, MotorType.kBrushless); // short arm
     // private final SparkMax climb2 = new SparkMax(57, MotorType.kBrushless);
     // //long arm
     TrapezoidProfile climbTrapezoidProfile1 = new TrapezoidProfile(new Constraints(.2, 40));
@@ -96,6 +97,7 @@ public class ClimbSub extends SubsystemBase {
             climbSetpoint1 = 0;
             // climbSetpoint2 = 0;
             climbTrapezoidSetpoint1 = new TrapezoidProfile.State();
+            climb1.getEncoder().setPosition(0);
             // climbTrapezoidSetpoint2 = new TrapezoidProfile.State();
         }));
     }
@@ -138,16 +140,38 @@ public class ClimbSub extends SubsystemBase {
         // }
         // });
 
+        DogLog.log("climb encoder", climb1.getEncoder().getPosition());
+
     }
 
-    public void climbLetGo() {
+    public void climbLetGo(boolean overridden) {
         // set climb motors to down
-        climb1.set(0.2);
+        if (overridden) {
+            climb1.set(-0.85);
+            System.out.println("letting go of climb, override true");
+        } else {
+            if (climb1.getEncoder().getPosition() <= -6.3) {
+                climb1.set(0);
+                System.out.println("Not letting go of climb, position greater than");
+            } else {
+                climb1.set(-0.95);
+                System.out.println("Letting go of climb");
+
+            }
+        }
         // climb2.set(0.9);
     }
 
-    public void climbDown() {
-        climb1.set(0.2);
+    public void climbDown(boolean overridden) {
+        if (overridden) {
+            climb1.set(0.85);
+        } else {
+            if (climb1.getEncoder().getPosition() >= 0) {
+                climb1.set(0);
+            } else {
+                climb1.set(0.85);
+            }
+        }
     }
 
     public void climbDownSlow() {
@@ -193,11 +217,19 @@ public class ClimbSub extends SubsystemBase {
     // }
 
     public Command climb() {
-        return run(() -> climbDown());
+        return run(() -> climbDown(false));
+    }
+
+    public Command climbOverridden() {
+        return run(() -> climbDown(true));
     }
 
     public Command climbRelease() {
-        return run(() -> climbLetGo());
+        return run(() -> climbLetGo(false));
+    }
+
+    public Command climbReleaseOverridden() {
+        return run(() -> climbLetGo(true));
     }
 
     public Command climbSlow() {

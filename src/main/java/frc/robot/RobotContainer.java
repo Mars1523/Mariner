@@ -270,17 +270,24 @@ public class RobotContainer {
                 primaryJoy.button(8).whileTrue(
                                 new AutoAlignTest(swerveSubsystem, NTD.of(0.0), NTD.of(0.75), NTD.of(0), NTD.of(0.02),
                                                 NTD.of(0.02)));
-                primaryJoy.button(7).whileTrue(
-                                new AutoAlignReef(swerveSubsystem, NTD.of(-0.3), NTD.of(0.75), NTD.of(0), NTD.of(0),
-                                                NTD.of(0)));
+                // primaryJoy.button(7).whileTrue(
+                // new AutoAlignReef(swerveSubsystem, NTD.of(-0.3), NTD.of(0.75), NTD.of(0),
+                // NTD.of(0),
+                // NTD.of(0)));
                 // primaryJoy.button(9)
                 // .onTrue(Commands.runOnce(() -> servo.set(0)))
                 // .onFalse(Commands.runOnce(() -> servo.set(1)));
                 primaryJoy.button(9).and(primaryJoy.button(7))
+                                .onTrue(climbSub.climbReleaseOverridden())
+                                .onFalse(climbSub.climbStopManual());
+                primaryJoy.button(9)
                                 .onTrue(climbSub.climbRelease())
                                 .onFalse(climbSub.climbStopManual());
                 primaryJoy.button(11)
                                 .onTrue(climbSub.climb())
+                                .onFalse(climbSub.climbStopManual());
+                primaryJoy.button(11).and(primaryJoy.button(7))
+                                .onTrue(climbSub.climbOverridden())
                                 .onFalse(climbSub.climbStopManual());
                 primaryJoy.button(10).onTrue(Commands.runOnce(() -> CommandScheduler.getInstance().cancelAll()));
 
