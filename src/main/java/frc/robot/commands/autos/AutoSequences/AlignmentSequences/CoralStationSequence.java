@@ -33,8 +33,8 @@ public class CoralStationSequence extends SequentialCommandGroup {
                 var intakeCoral = new AutoCoralIntake(coralArm);
                 addCommands(
                                 config,
-                                intakeAlign,
                                 Commands.parallel(
+                                                intakeAlign,
                                                 intakeCoral.until(coralArm::hasCoral),
                                                 LLLeds.shortBlink(Constants.UpperLimelightName)),
                                 stow);

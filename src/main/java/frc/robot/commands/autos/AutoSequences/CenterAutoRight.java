@@ -7,6 +7,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SelectCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
 import frc.robot.commands.GoTo;
@@ -42,7 +43,11 @@ public class CenterAutoRight extends SequentialCommandGroup {
                                 new L4AlignmentSequence(coralArm, algaeArm, elevator, swerve,
                                                 Constants.SetpointConstants.StrafeOffsets.leftL4),
                                 GoTo.coralStationRight(),
-                                new CoralStationSequence(coralArm, algaeArm, elevator, swerve)
+                                new CoralStationSequence(coralArm, algaeArm, elevator, swerve),
+                                GoTo.reefSE(),
+                                new L4AlignmentSequence(coralArm, algaeArm, elevator, swerve,
+                                                Constants.SetpointConstants.StrafeOffsets.rightL4),
+                                GoTo.coralStationRight()
 
                 // new ParallelCommandGroup(new AutoNav(), ConfigSystem)
                 // aim andl score corale

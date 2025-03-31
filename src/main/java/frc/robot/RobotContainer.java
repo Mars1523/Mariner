@@ -10,6 +10,7 @@ import org.littletonrobotics.urcl.URCL;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.util.PathPlannerLogging;
 
 import dev.doglog.DogLog;
 import dev.doglog.DogLogOptions;
@@ -40,7 +41,8 @@ import frc.robot.commands.autos.AutoAlignTest;
 import frc.robot.commands.autos.AutoAlignUpper;
 import frc.robot.commands.autos.AutoSequences.CenterAutoLeft;
 import frc.robot.commands.autos.AutoSequences.CenterAutoRight;
-import frc.robot.commands.autos.AutoSequences.CenterScoreOnce;
+import frc.robot.commands.autos.AutoSequences.CenterScoreOnceLeftCS;
+import frc.robot.commands.autos.AutoSequences.CenterScoreOnceRightCS;
 import frc.robot.commands.autos.AutoSequences.Forward;
 import frc.robot.commands.autos.AutoSequences.LeftAuto;
 import frc.robot.commands.autos.AutoSequences.LeftScoreOnce;
@@ -105,6 +107,18 @@ public class RobotContainer {
 
         public RobotContainer() {
                 DogLog.setOptions(new DogLogOptions().withCaptureDs(true).withCaptureConsole(true).withCaptureNt(true));
+                // Logging of autonomous paths
+                // Logging callback for current robot pose
+                PathPlannerLogging.setLogCurrentPoseCallback(
+                                pose -> DogLog.log("PathFollowing/currentPose", pose));
+
+                // Logging callback for target robot pose
+                PathPlannerLogging.setLogTargetPoseCallback(
+                                pose -> DogLog.log("PathFollowing/targetPose", pose));
+
+                // Logging callback for the active path, this is sent as a list of poses
+                PathPlannerLogging.setLogActivePathCallback(
+                                poses -> DogLog.log("PathFollowing/activePath", poses.toArray(new Pose2d[0])));
 
                 var sparks = new HashMap<Integer, String>();
                 sparks.put(10, "SwerveTurnBR");
@@ -141,8 +155,10 @@ public class RobotContainer {
                                 new RightScoreOnce(coralArm, algaeArm, elevatorSub, swerveSubsystem));
                 autoChooser.addOption("score once right",
                                 new LeftScoreOnce(coralArm, algaeArm, elevatorSub, swerveSubsystem));
-                autoChooser.addOption("score once center",
-                                new CenterScoreOnce(coralArm, algaeArm, elevatorSub, swerveSubsystem));
+                autoChooser.addOption("score once center go left CS",
+                                new CenterScoreOnceLeftCS(coralArm, algaeArm, elevatorSub, swerveSubsystem));
+                autoChooser.addOption("score once center go right CS",
+                                new CenterScoreOnceRightCS(coralArm, algaeArm, elevatorSub, swerveSubsystem));
 
                 Shuffleboard.getTab("auto").add(autoChooser);
 
@@ -190,6 +206,11 @@ public class RobotContainer {
 
         private boolean getUpperTag() {
                 return LimelightHelpers.getTV(Constants.UpperLimelightName);
+        }
+
+        private boolean getUpperTagPhoton() {
+                var results = Photon.getInstance().getLastResult();
+                return results.hasTargets();
         }
 
         private boolean getLowerTag() {
@@ -249,7 +270,7 @@ public class RobotContainer {
                 var noBumper = leftBumper.or(rightBumper).negate();
                 var hasAlgae = new Trigger(algaeArm::hasAlgae);
 
-                var hasUpperTarget = new Trigger(this::getUpperTag);
+                var hasUpperTarget = new Trigger(this::getUpperTagPhoton);
                 var hasLowerTarget = new Trigger(this::getLowerTag);
                 var hasNoTarget = new Trigger(this::getNoTag);
 
