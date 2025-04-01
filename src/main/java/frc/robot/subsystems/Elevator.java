@@ -185,7 +185,7 @@ public class Elevator extends SubsystemBase {
                 }
                 trapezoidSetpoint = trapezoidProfile.calculate(0.2, trapezoidSetpoint,
                                 new TrapezoidProfile.State(currentSetpoint, 0));
-                elevatorController.setReference(trapezoidSetpoint.position, ControlType.kPosition);
+                elevatorController.setReference(trapezoidSetpoint.position * 1.015503875968992, ControlType.kPosition);
                 elevatorController2.setReference(trapezoidSetpoint.position, ControlType.kPosition);
         }
 
