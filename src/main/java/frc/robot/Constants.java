@@ -192,7 +192,7 @@ public final class Constants {
       public static NTDouble groundLevel = new NTDouble(0, "groundLevel", "ElevatorSetpoints");
       public static NTDouble algaeLow = new NTDouble(0.85, "algaeLow", "ElevatorSetpoints");
       public static NTDouble algaeHigh = new NTDouble(1.17, "algaeHigh", "ElevatorSetpoints");
-      public static NTDouble coralStation = new NTDouble(0.33, "coralStation", "ElevatorSetpoints");
+      public static NTDouble coralStation = new NTDouble(0.1, "coralStation", "ElevatorSetpoints");
       public static NTDouble processor = new NTDouble(0.1, "processor", "ElevatorSetpoints");
       public static NTDouble groundAlgae = new NTDouble(0.2, "algaeGround", "ElevatorSetpoints");
 
@@ -209,8 +209,8 @@ public final class Constants {
       public static NTDouble l1 = new NTDouble(-0.03, "l1", "CoralPivotAngles"); // reef l1
       public static NTDouble lmid = new NTDouble(0.084, "lmid", "CoralPivotAngles"); // reef l2 and l3
       public static NTDouble l4 = new NTDouble(0.09, "l4", "CoralPivotAngles"); // reef l4
-      public static NTDouble CoralSt = new NTDouble(-0.11, "CoralSt", "CoralPivotAngles"); // pointing up to recieve
-                                                                                           // coral from hp
+      public static NTDouble CoralSt = new NTDouble(-0.115, "CoralSt", "CoralPivotAngles"); // pointing up to recieve
+                                                                                            // coral from hp
       public static NTDouble up = new NTDouble(-0.24, "up", "CoralPivotAngles"); // out of the way for intaking algae
       public static NTDouble down = new NTDouble(-0.24, "down", "CoralPivotAngles");
     }
@@ -219,7 +219,7 @@ public final class Constants {
       // static double l1 = 0;
       public static NTDouble leftReef = new NTDouble(0.20, "leftReef", "StrafeOffsets");
       public static NTDouble leftL4 = new NTDouble(0.2, "leftL4", "StrafeOffsets");
-      public static NTDouble rightReef = new NTDouble(-0.16, "rightReef", "StrafeOffsets");
+      public static NTDouble rightReef = new NTDouble(-0.15, "rightReef", "StrafeOffsets");
       public static NTDouble rightL4 = new NTDouble(-0.16, "rightL4", "StrafeOffsets");
       public static NTDouble centerReef = new NTDouble(0.00, "centerReef", "StrafeOffsets");
       public static NTDouble processor = new NTDouble(-0.05, "processor", "StrafeOffsets");
@@ -321,8 +321,7 @@ public final class Constants {
           ElevatorSetpoints.coralStation,
           AlgaeArmAngles.up);
       public static ConfigOption coralStationAuto = new ConfigOption(CoralPivotAngles.CoralSt,
-          NTD.of(0.13),
-          AlgaeArmAngles.up);
+          ElevatorSetpoints.coralStation, AlgaeArmAngles.up);
       public static ConfigOption processor = new ConfigOption(CoralPivotAngles.down, ElevatorSetpoints.processor,
           AlgaeArmAngles.processor);
       public static ConfigOption driveConfig = new ConfigOption(CoralPivotAngles.up, ElevatorSetpoints.groundLevel,
