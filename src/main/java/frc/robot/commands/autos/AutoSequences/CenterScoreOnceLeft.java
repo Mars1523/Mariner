@@ -9,13 +9,14 @@ import frc.robot.subsystems.CoralArm;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.SwerveSubsystem;
 
-public class CenterScoreOnce extends SequentialCommandGroup {
+public class CenterScoreOnceLeft extends SequentialCommandGroup {
     final CoralArm coralArm;
     final Elevator elevator;
     final AlgaeArm algaeArm;
     final SwerveSubsystem swerveSubsystem;
 
-    public CenterScoreOnce(CoralArm coralArm, Elevator elevator, AlgaeArm algaeArm, SwerveSubsystem swerveSubsystem) {
+    public CenterScoreOnceLeft(CoralArm coralArm, Elevator elevator, AlgaeArm algaeArm,
+            SwerveSubsystem swerveSubsystem) {
         this.coralArm = coralArm;
         this.elevator = elevator;
         this.algaeArm = algaeArm;

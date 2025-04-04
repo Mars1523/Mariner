@@ -44,14 +44,19 @@ import frc.robot.commands.autos.AutoAlignTest;
 import frc.robot.commands.autos.AutoAlignUpper;
 import frc.robot.commands.autos.AutoSequences.CenterAutoLeft;
 import frc.robot.commands.autos.AutoSequences.CenterAutoRight;
-import frc.robot.commands.autos.AutoSequences.CenterScoreOnce;
+import frc.robot.commands.autos.AutoSequences.CenterScoreOnceLeft;
+import frc.robot.commands.autos.AutoSequences.CenterScoreOnceLeftAlgae;
 import frc.robot.commands.autos.AutoSequences.CenterScoreOnceLeftCS;
+import frc.robot.commands.autos.AutoSequences.CenterScoreOnceRight;
+import frc.robot.commands.autos.AutoSequences.CenterScoreOnceRightAlgae;
 import frc.robot.commands.autos.AutoSequences.CenterScoreOnceRightCS;
 import frc.robot.commands.autos.AutoSequences.Forward;
 import frc.robot.commands.autos.AutoSequences.LeftAuto;
 import frc.robot.commands.autos.AutoSequences.LeftScoreOnce;
+import frc.robot.commands.autos.AutoSequences.LeftScoreOnceAlgae;
 import frc.robot.commands.autos.AutoSequences.RightAuto;
 import frc.robot.commands.autos.AutoSequences.RightScoreOnce;
+import frc.robot.commands.autos.AutoSequences.RightScoreOnceAlgae;
 import frc.robot.commands.autos.AutoSequences.AlignmentSequences.AlgaeIntakeAlignmentSequence;
 import frc.robot.commands.autos.AutoSequences.AlignmentSequences.CoralStationSequence;
 import frc.robot.commands.autos.AutoSequences.AlignmentSequences.L4AlignmentSequence;
@@ -171,19 +176,29 @@ public class RobotContainer {
 
                 LiveWindow.enableTelemetry(CommandScheduler.getInstance());
                 autoChooser.addOption("left", new LeftAuto(coralArm, algaeArm, elevatorSub, swerveSubsystem));
-                autoChooser.addOption("center left cs",
-                                new CenterAutoLeft(coralArm, algaeArm, elevatorSub, swerveSubsystem));
-                autoChooser.addOption("center right cs",
-                                new CenterAutoRight(coralArm, algaeArm, elevatorSub, swerveSubsystem));
+                // autoChooser.addOption("center left cs",
+                // new CenterAutoLeft(coralArm, algaeArm, elevatorSub, swerveSubsystem));
+                // autoChooser.addOption("center right cs",
+                // new CenterAutoRight(coralArm, algaeArm, elevatorSub, swerveSubsystem));
                 autoChooser.addOption("right", new RightAuto(coralArm, algaeArm, elevatorSub, swerveSubsystem));
                 autoChooser.addOption("goforward", new Forward(swerveSubsystem));
                 autoChooser.setDefaultOption("Do Nothing", Commands.none());
-                autoChooser.addOption("score once right",
+                autoChooser.addOption("Right score once",
                                 new RightScoreOnce(coralArm, algaeArm, elevatorSub, swerveSubsystem));
-                autoChooser.addOption("score once left",
+                autoChooser.addOption("Left score once",
                                 new LeftScoreOnce(coralArm, algaeArm, elevatorSub, swerveSubsystem));
-                autoChooser.addOption("score once center",
-                                new CenterScoreOnce(coralArm, elevatorSub, algaeArm, swerveSubsystem));
+                autoChooser.addOption("Center score once left",
+                                new CenterScoreOnceLeft(coralArm, elevatorSub, algaeArm, swerveSubsystem));
+                autoChooser.addOption("Center score once right",
+                                new CenterScoreOnceRight(coralArm, elevatorSub, algaeArm, swerveSubsystem));
+                autoChooser.addOption("Once center left algae",
+                                new CenterScoreOnceLeftAlgae(coralArm, elevatorSub, algaeArm, swerveSubsystem));
+                autoChooser.addOption("Once center right algae",
+                                new CenterScoreOnceRightAlgae(coralArm, elevatorSub, algaeArm, swerveSubsystem));
+                autoChooser.addOption("Once right algae",
+                                new RightScoreOnceAlgae(coralArm, algaeArm, elevatorSub, swerveSubsystem));
+                autoChooser.addOption("Once left algae",
+                                new LeftScoreOnceAlgae(coralArm, algaeArm, elevatorSub, swerveSubsystem));
                 // autoChooser.addOption("score once center go left CS",
                 // new CenterScoreOnceLeftCS(coralArm, algaeArm, elevatorSub, swerveSubsystem));
                 // autoChooser.addOption("score once center go right CS",
