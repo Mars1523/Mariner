@@ -34,13 +34,15 @@ public class CenterAutoLeft extends SequentialCommandGroup {
 
                 addCommands(
                                 GoTo.reefN(),
-                                new L4AlignmentSequence(coralArm, algaeArm, elevator, swerve,
-                                                Constants.SetpointConstants.StrafeOffsets.leftL4),
+                                 new L4AlignmentSequence(coralArm, algaeArm, elevator, swerve,
+                                                Constants.SetpointConstants.StrafeOffsets.leftL4,
+                                                Constants.SetpointConstants.DistanceOffsets.L4left),
                                 GoTo.coralStationLeft(),
                                 new CoralStationSequence(coralArm, algaeArm, elevator, swerve),
                                 GoTo.reefSW(),
-                                new L4AlignmentSequence(coralArm, algaeArm, elevator, swerve,
-                                                Constants.SetpointConstants.StrafeOffsets.leftL4),
+                                 new L4AlignmentSequence(coralArm, algaeArm, elevator, swerve,
+                                                Constants.SetpointConstants.StrafeOffsets.leftL4,
+                                                Constants.SetpointConstants.DistanceOffsets.L4left),
                                 GoTo.coralStationLeft(),
                                 new CoralStationSequence(coralArm, algaeArm, elevator, swerve),
                                 GoTo.reefSW()

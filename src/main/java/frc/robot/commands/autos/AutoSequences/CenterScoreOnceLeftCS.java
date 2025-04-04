@@ -29,11 +29,13 @@ public class CenterScoreOnceLeftCS extends SequentialCommandGroup {
                 this.swerveSubsystem = swerveSubsystem;
 
                 addCommands(
-                                new AutoDrive(swerveSubsystem, 1, 0.5),
+                                // new AutoDrive(swerveSubsystem, 1, 0.5),
                                 GoTo.reefN(),
                                 new L4AlignmentSequence(coralArm, algaeArm, elevator, swerveSubsystem,
-                                                Constants.SetpointConstants.StrafeOffsets.leftL4),
+                                                Constants.SetpointConstants.StrafeOffsets.leftL4,
+                                                Constants.SetpointConstants.DistanceOffsets.L4left),
                                 new WaitCommand(5),
                                 GoTo.coralStationLeft());
+
         }
 }

@@ -19,7 +19,7 @@ public class L4AlignmentSequence extends SequentialCommandGroup {
         // this is so we dont need two identical classes
         public L4AlignmentSequence(CoralArm coralArm, AlgaeArm algaeArm, Elevator elevator,
                         SwerveSubsystem swerveSubsystem,
-                        NTDouble strafeOffset) {
+                        NTDouble strafeOffset, NTDouble distanceOffset) {
                 String llName = Constants.ReefLimelightName;
                 var config = new ConfigSystem(Constants.SetpointConstants.Options.l4, coralArm, elevator, algaeArm);
                 var stow = new ConfigSystem(Constants.SetpointConstants.Options.driveConfig, coralArm, elevator,
@@ -36,7 +36,7 @@ public class L4AlignmentSequence extends SequentialCommandGroup {
                         llName = Constants.ReefLimelightName;
                 }
                 var scoreAlign = new AutoAlignReef(swerveSubsystem, strafeOffset,
-                                Constants.SetpointConstants.DistanceOffsets.leftReefScore, NTD.of(0), NTD.of(0.02),
+                                distanceOffset, NTD.of(0), NTD.of(0.02),
                                 NTD.of(0.02));
 
                 var scoreCoral = new AutoCoralScore(coralArm);

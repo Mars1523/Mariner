@@ -36,17 +36,20 @@ public class CenterAutoRight extends SequentialCommandGroup {
                 addCommands(
                                 GoTo.reefN(),
                                 new L4AlignmentSequence(coralArm, algaeArm, elevator, swerve,
-                                                Constants.SetpointConstants.StrafeOffsets.leftL4),
+                                                Constants.SetpointConstants.StrafeOffsets.leftL4,
+                                                Constants.SetpointConstants.DistanceOffsets.L4left),
                                 GoTo.coralStationRight(),
                                 new CoralStationSequence(coralArm, algaeArm, elevator, swerve),
                                 GoTo.reefSE(),
                                 new L4AlignmentSequence(coralArm, algaeArm, elevator, swerve,
-                                                Constants.SetpointConstants.StrafeOffsets.leftL4),
+                                                Constants.SetpointConstants.StrafeOffsets.leftL4,
+                                                Constants.SetpointConstants.DistanceOffsets.L4left),
                                 GoTo.coralStationRight(),
                                 new CoralStationSequence(coralArm, algaeArm, elevator, swerve),
                                 GoTo.reefSE(),
                                 new L4AlignmentSequence(coralArm, algaeArm, elevator, swerve,
-                                                Constants.SetpointConstants.StrafeOffsets.rightL4),
+                                                Constants.SetpointConstants.StrafeOffsets.leftL4,
+                                                Constants.SetpointConstants.DistanceOffsets.L4left),
                                 GoTo.coralStationRight()
 
                 // new ParallelCommandGroup(new AutoNav(), ConfigSystem)

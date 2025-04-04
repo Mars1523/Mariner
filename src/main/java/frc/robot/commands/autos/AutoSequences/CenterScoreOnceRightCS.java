@@ -16,25 +16,26 @@ import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.SwerveSubsystem;
 
 public class CenterScoreOnceRightCS extends SequentialCommandGroup {
-    final CoralArm coralArm;
-    final Elevator elevator;
-    final AlgaeArm algaeArm;
-    final SwerveSubsystem swerveSubsystem;
+        final CoralArm coralArm;
+        final Elevator elevator;
+        final AlgaeArm algaeArm;
+        final SwerveSubsystem swerveSubsystem;
 
-    public CenterScoreOnceRightCS(CoralArm coralArm, AlgaeArm algaeArm, Elevator elevator,
-            SwerveSubsystem swerveSubsystem) {
-        this.coralArm = coralArm;
-        this.algaeArm = algaeArm;
-        this.elevator = elevator;
-        this.swerveSubsystem = swerveSubsystem;
+        public CenterScoreOnceRightCS(CoralArm coralArm, AlgaeArm algaeArm, Elevator elevator,
+                        SwerveSubsystem swerveSubsystem) {
+                this.coralArm = coralArm;
+                this.algaeArm = algaeArm;
+                this.elevator = elevator;
+                this.swerveSubsystem = swerveSubsystem;
 
-        addCommands(
-                new AutoDrive(swerveSubsystem, 1, 0.5),
-                GoTo.reefN(),
-                new L4AlignmentSequence(coralArm, algaeArm, elevator, swerveSubsystem,
-                        Constants.SetpointConstants.StrafeOffsets.leftL4),
-                new WaitCommand(5),
-                GoTo.coralStationRight());
+                addCommands(
+                                // new AutoDrive(swerveSubsystem, 1, 0.5),
+                                GoTo.reefN(),
+                                new L4AlignmentSequence(coralArm, algaeArm, elevator, swerveSubsystem,
+                                                Constants.SetpointConstants.StrafeOffsets.leftL4,
+                                                Constants.SetpointConstants.DistanceOffsets.L4left),
+                                new WaitCommand(5),
+                                GoTo.coralStationRight());
 
-    }
+        }
 }

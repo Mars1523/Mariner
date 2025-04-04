@@ -60,7 +60,7 @@ public class Elevator extends SubsystemBase {
                                 .velocityConversionFactor(positionFactor / 60);
                 configLead.closedLoop
                                 .pid(20, 0, 0)
-                                .outputRange(-0.4, 0.9);
+                                .outputRange(-0.5, 0.9);
                 // .feedbackSensor(FeedbackSensor.kPrimaryEncoder);
                 // configLead.closedLoop.maxMotion
                 // .maxVelocity(1)
@@ -76,7 +76,7 @@ public class Elevator extends SubsystemBase {
                                 .velocityConversionFactor(positionFactor / 60);
                 configFollow.closedLoop
                                 .pid(20, 0, 0)
-                                .outputRange(-0.4, 0.9);
+                                .outputRange(-0.5, 0.9);
                 // .feedbackSensor(FeedbackSensor.`);
                 // configFollow.follow(elevator1, true);
                 elevator2.configure(configFollow, ResetMode.kResetSafeParameters,

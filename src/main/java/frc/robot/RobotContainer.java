@@ -34,6 +34,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants.SetpointConstants.DistanceOffsets;
 import frc.robot.NTDouble.NTD;
 import frc.robot.commands.DefaultSwerve;
 import frc.robot.commands.GoTo;
@@ -43,6 +44,7 @@ import frc.robot.commands.autos.AutoAlignTest;
 import frc.robot.commands.autos.AutoAlignUpper;
 import frc.robot.commands.autos.AutoSequences.CenterAutoLeft;
 import frc.robot.commands.autos.AutoSequences.CenterAutoRight;
+import frc.robot.commands.autos.AutoSequences.CenterScoreOnce;
 import frc.robot.commands.autos.AutoSequences.CenterScoreOnceLeftCS;
 import frc.robot.commands.autos.AutoSequences.CenterScoreOnceRightCS;
 import frc.robot.commands.autos.AutoSequences.Forward;
@@ -106,8 +108,8 @@ public class RobotContainer {
         }
 
         SendableChooser<Command> autoChooser = AutoBuilder.buildAutoChooser();
-        public SendableChooser<Command> chooseAuto1 = AutoBuilder.buildAutoChooser();
-        public SendableChooser<Command> chooseAuto2 = AutoBuilder.buildAutoChooser();
+        // public SendableChooser<Command> chooseAuto1 = AutoBuilder.buildAutoChooser();
+        // public SendableChooser<Command> chooseAuto2 = AutoBuilder.buildAutoChooser();
         SendableChooser<StartingPlace> poseChooser = new SendableChooser<>();
         // GoTo goTo = new GoTo(sideChooser);
 
@@ -149,19 +151,22 @@ public class RobotContainer {
                 sparks.put(60, "Elevator2");
                 URCL.start(sparks);
 
-                chooseAuto1.setDefaultOption("go to reefS", GoTo.reefS());
-                chooseAuto1.addOption("score left", new L4AlignmentSequence(coralArm, algaeArm, elevatorSub,
-                                swerveSubsystem, Constants.SetpointConstants.StrafeOffsets.leftL4));
-                chooseAuto1.setDefaultOption("print", Commands.print("Auto 1 works!"));
-                chooseAuto1.addOption("config", new ConfigSystem(Constants.SetpointConstants.Options.l2, coralArm,
-                                elevatorSub, algaeArm));
-                chooseAuto2.addOption("print", Commands.print("Auto 2 works!"));
-                chooseAuto2.setDefaultOption("config", new ConfigSystem(Constants.SetpointConstants.Options.l3,
-                                coralArm, elevatorSub, algaeArm));
-                chooseAuto2.addOption("score right",
-                                new L4AlignmentSequence(coralArm, algaeArm, elevatorSub, swerveSubsystem,
-                                                Constants.SetpointConstants.StrafeOffsets.rightL4));
-                chooseAuto2.setDefaultOption("go to csR", GoTo.coralStationRight());
+                // chooseAuto1.setDefaultOption("go to reefS", GoTo.reefS());
+                // chooseAuto1.addOption("score left", new L4AlignmentSequence(coralArm,
+                // algaeArm, elevatorSub,
+                // swerveSubsystem, Constants.SetpointConstants.StrafeOffsets.leftL4));
+                // chooseAuto1.setDefaultOption("print", Commands.print("Auto 1 works!"));
+                // chooseAuto1.addOption("config", new
+                // ConfigSystem(Constants.SetpointConstants.Options.l2, coralArm,
+                // elevatorSub, algaeArm));
+                // chooseAuto2.addOption("print", Commands.print("Auto 2 works!"));
+                // chooseAuto2.setDefaultOption("config", new
+                // ConfigSystem(Constants.SetpointConstants.Options.l3,
+                // coralArm, elevatorSub, algaeArm));
+                // chooseAuto2.addOption("score right",
+                // new L4AlignmentSequence(coralArm, algaeArm, elevatorSub, swerveSubsystem,
+                // Constants.SetpointConstants.StrafeOffsets.rightL4));
+                // chooseAuto2.setDefaultOption("go to csR", GoTo.coralStationRight());
 
                 LiveWindow.enableTelemetry(CommandScheduler.getInstance());
                 autoChooser.addOption("left", new LeftAuto(coralArm, algaeArm, elevatorSub, swerveSubsystem));
@@ -174,19 +179,22 @@ public class RobotContainer {
                 autoChooser.setDefaultOption("Do Nothing", Commands.none());
                 autoChooser.addOption("score once right",
                                 new RightScoreOnce(coralArm, algaeArm, elevatorSub, swerveSubsystem));
-                autoChooser.addOption("score once right",
+                autoChooser.addOption("score once left",
                                 new LeftScoreOnce(coralArm, algaeArm, elevatorSub, swerveSubsystem));
-                autoChooser.addOption("score once center go left CS",
-                                new CenterScoreOnceLeftCS(coralArm, algaeArm, elevatorSub, swerveSubsystem));
-                autoChooser.addOption("score once center go right CS",
-                                new CenterScoreOnceRightCS(coralArm, algaeArm, elevatorSub, swerveSubsystem));
-                autoChooser.addOption("configurable auto",
-                                new FinalAuto(chooseAuto1.getSelected(), chooseAuto2.getSelected()));
+                autoChooser.addOption("score once center",
+                                new CenterScoreOnce(coralArm, elevatorSub, algaeArm, swerveSubsystem));
+                // autoChooser.addOption("score once center go left CS",
+                // new CenterScoreOnceLeftCS(coralArm, algaeArm, elevatorSub, swerveSubsystem));
+                // autoChooser.addOption("score once center go right CS",
+                // new CenterScoreOnceRightCS(coralArm, algaeArm, elevatorSub,
+                // swerveSubsystem));
+                // autoChooser.addOption("configurable auto",
+                // new FinalAuto(chooseAuto1.getSelected(), chooseAuto2.getSelected()));
                 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                 Shuffleboard.getTab("auto").add(autoChooser);
 
-                Shuffleboard.getTab("auto").add(chooseAuto1);
-                Shuffleboard.getTab("auto").add(chooseAuto2);
+                // Shuffleboard.getTab("auto").add(chooseAuto1);
+                // Shuffleboard.getTab("auto").add(chooseAuto2);
 
                 // Shuffleboard.getTab("auto").add("Pick autos?", getFinalAuto());
 
@@ -267,9 +275,10 @@ public class RobotContainer {
                 primaryJoy.button(6)
                                 .onTrue(algaeArm.algaeSpinOut())
                                 .onFalse(algaeArm.algaeSpinStop());
-                primaryJoy.button(8).whileTrue(
-                                new AutoAlignTest(swerveSubsystem, NTD.of(0.0), NTD.of(0.75), NTD.of(0), NTD.of(0.02),
-                                                NTD.of(0.02)));
+                // primaryJoy.button(8).whileTrue(
+                // new AutoAlignTest(swerveSubsystem, NTD.of(0.0), NTD.of(0.75), NTD.of(0),
+                // NTD.of(0.02),
+                // NTD.of(0.02)));
                 // primaryJoy.button(7).whileTrue(
                 // new AutoAlignReef(swerveSubsystem, NTD.of(-0.3), NTD.of(0.75), NTD.of(0),
                 // NTD.of(0),
@@ -280,18 +289,39 @@ public class RobotContainer {
                 primaryJoy.button(9).and(primaryJoy.button(7))
                                 .onTrue(climbSub.climbReleaseOverridden())
                                 .onFalse(climbSub.climbStopManual());
-                primaryJoy.button(9)
+                primaryJoy.button(9).and(primaryJoy.button(7).negate())
                                 .onTrue(climbSub.climbRelease())
                                 .onFalse(climbSub.climbStopManual());
-                primaryJoy.button(11)
+                primaryJoy.button(11).and(primaryJoy.button(7).negate())
                                 .onTrue(climbSub.climb())
                                 .onFalse(climbSub.climbStopManual());
                 primaryJoy.button(11).and(primaryJoy.button(7))
                                 .onTrue(climbSub.climbOverridden())
                                 .onFalse(climbSub.climbStopManual());
+                primaryJoy.button(8)
+                                .onTrue(climbSub.climbOverOverridden())
+                                .onFalse(climbSub.climbStopManual());
                 primaryJoy.button(10).onTrue(Commands.runOnce(() -> CommandScheduler.getInstance().cancelAll()));
 
-                var leftBumper = new JoystickButton(secondaryController, XboxController.Button.kLeftBumper.value);
+                // primaryJoy.button(7)
+                // .whileTrue(GoTo.reefSW());
+                // primaryJoy.button(8)
+                // .whileTrue(GoTo.reefNW());
+                // primaryJoy.button(9)
+                // .onTrue(GoTo.reefS());
+                // primaryJoy.button(10)
+                // .onTrue(GoTo.reefN());
+                // primaryJoy.button(11)
+                // .onTrue(GoTo.reefSE());
+                // primaryJoy.button(12)
+                // .onTrue(GoTo.reefNE());
+                // primaryJoy.pov(90)
+                // .whileTrue(GoTo.coralStationRight());
+                // primaryJoy.pov(270)
+                // .whileTrue(GoTo.coralStationLeft());
+
+                var leftBumper = new JoystickButton(secondaryController,
+                                XboxController.Button.kLeftBumper.value);
                 var rightBumper = new JoystickButton(secondaryController, XboxController.Button.kRightBumper.value);
                 var xboxA = new JoystickButton(secondaryController, XboxController.Button.kA.value);
                 var xboxB = new JoystickButton(secondaryController, XboxController.Button.kB.value);
@@ -325,7 +355,8 @@ public class RobotContainer {
                                                 Constants.SetpointConstants.Options.l3));
                 xboxY.and(leftBumper).onTrue(
                                 new L4AlignmentSequence(coralArm, algaeArm, elevatorSub, swerveSubsystem,
-                                                Constants.SetpointConstants.StrafeOffsets.leftL4));
+                                                Constants.SetpointConstants.StrafeOffsets.leftL4,
+                                                Constants.SetpointConstants.DistanceOffsets.L4left));
                 xboxA.and(rightBumper).onTrue(
                                 new ConfigSystem(Constants.SetpointConstants.Options.l1, coralArm, elevatorSub,
                                                 algaeArm));
@@ -337,8 +368,9 @@ public class RobotContainer {
                                                 Constants.SetpointConstants.Options.l3));
                 xboxY.and(rightBumper).onTrue(
                                 new L4AlignmentSequence(coralArm, algaeArm, elevatorSub, swerveSubsystem,
-                                                Constants.SetpointConstants.StrafeOffsets.rightL4));
-                xboxA.and(noBumper).and(hasAlgae).and(hasUpperTarget).onTrue(
+                                                Constants.SetpointConstants.StrafeOffsets.rightL4,
+                                                Constants.SetpointConstants.DistanceOffsets.L4Right));
+                noBumper.and(hasUpperTarget).and(leftStick).onTrue(
                                 new ProcessorAlignmentSequence(coralArm, algaeArm, elevatorSub, swerveSubsystem));
                 xboxA.and(noBumper).and(hasAlgae).and(hasUpperTarget.negate()).onTrue(
                                 new ConfigSystem(Constants.SetpointConstants.Options.processor, coralArm, elevatorSub,
@@ -394,6 +426,24 @@ public class RobotContainer {
                                 GoTo.reefSW());
                 rightPOV.and(xboxBack).whileTrue(
                                 GoTo.reefSE());
+
+                // xboxBack
+                // .onTrue(climbSub.climbReleaseOverridden())
+                // .onFalse(climbSub.climbStopManual());
+                // upPOV
+                // .onTrue(climbSub.climbRelease())
+                // .onFalse(climbSub.climbStopManual());
+                // leftPOV
+                // .onTrue(climbSub.climb())
+                // .onFalse(climbSub.climbStopManual());
+                // downPOV
+                // .onTrue(climbSub.climbOverridden())
+                // .onFalse(climbSub.climbStopManual());
+                // rightPOV
+                // .onTrue(climbSub.climbOverOverridden())
+                // .onFalse(climbSub.climbStopManual());
+                // xboxStart.onTrue(Commands.runOnce(() ->
+                // CommandScheduler.getInstance().cancelAll()));
 
                 // CommandScheduler.getInstance().onCommandInitialize((c) ->
                 // System.out.println("initalizing: "+c.getName()));

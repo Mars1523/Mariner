@@ -56,7 +56,7 @@ public class ClimbSub extends SubsystemBase {
         configLeader
                 .openLoopRampRate(.5)
                 .inverted(true)
-                .idleMode(SparkMaxConfig.IdleMode.kCoast);
+                .idleMode(SparkMaxConfig.IdleMode.kBrake);
         configLeader.closedLoop
                 .pid(5, 0, 0)
                 .outputRange(0, 1);
@@ -97,7 +97,7 @@ public class ClimbSub extends SubsystemBase {
             climbSetpoint1 = 0;
             // climbSetpoint2 = 0;
             climbTrapezoidSetpoint1 = new TrapezoidProfile.State();
-            climb1.getEncoder().setPosition(0);
+            // climb1.getEncoder().setPosition(0);
             // climbTrapezoidSetpoint2 = new TrapezoidProfile.State();
         }));
     }
@@ -147,30 +147,33 @@ public class ClimbSub extends SubsystemBase {
     public void climbLetGo(boolean overridden) {
         // set climb motors to down
         if (overridden) {
-            climb1.set(-0.85);
-            System.out.println("letting go of climb, override true");
+            climb1.set(-1);
         } else {
             if (climb1.getEncoder().getPosition() <= -6.3) {
                 climb1.set(0);
-                System.out.println("Not letting go of climb, position greater than");
             } else {
                 climb1.set(-0.95);
-                System.out.println("Letting go of climb");
 
             }
         }
         // climb2.set(0.9);
     }
 
-    public void climbDown(boolean overridden) {
-        if (overridden) {
-            climb1.set(0.85);
-        } else {
-            if (climb1.getEncoder().getPosition() >= 0) {
+    public void climbDown(boolean overridden, boolean overoverridden) {
+        if (!overridden && !overoverridden) {
+            if (climb1.getEncoder().getPosition() >= 0.0) {
                 climb1.set(0);
             } else {
                 climb1.set(0.85);
             }
+        } else if (overridden && !overoverridden) {
+            if (climb1.getEncoder().getPosition() >= 0.4) {
+                climb1.set(0);
+            } else {
+                climb1.set(0.85);
+            }
+        } else if (!overridden && overoverridden) {
+            climb1.set(0.7);
         }
     }
 
@@ -217,11 +220,11 @@ public class ClimbSub extends SubsystemBase {
     // }
 
     public Command climb() {
-        return run(() -> climbDown(false));
+        return run(() -> climbDown(false, false));
     }
 
     public Command climbOverridden() {
-        return run(() -> climbDown(true));
+        return run(() -> climbDown(true, false));
     }
 
     public Command climbRelease() {
@@ -230,6 +233,10 @@ public class ClimbSub extends SubsystemBase {
 
     public Command climbReleaseOverridden() {
         return run(() -> climbLetGo(true));
+    }
+
+    public Command climbOverOverridden() {
+        return run(() -> climbDown(false, true));
     }
 
     public Command climbSlow() {

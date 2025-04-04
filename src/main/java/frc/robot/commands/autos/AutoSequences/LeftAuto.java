@@ -36,11 +36,13 @@ public class LeftAuto extends SequentialCommandGroup {
                 addCommands(
                                 GoTo.reefNW(),
                                 new L4AlignmentSequence(coralArm, algaeArm, elevator, swerve,
+                                                Constants.SetpointConstants.StrafeOffsets.leftL4,
                                                 Constants.SetpointConstants.StrafeOffsets.leftL4),
                                 GoTo.coralStationLeft(),
                                 new CoralStationSequence(coralArm, algaeArm, elevator, swerve),
                                 GoTo.reefSW(),
                                 new L4AlignmentSequence(coralArm, algaeArm, elevator, swerve,
+                                                Constants.SetpointConstants.StrafeOffsets.leftL4,
                                                 Constants.SetpointConstants.StrafeOffsets.leftL4),
                                 GoTo.coralStationLeft(),
                                 new CoralStationSequence(coralArm, algaeArm, elevator, swerve));
