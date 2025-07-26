@@ -20,7 +20,6 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import frc.robot.Constants;
 
 public class SwerveModule {
@@ -112,7 +111,6 @@ public class SwerveModule {
                 driveMotor.configure(driveConfig, SparkBase.ResetMode.kResetSafeParameters,
                                 SparkBase.PersistMode.kNoPersistParameters);
 
-
                 double turningPositionConversionFactor = Math
                                 .toRadians(Constants.ModuleConstants.TurningEncoderDegreesPerPulse);
 
@@ -152,14 +150,6 @@ public class SwerveModule {
                 turningEncoder.setPosition(scaleSwerve(turningMotor.getAnalog().getVoltage() - voltageOffset));
                 pidController = turningMotor.getClosedLoopController();
 
-                // Shuffleboard.getTab("Debug").addDouble("SwerveTurnAbsRot " + turningMotorID,
-                //                                 () -> scale(scaleSwerve(turningMotor.getAnalog().getVoltage() - voltageOffset), 0,
-                //                                 Math.PI * 2, 0,
-                //                                 1));
-                // Shuffleboard.getTab("Debug").addDouble("SwerveTurnRelRot " + turningMotorID,
-                //                 () -> Units.radiansToRotations(turningEncoder.getPosition()));
-                // Shuffleboard.getTab("Debug").addDouble("SwerveTurnAbsVolts " + turningMotorID,
-                //                 () -> turningMotor.getAnalog().getVoltage());
         }
 
         private static double scale(double value, double min, double max, double a, double b) {

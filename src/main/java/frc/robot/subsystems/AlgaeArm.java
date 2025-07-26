@@ -19,6 +19,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.souffle.Souffle;
+
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 public class AlgaeArm extends SubsystemBase {
@@ -84,12 +86,12 @@ public class AlgaeArm extends SubsystemBase {
         // algaeWrist.getEncoder().setPosition(0);
 
         // Shuffleboard.getTab("Debug").add("P", 0.0);
-        Shuffleboard.getTab("Debug").addDouble("Algae Wrist Setpoint", () -> algaeWristSetpoint);
-        Shuffleboard.getTab("Debug").addDouble("Algae Wrist Current", () -> algaeWrist.getEncoder().getPosition());
-        Shuffleboard.getTab("Debug").addDouble("Algae Wrist Absolute",
+        Souffle.record("Debug/Algae Wrist Setpoint", () -> algaeWristSetpoint);
+        Souffle.record("Debug/Algae Wrist Current", () -> algaeWrist.getEncoder().getPosition());
+        Souffle.record("Debug/Algae Wrist Absolute",
                 () -> algaeWrist.getAbsoluteEncoder().getPosition());
-        Shuffleboard.getTab("Debug").addDouble("Algae Wrist Power", () -> algaeWrist.getAppliedOutput());
-        Shuffleboard.getTab("Debug").addBoolean("has Algae", () -> hasAlgae());
+        Souffle.record("Debug/Algae Wrist Power", () -> algaeWrist.getAppliedOutput());
+        Souffle.record("Debug/has Algae", () -> hasAlgae());
 
     }
 

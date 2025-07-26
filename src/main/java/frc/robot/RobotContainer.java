@@ -8,15 +8,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.littletonrobotics.junction.Logger;
+import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 import org.littletonrobotics.urcl.URCL;
 
-import com.ctre.phoenix.platform.can.AutocacheState;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.util.PathPlannerLogging;
 
-import dev.doglog.DogLog;
-import dev.doglog.DogLogOptions;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -35,22 +34,15 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Constants.SetpointConstants.DistanceOffsets;
-import frc.robot.NTDouble.NTD;
 import frc.robot.commands.DefaultSwerve;
 import frc.robot.commands.GoTo;
 import frc.robot.commands.Configuration.ConfigSystem;
-import frc.robot.commands.autos.AutoAlignReef;
-import frc.robot.commands.autos.AutoAlignTest;
-import frc.robot.commands.autos.AutoAlignUpper;
 import frc.robot.commands.autos.AutoSequences.CenterAutoLeft;
 import frc.robot.commands.autos.AutoSequences.CenterAutoRight;
 import frc.robot.commands.autos.AutoSequences.CenterScoreOnceLeft;
 import frc.robot.commands.autos.AutoSequences.CenterScoreOnceLeftAlgae;
-import frc.robot.commands.autos.AutoSequences.CenterScoreOnceLeftCS;
 import frc.robot.commands.autos.AutoSequences.CenterScoreOnceRight;
 import frc.robot.commands.autos.AutoSequences.CenterScoreOnceRightAlgae;
-import frc.robot.commands.autos.AutoSequences.CenterScoreOnceRightCS;
 import frc.robot.commands.autos.AutoSequences.Forward;
 import frc.robot.commands.autos.AutoSequences.LeftAuto;
 import frc.robot.commands.autos.AutoSequences.LeftScoreOnce;
@@ -69,6 +61,7 @@ import frc.robot.subsystems.ClimbSub;
 import frc.robot.subsystems.CoralArm;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.souffle.Souffle;
 
 public class RobotContainer {
 
@@ -113,10 +106,10 @@ public class RobotContainer {
                 Left, Right, Center
         }
 
-        SendableChooser<Command> autoChooser = AutoBuilder.buildAutoChooser();
+        LoggedDashboardChooser<Command> autoChooser = new LoggedDashboardChooser<>("autoChooser");
         // public SendableChooser<Command> chooseAuto1 = AutoBuilder.buildAutoChooser();
         // public SendableChooser<Command> chooseAuto2 = AutoBuilder.buildAutoChooser();
-        SendableChooser<StartingPlace> poseChooser = new SendableChooser<>();
+        LoggedDashboardChooser<StartingPlace> poseChooser = new LoggedDashboardChooser<>("pose");
         // GoTo goTo = new GoTo(sideChooser);
 
         public RobotContainer() {
@@ -126,15 +119,15 @@ public class RobotContainer {
                 // Logging of autonomous paths
                 // Logging callback for current robot pose
                 PathPlannerLogging.setLogCurrentPoseCallback(
-                                pose -> DogLog.log("PathFollowing/currentPose", pose));
+                                pose -> Logger.recordOutput("PathFollowing/currentPose", pose));
 
                 // Logging callback for target robot pose
                 PathPlannerLogging.setLogTargetPoseCallback(
-                                pose -> DogLog.log("PathFollowing/targetPose", pose));
+                                pose -> Logger.recordOutput("PathFollowing/targetPose", pose));
 
                 // Logging callback for the active path, this is sent as a list of poses
                 PathPlannerLogging.setLogActivePathCallback(
-                                poses -> DogLog.log("PathFollowing/activePath", poses.toArray(new Pose2d[0])));
+                                poses -> Logger.recordOutput("PathFollowing/activePath", poses.toArray(new Pose2d[0])));
 
                 var sparks = new HashMap<Integer, String>();
                 sparks.put(10, "SwerveTurnBR");
@@ -156,7 +149,8 @@ public class RobotContainer {
 
                 sparks.put(59, "Elevator1");
                 sparks.put(60, "Elevator2");
-                URCL.start(sparks);
+                Logger.registerURCL(URCL.startExternal(sparks));
+                Logger.start();
 
                 // chooseAuto1.setDefaultOption("go to reefS", GoTo.reefS());
                 // chooseAuto1.addOption("score left", new L4AlignmentSequence(coralArm,
@@ -183,7 +177,7 @@ public class RobotContainer {
                 // new CenterAutoRight(coralArm, algaeArm, elevatorSub, swerveSubsystem));
                 autoChooser.addOption("right", new RightAuto(coralArm, algaeArm, elevatorSub, swerveSubsystem));
                 autoChooser.addOption("goforward", new Forward(swerveSubsystem));
-                autoChooser.setDefaultOption("Do Nothing", Commands.none());
+                autoChooser.addDefaultOption("Do Nothing", Commands.none());
                 autoChooser.addOption("Right score once",
                                 new RightScoreOnce(coralArm, algaeArm, elevatorSub, swerveSubsystem));
                 autoChooser.addOption("Left score once",
@@ -212,7 +206,7 @@ public class RobotContainer {
                 // autoChooser.addOption("configurable auto",
                 // new FinalAuto(chooseAuto1.getSelected(), chooseAuto2.getSelected()));
                 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                Shuffleboard.getTab("auto").add(autoChooser);
+                // Shuffleboard.getTab("auto").add(autoChooser);
 
                 // Shuffleboard.getTab("auto").add(chooseAuto1);
                 // Shuffleboard.getTab("auto").add(chooseAuto2);
@@ -225,7 +219,7 @@ public class RobotContainer {
 
                 // sideChooser.addOption("Red", GoTo.side.Red);
                 // sideChooser.addOption("Blue", GoTo.side.Blue);
-                Shuffleboard.getTab("pose").add(poseChooser);
+                // Shuffleboard.getTab("pose").add(poseChooser);
                 // Shuffleboard.getTab("side").add(sideChooser);
 
                 swerveSubsystem.setDefaultCommand(swerve);
@@ -248,7 +242,7 @@ public class RobotContainer {
                 }, climbSub));
 
                 var scheduler = CommandScheduler.getInstance();
-                Shuffleboard.getTab("Drive").addBoolean("Is Teleop", () -> scheduler.isScheduled(swerve));
+                Souffle.record("Drive/Is Teleop", () -> scheduler.isScheduled(swerve));
         }
 
         public void periodic() {
@@ -257,7 +251,7 @@ public class RobotContainer {
                         var cameraToTarget = results.getBestTarget().getBestCameraToTarget();
                         var transform = Constants.robotToCamera.plus(cameraToTarget);
                         var fieldToRobot = new Pose3d(swerveSubsystem.getPose());
-                        DogLog.log("PhotonBestTarget", fieldToRobot.transformBy(transform));
+                        Logger.recordOutput("PhotonBestTarget", fieldToRobot.transformBy(transform));
                 }
         }
 
@@ -519,7 +513,7 @@ public class RobotContainer {
 
         public Command getAutonomousCommand() {
                 // return Commands.print("No autonomous command configured");
-                var command = autoChooser.getSelected();
+                var command = autoChooser.get();
                 if (command != null) {
                         return command;
                 } else {
@@ -528,7 +522,7 @@ public class RobotContainer {
         }
 
         public void setStartingPose() {
-                var poseChooserState = poseChooser.getSelected();
+                var poseChooserState = poseChooser.get();
                 var selectedStartingPose = poseChooserState == null ? StartingPlace.Center : poseChooserState;
                 if (GoTo.getAlliance() == Alliance.Red) {
                         switch (selectedStartingPose) {

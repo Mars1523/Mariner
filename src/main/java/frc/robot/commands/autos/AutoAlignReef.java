@@ -3,7 +3,8 @@ package frc.robot.commands.autos;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import dev.doglog.DogLog;
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.XboxController;
@@ -178,22 +179,22 @@ public class AutoAlignReef extends Command {
         // nt.getEntry("/Shuffleboard/Tune/AutoAlignTags/PID rotation
         // out").setDouble(rot);
 
-        DogLog.log("/Shuffleboard/Tune/AutoAlignTags/ReefAlign/LL Distance", target.getX());
-        DogLog.log("AutoAlignTags/ReefAlign/PID Distance Out", distanceSpeed);
-        DogLog.log("AutoAlignTags/ReefAlign/PID Distance Setpoint",
+        Logger.recordOutput("/Shuffleboard/Tune/AutoAlignTags/ReefAlign/LL Distance", target.getX());
+        Logger.recordOutput("AutoAlignTags/ReefAlign/PID Distance Out", distanceSpeed);
+        Logger.recordOutput("AutoAlignTags/ReefAlign/PID Distance Setpoint",
                 distancePID.getSetpoint().position);
-        DogLog.log("AutoAlignTags/ReefAlign/PID Distance Goal", distancePID.getGoal().position);
-        DogLog.log("AutoAlignTags/ReefAlign/LL Strafe", target.getY());
-        DogLog.log("AutoAlignTags/ReefAlign/PID Strafe Setpoint", strafePID.getSetpoint().position);
-        DogLog.log("AutoAlignTags/ReefAlign/PID Strafe Goal", strafePID.getGoal().position);
-        DogLog.log("AutoAlignTags/ReefAlign/PID Strafe Out", strafeSpeed);
-        DogLog.log("AutoAlignTags/ReefAlign/LL rotation yaw", target.getRotation().getZ());
-        DogLog.log("AutoAlignTags/ReefAlign/PID rotation out", rot);
+        Logger.recordOutput("AutoAlignTags/ReefAlign/PID Distance Goal", distancePID.getGoal().position);
+        Logger.recordOutput("AutoAlignTags/ReefAlign/LL Strafe", target.getY());
+        Logger.recordOutput("AutoAlignTags/ReefAlign/PID Strafe Setpoint", strafePID.getSetpoint().position);
+        Logger.recordOutput("AutoAlignTags/ReefAlign/PID Strafe Goal", strafePID.getGoal().position);
+        Logger.recordOutput("AutoAlignTags/ReefAlign/PID Strafe Out", strafeSpeed);
+        Logger.recordOutput("AutoAlignTags/ReefAlign/LL rotation yaw", target.getRotation().getZ());
+        Logger.recordOutput("AutoAlignTags/ReefAlign/PID rotation out", rot);
 
-        DogLog.log("AutoAlignTags/StrafeError", strafeGoal.get() - target.getY());
-        DogLog.log("AutoAlignTags/DistanceError", distanceGoal.get() - target.getX());
+        Logger.recordOutput("AutoAlignTags/StrafeError", strafeGoal.get() - target.getY());
+        Logger.recordOutput("AutoAlignTags/DistanceError", distanceGoal.get() - target.getX());
         var rotationDelta = new Rotation2d(rotationGoal.get()).minus(target.getRotation().toRotation2d());
-        DogLog.log("AutoAlignTags/RotationError", rotationDelta);
+        Logger.recordOutput("AutoAlignTags/RotationError", rotationDelta);
         // how do i set a different goal for the distance
 
         // System.out.println(getStance());

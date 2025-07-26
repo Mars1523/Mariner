@@ -2,6 +2,8 @@ package frc.robot.subsystems;
 
 import static edu.wpi.first.units.Units.Volts;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
@@ -9,7 +11,6 @@ import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.studica.frc.AHRS;
 import com.studica.frc.AHRS.NavXComType;
 
-import dev.doglog.DogLog;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.filter.SlewRateLimiter;
@@ -214,9 +215,9 @@ public class SwerveSubsystem extends SubsystemBase {
                 );
 
                 field.setRobotPose(getPose());
-                DogLog.log("robot pose", getPose());
-                DogLog.log("Module States", getModuleStates());
-                DogLog.log("Current Rotation", getRotation());
+                Logger.recordOutput("robot pose", getPose());
+                Logger.recordOutput("Module States", getModuleStates());
+                Logger.recordOutput("Current Rotation", getRotation());
 
         }
 
@@ -324,7 +325,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
                 var sysIdRoutine = new SysIdRoutine(
                                 new SysIdRoutine.Config(null, null, null,
-                                                (state) -> DogLog.log("SysIdTestState", state.toString())),
+                                                (state) -> Logger.recordOutput("SysIdTestState", state.toString())),
                                 new SysIdRoutine.Mechanism(
                                                 (voltage) -> this.runCharacterization(voltage.in(Volts)),
                                                 null, // No log consumer, since data is recorded by URCL

@@ -1,10 +1,9 @@
 package frc.robot.commands.autos;
 
-import static edu.wpi.first.units.Units.Radians;
-
 import java.util.Optional;
 
-import dev.doglog.DogLog;
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose3d;
@@ -60,8 +59,8 @@ public class AutoAlignUpper extends Command {
             System.out.println("Camera to Target" + cameraToTarget);
             var transform = Constants.robotToCamera.plus(cameraToTarget);
             var fieldToRobot = new Pose3d(swerveSub.getPose());
-            DogLog.log("RobotToCamera", fieldToRobot.transformBy(Constants.robotToCamera));
-            DogLog.log("PhotonFinalOffset", fieldToRobot.transformBy(transform));
+            Logger.recordOutput("RobotToCamera", fieldToRobot.transformBy(Constants.robotToCamera));
+            Logger.recordOutput("PhotonFinalOffset", fieldToRobot.transformBy(transform));
 
             // System.out.println("robot to camera" + Constants.robotToCamera);
             // System.out.println("final offset: " + transform.getTranslation());
@@ -179,24 +178,24 @@ public class AutoAlignUpper extends Command {
         rot = MathUtil.clamp(rot, -DriveConstants.MaxAngularVelocityRadiansPerSecond / 3.5,
                 DriveConstants.MaxAngularVelocityRadiansPerSecond / 3.5);
 
-        DogLog.log("/Shuffleboard/Tune/AutoAlignTags/UpperAlign/LL Distance", target.getX());
-        DogLog.log("AutoAlignTags/UpperAlign/PID Distance Out", distanceSpeed);
-        DogLog.log("AutoAlignTags/UpperAlign/PID Distance Setpoint",
+        Logger.recordOutput("/Shuffleboard/Tune/AutoAlignTags/UpperAlign/LL Distance", target.getX());
+        Logger.recordOutput("AutoAlignTags/UpperAlign/PID Distance Out", distanceSpeed);
+        Logger.recordOutput("AutoAlignTags/UpperAlign/PID Distance Setpoint",
                 distancePID.getSetpoint().position);
-        DogLog.log("AutoAlignTags/UpperAlign/PID Distance Goal", distancePID.getGoal().position);
-        DogLog.log("AutoAlignTags/UpperAlign/LL Strafe", target.getY());
-        DogLog.log("AutoAlignTags/UpperAlign/PID Strafe Setpoint", strafePID.getSetpoint().position);
-        DogLog.log("AutoAlignTags/UpperAlign/PID Strafe Goal", strafePID.getGoal().position);
-        DogLog.log("AutoAlignTags/UpperAlign/PID Strafe Out", strafeSpeed);
-        DogLog.log("AutoAlignTags/UpperAlign/LL rotation yaw", target.getRotation().getZ());
-        DogLog.log("AutoAlignTags/UpperAlign/PID rotation out", rot);
+        Logger.recordOutput("AutoAlignTags/UpperAlign/PID Distance Goal", distancePID.getGoal().position);
+        Logger.recordOutput("AutoAlignTags/UpperAlign/LL Strafe", target.getY());
+        Logger.recordOutput("AutoAlignTags/UpperAlign/PID Strafe Setpoint", strafePID.getSetpoint().position);
+        Logger.recordOutput("AutoAlignTags/UpperAlign/PID Strafe Goal", strafePID.getGoal().position);
+        Logger.recordOutput("AutoAlignTags/UpperAlign/PID Strafe Out", strafeSpeed);
+        Logger.recordOutput("AutoAlignTags/UpperAlign/LL rotation yaw", target.getRotation().getZ());
+        Logger.recordOutput("AutoAlignTags/UpperAlign/PID rotation out", rot);
         System.out.println("supposed yaw: " + target.getRotation().getZ());
 
-        DogLog.log("AutoAlignTags/StrafeError", strafeGoal.get() - target.getY());
-        DogLog.log("AutoAlignTags/DistanceError", distanceGoal.get() - target.getX());
+        Logger.recordOutput("AutoAlignTags/StrafeError", strafeGoal.get() - target.getY());
+        Logger.recordOutput("AutoAlignTags/DistanceError", distanceGoal.get() - target.getX());
         var rotationDelta = new Rotation2d(rotationGoal.get()).minus(target.getRotation().toRotation2d());
-        DogLog.log("AutoAlignTags/RotationError", rotationDelta);
-        // DogLog.log("AutoAlignTags/RotationError", rotationGoal.get() -
+        Logger.recordOutput("AutoAlignTags/RotationError", rotationDelta);
+        // Logger.recordOutput("AutoAlignTags/RotationError", rotationGoal.get() -
         // target.getRotation().getZ());
 
         // System.out.println("supposed Distance: " + target.getX());
