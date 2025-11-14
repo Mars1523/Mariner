@@ -1,8 +1,9 @@
 package frc.robot.commands;
 
-import java.lang.StackWalker.Option;
-import java.util.Optional;
-import java.util.Set;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.stream.Collectors;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathConstraints;
@@ -42,8 +43,30 @@ public class GoTo {
     private final static int blueCsRightTagID = 12;
     private final static int blueProcessorTagID = 16;
 
+    private final static int[] allTagIDs =
+            {10, 9, 11, 7, 8, 6, 1, 2, 3, 21, 22, 20, 18, 17, 19, 13, 12, 16,};
+
     public static boolean isRed() {
         return getAlliance() == Alliance.Red;
+    }
+
+    // Finds the tag who is closest to the robot and is facing the robot
+    public static int bestTag(Pose2d robotPose) {
+        return Collections.min(
+                Arrays.stream(allTagIDs).boxed().collect(Collectors.toList()),
+                Comparator
+                        .comparing(
+                                (Integer other) -> robotPose.getTranslation()
+                                        .getDistance(getTagPose(other)
+                                                .getTranslation()))
+                        .thenComparing((Integer other) -> Math
+                                .abs(robotPose.getRotation()
+                                        .minus(getTagPose(other).getRotation())
+                                        .getRadians())));
+    }
+
+    public static Pose2d getTagPose(Integer tagID) {
+        return Constants.kField.getTagPose(tagID).get().toPose2d();
     }
 
     public static Alliance getAlliance() {
@@ -55,11 +78,15 @@ public class GoTo {
     public static PathConstraints constraints =
             new PathConstraints(3.7, 3.9, 360 * 1.5, 360);
 
-    private static Pose2d inFrontOfTag(int id) {
+    public static Pose2d inFrontOfTag(int id) {
+        return inFrontOfTag(id, 1.2);
+    }
+
+    public static Pose2d inFrontOfTag(int id, double distance) {
         Transform2d rot180 =
                 new Transform2d(Translation2d.kZero, Rotation2d.k180deg);
         var tag = Constants.kField.getTagPose(id).get().toPose2d();
-        var offset = new Transform2d(1.2, 0, new Rotation2d());
+        var offset = new Transform2d(distance, 0, new Rotation2d());
         Pose2d infrontOfTag = tag.plus(offset).transformBy(rot180);
         return infrontOfTag;
     }

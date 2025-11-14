@@ -8,7 +8,6 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.SwerveSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.networktables.NetworkTableInstance;
 import frc.robot.Constants;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -39,15 +38,17 @@ public class AbsoluteGoto extends Command {
                 new TrapezoidProfile.Constraints(
                         Constants.DriveConstants.MaxVelocityMetersPerSecond / 3,
                         2.5));
-        rotationPID = new ProfiledPIDController(3.85 * .9, .8 * .7, .85 * .125,
+        rotationPID = new ProfiledPIDController(3.95 * .9, .8 * .7, .85 * .125,
                 new TrapezoidProfile.Constraints(
                         Constants.DriveConstants.MaxAngularVelocityRadiansPerSecond
-                                / 2,
-                        (Math.PI * 2) / 2));
+                                / 1.5,
+                        (Math.PI * 2)));
 
         yPID.setGoal(goal.getY());
         xPID.setGoal(goal.getX());
         rotationPID.setGoal(goal.getRotation().getRadians());
+        // WIP
+        rotationPID.setTolerance(rotationError);
 
         yPID.setIntegratorRange(-1, 1);
         xPID.setIntegratorRange(-1, 1);
@@ -59,15 +60,19 @@ public class AbsoluteGoto extends Command {
         xPID.reset(swerveSub.getPose().getX());
         rotationPID.reset(swerveSub.getPose().getRotation().getRadians());
 
-        Logger.recordOutput("/Debug/AutoAlignAbs/Goal", goal);
+        swerveSub.postPose(goal);
     }
 
     // TODO: Avg speed
     public boolean isAligned() {
+        // WIP
+        rotationPID.atGoal();
         if (goal.minus(swerveSub.getPose()).getTranslation()
                 .getNorm() < translationError.get()
                 && goal.getRotation().minus(swerveSub.getPose().getRotation())
-                        .getRadians() < rotationError) {
+                        .getRadians() < Math.toRadians(5)) {
+
+
             return true;
         } else {
             return false;
@@ -76,8 +81,6 @@ public class AbsoluteGoto extends Command {
 
     @Override
     public void execute() {
-        var nt = NetworkTableInstance.getDefault();
-
         double ySpeed = yPID.calculate(swerveSub.getPose().getY());
         ySpeed = MathUtil.clamp(ySpeed,
                 -DriveConstants.MaxVelocityMetersPerSecond / 3.5,
@@ -106,12 +109,15 @@ public class AbsoluteGoto extends Command {
         // Logger.recordOutput("/Debug/AutoAlignAbs/X CurrentSwerve",
         // swerveSub.getPose().getX());
         // Logger.recordOutput("/Debug/AutoAlignAbs/X out", xSpeed);
-        // Logger.recordOutput("/Debug/AutoAlignAbs/R Goal",
-        // goal.getRotation().getRadians());
-        // Logger.recordOutput("/Debug/AutoAlignAbs/R Setpoint",
-        // rotationPID.getSetpoint().position);
+        Logger.recordOutput("/Debug/AutoAlignAbs/R Goal",
+                goal.getRotation().getRadians());
+        Logger.recordOutput("/Debug/AutoAlignAbs/R Setpoint",
+                rotationPID.getSetpoint().position);
+        Logger.recordOutput("/Debug/AutoAlignAbs/R CurrentSwerve",
+                swerveSub.getPose().getRotation().getRadians());
         // Logger.recordOutput("/Debug/AutoAlignAbs/R CurrentSwerve",
         // swerveSub.getPose().getRotation().getRadians());
+        Logger.recordOutput("/Debug/AutoAlignAbs/R Out RadsPerS", rot);
 
         var chas = ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot,
                 swerveSub.getPose().getRotation());

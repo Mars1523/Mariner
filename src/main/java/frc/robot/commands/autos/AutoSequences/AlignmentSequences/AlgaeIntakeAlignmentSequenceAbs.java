@@ -1,0 +1,68 @@
+package frc.robot.commands.autos.AutoSequences.AlignmentSequences;
+
+import java.util.Set;
+
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Constants;
+import frc.robot.Constants.SetpointConstants.ConfigOption;
+import frc.robot.NTDouble.NTD;
+import frc.robot.commands.GoTo;
+import frc.robot.commands.Configuration.ConfigSystem;
+import frc.robot.commands.autos.AbsoluteGoto;
+import frc.robot.commands.autos.AutoDrive;
+import frc.robot.commands.autos.AlgaeAutos.AutoAlgaeIntake;
+import frc.robot.subsystems.AlgaeArm;
+import frc.robot.subsystems.CoralArm;
+import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.SwerveSubsystem;
+
+public class AlgaeIntakeAlignmentSequenceAbs extends SequentialCommandGroup {
+
+        public AlgaeIntakeAlignmentSequenceAbs(CoralArm coralArm, Elevator elevator, AlgaeArm algaeArm,
+                        SwerveSubsystem swerveSubsystem, ConfigOption configOption) {
+                var config = new ConfigSystem(configOption, coralArm, elevator, algaeArm);
+                var stow = new ConfigSystem(Constants.SetpointConstants.Options.processor, coralArm, elevator,
+                                algaeArm);
+                var configureAlign = Commands.defer(()-> {
+                        var id= GoTo.bestTag(swerveSubsystem.getPose());
+                        var pose = GoTo.inFrontOfTag(
+                                id,
+                                Constants.SetpointConstants.DistanceOffsets.reefAlgaeConfigure.get());
+                        return new AbsoluteGoto(swerveSubsystem, pose, NTD.of(0.04));
+                }, Set.of(swerveSubsystem));
+                var intakeAlign = Commands.defer(()-> {
+                        var id= GoTo.bestTag(swerveSubsystem.getPose());
+                        var pose = GoTo.inFrontOfTag(
+                                id,
+                                Constants.SetpointConstants.DistanceOffsets.algaeReefGrab.get());
+                        return new AbsoluteGoto(swerveSubsystem, pose, NTD.of(0.02));
+                }, Set.of(swerveSubsystem));
+                var intakeAlgae = new AutoAlgaeIntake(algaeArm);
+                // var secondIntakeAlgae = new AutoAlgaeIntake(algaeArm);
+                var autoDriveBack = new AutoDrive(swerveSubsystem, 0.25, -0.3);
+                addCommands(
+                                // new ParallelCommandGroup(
+                                Commands.print("Start AlgaeIntakeAlighnSeque"),
+                                configureAlign.andThen(Commands.print("aligned")),
+                                config.andThen(Commands.print("configed")),
+                                new ParallelRaceGroup(
+                                                intakeAlign,
+                                                intakeAlgae.until(algaeArm::hasAlgae))
+                                                .andThen(Commands.print("algaeIntaked")),
+                                autoDriveBack,
+                                // new ParallelCommandGroup(autoDriveBack, secondIntakeAlgae.withTimeout(2)),
+                                Commands.print("autodriveback done"),
+                                stow,
+                                Commands.print("stow done")
+
+                // intakeAlign.andThen(Commands.print("intaked"))
+                // ),
+                // intakeAlign,
+                // intakeAlgae,
+                // secondConfigureAlign,
+                // stow
+                );
+        }
+}

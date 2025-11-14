@@ -251,7 +251,8 @@ public class SwerveSubsystem extends SubsystemBase {
                     // ChassisSpeeds.discretize(speeds, .02));
                     // driveStates(swerveModuleStates);
                 }, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
-                new PPHolonomicDriveController( // HolonomicPathFollowerConfig, this should likely live
+                new PPHolonomicDriveController( // HolonomicPathFollowerConfig, this should likely
+                                                // live
                                                 // in your
                                                 // Constants class
                         new PIDConstants(5, 0.0, 0.0), // Translation PID constants
@@ -334,6 +335,10 @@ public class SwerveSubsystem extends SubsystemBase {
         // bRSwerve.runCharacterization(in);
     }
 
+    public void postPose(Pose2d pose) {
+        Logger.recordOutput("Swerve/GoalPose", pose);
+    }
+
     // WIP
     public void postTrajectory(List<Pose2d> poses) {
         if (poses.isEmpty()) {
@@ -342,7 +347,8 @@ public class SwerveSubsystem extends SubsystemBase {
         // Create a Trajectory from the list of poses
         List<Trajectory.State> states = new java.util.ArrayList<>();
         double totalTime = 0.0;
-        double velocity = DriveConstants.MaxVelocityMetersPerSecond * 0.5; // Use 50% of max velocity
+        double velocity = DriveConstants.MaxVelocityMetersPerSecond * 0.5; // Use 50% of max
+                                                                           // velocity
 
         for (int i = 0; i < poses.size(); i++) {
             Pose2d pose = poses.get(i);
