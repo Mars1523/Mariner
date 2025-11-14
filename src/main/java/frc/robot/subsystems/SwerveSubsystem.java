@@ -45,6 +45,34 @@ public class SwerveSubsystem extends SubsystemBase {
 
         private SwerveDrive swerveDrive;
 
+        private Rotation2d driverRotationOffset = Rotation2d.kZero;
+
+        public void zeroDriverRotation() {
+                driverRotationOffset = getRotation();
+        }
+
+        public void driveHuman(double xPercent, double yPercent,
+                        double rotPercent, boolean fieldRelative) {
+                var xSpeed = xRateLimiter.calculate(xPercent) *
+                                Constants.DriveConstants.MaxVelocityMetersPerSecond;
+                var ySpeed = yRateLimiter.calculate(yPercent) *
+                                Constants.DriveConstants.MaxVelocityMetersPerSecond;
+                var rotation = rotRateLimiter.calculate(rotPercent)
+                                * Constants.DriveConstants.MaxAngularVelocityRadiansPerSecond;
+
+                var translation = new Translation2d(xSpeed, ySpeed);
+
+                // Creates a robot-relative ChassisSpeeds object, converting from field-relative
+                // speeds if
+                // necessary.
+                ChassisSpeeds velocity = new ChassisSpeeds(translation.getX(),
+                                translation.getY(), rotation);
+
+                velocity = ChassisSpeeds.fromFieldRelativeSpeeds(
+                                velocity, getRotation().minus(driverRotationOffset));
+                swerveDrive.drive(velocity, false, new Translation2d());
+        }
+
         public void drive(double xPercent, double yPercent, double rotPercent, boolean fieldRelative) {
                 var xSpeed = xRateLimiter.calculate(xPercent) *
                                 Constants.DriveConstants.MaxVelocityMetersPerSecond;
