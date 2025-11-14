@@ -21,7 +21,9 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
 
@@ -116,6 +118,11 @@ public class Elevator extends SubsystemBase {
                                 sysIdRoutine.dynamic(SysIdRoutine.Direction.kForward));
                 Shuffleboard.getTab("SysId").add("Dynamic Backaward Elevator",
                                 sysIdRoutine.dynamic(SysIdRoutine.Direction.kReverse));
+                
+                RobotModeTriggers.disabled().onFalse(Commands.runOnce(() -> {
+                        trapezoidSetpoint = new TrapezoidProfile.State(elevator1.getEncoder().getPosition(), elevator1.getEncoder().getVelocity());
+                        setPosition(elevator1.getEncoder().getPosition());
+                }));
         }
 
         private void runVolts(double in) {
