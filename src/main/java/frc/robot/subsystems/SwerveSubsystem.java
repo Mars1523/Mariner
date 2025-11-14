@@ -332,6 +332,9 @@ public class SwerveSubsystem extends SubsystemBase {
                 // bRSwerve.runCharacterization(in);
         }
 
+        public void postPose(Pose2d pose) {
+                Logger.recordOutput("Swerve/GoalPose", pose);
+        }
         // WIP
         public void postTrajectory(List<Pose2d> poses) {
                 if (poses.isEmpty()) {

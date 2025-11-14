@@ -54,6 +54,7 @@ import frc.robot.commands.autos.AutoSequences.RightAuto;
 import frc.robot.commands.autos.AutoSequences.RightScoreOnce;
 import frc.robot.commands.autos.AutoSequences.RightScoreOnceAlgae;
 import frc.robot.commands.autos.AutoSequences.AlignmentSequences.AlgaeIntakeAlignmentSequence;
+import frc.robot.commands.autos.AutoSequences.AlignmentSequences.AlgaeIntakeAlignmentSequenceAbs;
 import frc.robot.commands.autos.AutoSequences.AlignmentSequences.CoralStationSequence;
 import frc.robot.commands.autos.AutoSequences.AlignmentSequences.L4AlignmentSequence;
 import frc.robot.commands.autos.AutoSequences.AlignmentSequences.LeftAlignmentSequence;
@@ -410,7 +411,7 @@ public class RobotContainer {
                                 new AlgaeIntakeAlignmentSequence(coralArm, elevatorSub, algaeArm, swerveSubsystem,
                                                 Constants.SetpointConstants.Options.algaeLow));
                 xboxY.and(noBumper).onTrue(
-                                new AlgaeIntakeAlignmentSequence(coralArm, elevatorSub, algaeArm, swerveSubsystem,
+                                new AlgaeIntakeAlignmentSequenceAbs(coralArm, elevatorSub, algaeArm, swerveSubsystem,
                                                 Constants.SetpointConstants.Options.algaeHigh));
                 rightStick.and(noBumper).onTrue(
                                 new ConfigSystem(Constants.SetpointConstants.Options.algaeGround, coralArm, elevatorSub,
