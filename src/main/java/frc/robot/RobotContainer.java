@@ -34,6 +34,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.RobotContainer.StartingPlace;
 import frc.robot.commands.DefaultSwerve;
 import frc.robot.commands.GoTo;
 import frc.robot.commands.Configuration.ConfigSystem;
@@ -106,11 +107,17 @@ public class RobotContainer {
                 Left, Right, Center
         }
 
-        LoggedDashboardChooser<Command> autoChooser = new LoggedDashboardChooser<>("autoChooser");
+        // LoggedDashboardChooser<Command> autoChooser = new
+        // LoggedDashboardChooser<>("autoChooser");
         // public SendableChooser<Command> chooseAuto1 = AutoBuilder.buildAutoChooser();
         // public SendableChooser<Command> chooseAuto2 = AutoBuilder.buildAutoChooser();
-        LoggedDashboardChooser<StartingPlace> poseChooser = new LoggedDashboardChooser<>("pose");
+        // LoggedDashboardChooser<StartingPlace> poseChooser = new
+        // LoggedDashboardChooser<>("pose");
         // GoTo goTo = new GoTo(sideChooser);
+        SendableChooser<Command> autoChooser = AutoBuilder.buildAutoChooser();
+        // public SendableChooser<Command> chooseAuto1 = AutoBuilder.buildAutoChooser();
+        // public SendableChooser<Command> chooseAuto2 = AutoBuilder.buildAutoChooser();
+        SendableChooser<StartingPlace> poseChooser = new SendableChooser<>();
 
         public RobotContainer() {
 
@@ -177,7 +184,7 @@ public class RobotContainer {
                 // new CenterAutoRight(coralArm, algaeArm, elevatorSub, swerveSubsystem));
                 autoChooser.addOption("right", new RightAuto(coralArm, algaeArm, elevatorSub, swerveSubsystem));
                 autoChooser.addOption("goforward", new Forward(swerveSubsystem));
-                autoChooser.addDefaultOption("Do Nothing", Commands.none());
+                // autoChooser.addDefaultOption("Do Nothing", Commands.none());
                 autoChooser.addOption("Right score once",
                                 new RightScoreOnce(coralArm, algaeArm, elevatorSub, swerveSubsystem));
                 autoChooser.addOption("Left score once",
@@ -206,7 +213,7 @@ public class RobotContainer {
                 // autoChooser.addOption("configurable auto",
                 // new FinalAuto(chooseAuto1.getSelected(), chooseAuto2.getSelected()));
                 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                // Shuffleboard.getTab("auto").add(autoChooser);
+                Shuffleboard.getTab("auto").add(autoChooser);
 
                 // Shuffleboard.getTab("auto").add(chooseAuto1);
                 // Shuffleboard.getTab("auto").add(chooseAuto2);
@@ -219,7 +226,7 @@ public class RobotContainer {
 
                 // sideChooser.addOption("Red", GoTo.side.Red);
                 // sideChooser.addOption("Blue", GoTo.side.Blue);
-                // Shuffleboard.getTab("pose").add(poseChooser);
+                Shuffleboard.getTab("pose").add(poseChooser);
                 // Shuffleboard.getTab("side").add(sideChooser);
 
                 swerveSubsystem.setDefaultCommand(swerve);
@@ -301,18 +308,18 @@ public class RobotContainer {
                 // primaryJoy.button(9)
                 // .onTrue(Commands.runOnce(() -> servo.set(0)))
                 // .onFalse(Commands.runOnce(() -> servo.set(1)));
-                primaryJoy.button(9).and(primaryJoy.button(7))
+                primaryJoy.button(9)
                                 .onTrue(climbSub.climbReleaseOverridden())
                                 .onFalse(climbSub.climbStopManual());
-                primaryJoy.button(9).and(primaryJoy.button(7).negate())
-                                .onTrue(climbSub.climbRelease())
-                                .onFalse(climbSub.climbStopManual());
-                primaryJoy.button(11).and(primaryJoy.button(7).negate())
-                                .onTrue(climbSub.climb())
-                                .onFalse(climbSub.climbStopManual());
-                primaryJoy.button(11).and(primaryJoy.button(7))
-                                .onTrue(climbSub.climbOverridden())
-                                .onFalse(climbSub.climbStopManual());
+                // primaryJoy.button(9).and(primaryJoy.button(7).negate())
+                // .onTrue(climbSub.climbRelease())
+                // .onFalse(climbSub.climbStopManual());
+                // primaryJoy.button(11).and(primaryJoy.button(7).negate())
+                // .onTrue(climbSub.climb())
+                // .onFalse(climbSub.climbStopManual());
+                // primaryJoy.button(11).and(primaryJoy.button(7))
+                // .onTrue(climbSub.climbOverridden())
+                // .onFalse(climbSub.climbStopManual());
                 primaryJoy.button(8)
                                 .onTrue(climbSub.climbOverOverridden())
                                 .onFalse(climbSub.climbStopManual());
@@ -408,6 +415,12 @@ public class RobotContainer {
                                 new ConfigSystem(Constants.SetpointConstants.Options.algaeGround, coralArm, elevatorSub,
                                                 algaeArm));
                 rightBumper.and(leftBumper).whileTrue(climbSub.climbRelease());
+
+                // elevatorSub.setPosition(elevatorSub.getSetpoint() + 1 *
+                // secondaryController.getLeftTriggerAxis())
+
+                // xboxBack.and(hasAlgae.negate()).and(elevatorSub.elevatorHeightGet()
+                // <0.05).and
 
                 // waypoints
                 /*
@@ -513,7 +526,7 @@ public class RobotContainer {
 
         public Command getAutonomousCommand() {
                 // return Commands.print("No autonomous command configured");
-                var command = autoChooser.get();
+                var command = autoChooser.getSelected();
                 if (command != null) {
                         return command;
                 } else {
@@ -522,7 +535,7 @@ public class RobotContainer {
         }
 
         public void setStartingPose() {
-                var poseChooserState = poseChooser.get();
+                var poseChooserState = poseChooser.getSelected();
                 var selectedStartingPose = poseChooserState == null ? StartingPlace.Center : poseChooserState;
                 if (GoTo.getAlliance() == Alliance.Red) {
                         switch (selectedStartingPose) {

@@ -32,7 +32,7 @@ public class Elevator extends SubsystemBase {
         private SparkClosedLoopController elevatorController;
         private SparkClosedLoopController elevatorController2;
         private double currentSetpoint;
-        private TrapezoidProfile trapezoidProfile = new TrapezoidProfile(new Constraints(1, 0.9 / 60.0));
+        private TrapezoidProfile trapezoidProfile = new TrapezoidProfile(new Constraints(0.5, 0.9 / 60.0));
         private double positionFactor = (1.0 / 5.0) * Math.PI * 1.0 * 0.0254;
 
         TrapezoidProfile.State trapezoidSetpoint = new TrapezoidProfile.State();
@@ -130,11 +130,20 @@ public class Elevator extends SubsystemBase {
                 // elevatorController2.setReference(setpoint, ControlType.kPosition);
         }
 
+        public double getSetpoint() {
+                return currentSetpoint;
+        }
+
         public double elevatorHeightGet() {
                 return elevator1.getEncoder().getPosition();
         }
 
+        // public void uppies(double leftTriggerAxis) {
+        // elevator1.setPosition(leftTriggerAxis);
+        // }
+
         public boolean isReady() {
+
                 double elevator1Position = elevator1.getEncoder().getPosition();
                 double elevator2Position = elevator2.getEncoder().getPosition();
                 boolean elevator1Ready = elevator1Position > (currentSetpoint - 0.1)
@@ -216,4 +225,5 @@ public class Elevator extends SubsystemBase {
         public Command algaeHigh() {
                 return run(() -> setPosition(Constants.SetpointConstants.ElevatorSetpoints.algaeHigh.get()));
         }
+
 }

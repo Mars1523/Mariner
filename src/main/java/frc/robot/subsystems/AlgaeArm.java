@@ -47,8 +47,8 @@ public class AlgaeArm extends SubsystemBase {
                 .idleMode(SparkMaxConfig.IdleMode.kCoast);
         configAlgaeWrist.absoluteEncoder
                 .inverted(true)
-                .zeroCentered(true)
-                .zeroOffset(0.65);
+                .zeroCentered(true);
+        // .zeroOffset(0.72);
         configAlgaeWrist.signals
                 .absoluteEncoderPositionAlwaysOn(true)
                 .absoluteEncoderPositionPeriodMs(100);
