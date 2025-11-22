@@ -18,42 +18,43 @@ import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.SwerveSubsystem;
 
 public class Test extends SequentialCommandGroup {
-        final CoralArm coralArm;
-        final AlgaeArm algaeArm;
-        final Elevator elevator;
-        final SwerveSubsystem swerveSubsystem;
+    final CoralArm coralArm;
+    final AlgaeArm algaeArm;
+    final Elevator elevator;
+    final SwerveSubsystem swerveSubsystem;
 
-        public Test(CoralArm coralArm, AlgaeArm algaeArm, Elevator elevator, SwerveSubsystem swerve) {
-                this.coralArm = coralArm;
-                this.algaeArm = algaeArm;
-                this.elevator = elevator;
-                this.swerveSubsystem = swerve;
+    public Test(CoralArm coralArm, AlgaeArm algaeArm, Elevator elevator,
+            SwerveSubsystem swerve) {
+        this.coralArm = coralArm;
+        this.algaeArm = algaeArm;
+        this.elevator = elevator;
+        this.swerveSubsystem = swerve;
 
-                addCommands(
-                                new AutoDrive(swerve, 2, 0.5),
-                                new AutoRotate(swerve, 90, 0.5),
-                                AutoBuilder.pathfindToPose(Constants.WaypointConstants.ReefN,
-                                                Constants.AutoConstants.constantConstraints),
-                                // new L4AlignmentSequence(coralArm, algaeArm, elevator, swerve,
-                                // Constants.SetpointConstants.StrafeOffsets.leftL4),
-                                // AutoBuilder.pathfindToPose(Constants.WaypointConstants.CoralStationLeft,
-                                // Constants.AutoConstants.constantConstraints),
-                                // new CoralStationSequence(coralArm, algaeArm, elevator, swerve),
-                                // AutoBuilder.pathfindToPose(Constants.WaypointConstants.ReefSW,
-                                // Constants.AutoConstants.constantConstraints),
-                                // new L4AlignmentSequence(coralArm, algaeArm, elevator, swerve,
-                                // Constants.SetpointConstants.StrafeOffsets.leftL4),
-                                AutoBuilder.pathfindToPose(Constants.WaypointConstants.CoralStationLeft,
-                                                Constants.AutoConstants.constantConstraints),
-                                new CoralStationSequence(coralArm, algaeArm, elevator, swerve)
+        addCommands(new AutoDrive(swerve, 2, 0.5),
+                new AutoRotate(swerve, 90, 0.5),
+                AutoBuilder.pathfindToPose(Constants.WaypointConstants.ReefN,
+                        Constants.AutoConstants.constantConstraints),
+                // new L4AlignmentSequence(coralArm, algaeArm, elevator, swerve,
+                // Constants.SetpointConstants.StrafeOffsets.leftL4),
+                // AutoBuilder.pathfindToPose(Constants.WaypointConstants.CoralStationLeft,
+                // Constants.AutoConstants.constantConstraints),
+                // new CoralStationSequence(coralArm, algaeArm, elevator, swerve),
+                // AutoBuilder.pathfindToPose(Constants.WaypointConstants.ReefSW,
+                // Constants.AutoConstants.constantConstraints),
+                // new L4AlignmentSequence(coralArm, algaeArm, elevator, swerve,
+                // Constants.SetpointConstants.StrafeOffsets.leftL4),
+                AutoBuilder.pathfindToPose(
+                        Constants.WaypointConstants.CoralStationLeft,
+                        Constants.AutoConstants.constantConstraints),
+                new CoralStationSequence(coralArm, algaeArm, elevator, swerve)
 
-                // new ParallelCommandGroup(new AutoNav(), ConfigSystem)
-                // aim andl score corale
-                // new AutoNav(0) //go to coral station
-                // aim and intake coral
-                // run to reef spot again
-                // aim and score coral
+        // new ParallelCommandGroup(new AutoNav(), ConfigSystem)
+        // aim andl score corale
+        // new AutoNav(0) //go to coral station
+        // aim and intake coral
+        // run to reef spot again
+        // aim and score coral
 
-                );
-        }
+        );
+    }
 }

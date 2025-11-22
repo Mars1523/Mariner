@@ -13,7 +13,8 @@ public class AutoRotate extends Command {
 
     // private boolean inverted;
 
-    public AutoRotate(SwerveSubsystem swerveSub, double goalYaw, double turnSpeed) {
+    public AutoRotate(SwerveSubsystem swerveSub, double goalYaw,
+            double turnSpeed) {
 
         addRequirements(swerveSub);
 
@@ -45,7 +46,8 @@ public class AutoRotate extends Command {
 
     @Override
     public boolean isFinished() {
-        if (Math.abs(goalYaw) < Math.abs(swerveSub.getRotation().minus(startingYaw).getDegrees())) {
+        if (Math.abs(goalYaw) < Math
+                .abs(swerveSub.getRotation().minus(startingYaw).getDegrees())) {
             return true;
         } else {
             return false;

@@ -14,7 +14,8 @@ public class DefaultSwerve extends Command {
     private Elevator elevator;
     boolean slow = false;
 
-    public DefaultSwerve(Joystick joy, SwerveSubsystem swerveSub, Elevator elevator) {
+    public DefaultSwerve(Joystick joy, SwerveSubsystem swerveSub,
+            Elevator elevator) {
         addRequirements(swerveSub);
         this.swerveSub = swerveSub;
         this.joy = joy;
@@ -26,8 +27,7 @@ public class DefaultSwerve extends Command {
     }
 
     @Override
-    public void initialize() {
-    }
+    public void initialize() {}
 
     @Override
     public void execute() {
@@ -87,8 +87,7 @@ public class DefaultSwerve extends Command {
     }
 
     @Override
-    public void end(boolean interrupted) {
-    }
+    public void end(boolean interrupted) {}
 
     @Override
     public boolean isFinished() {

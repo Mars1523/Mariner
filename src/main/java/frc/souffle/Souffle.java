@@ -25,31 +25,29 @@ class SuppliedValue<T> {
     }
 }
 
+
 public class Souffle {
-    private static Map<String, SuppliedValue<?>> valueSuppliers = new ConcurrentHashMap<>();
+    private static Map<String, SuppliedValue<?>> valueSuppliers =
+            new ConcurrentHashMap<>();
 
     public static void record(String key, DoubleSupplier supplier) {
-        valueSuppliers.put(key,
-                new SuppliedValue<>(
-                        supplier::getAsDouble,
-                        (v) -> Logger.recordOutput(key, v)));
+        valueSuppliers.put(key, new SuppliedValue<>(supplier::getAsDouble,
+                (v) -> Logger.recordOutput(key, v)));
     }
 
     public static void record(String key, BooleanSupplier supplier) {
-        valueSuppliers.put(key,
-                new SuppliedValue<>(
-                        supplier::getAsBoolean,
-                        (v) -> Logger.recordOutput(key, v)));
+        valueSuppliers.put(key, new SuppliedValue<>(supplier::getAsBoolean,
+                (v) -> Logger.recordOutput(key, v)));
     }
 
-    public static <T extends StructSerializable> void record(String key, Supplier<T> supplier) {
+    public static <T extends StructSerializable> void record(String key,
+            Supplier<T> supplier) {
         var value = supplier.get();
 
         var maybeStruct = StructRegistry.getStruct(value.getClass());
         if (maybeStruct.isPresent()) {
-            valueSuppliers.put(key,
-                    new SuppliedValue<T>(
-                            supplier::get, (v) -> Logger.recordOutput(key, v)));
+            valueSuppliers.put(key, new SuppliedValue<T>(supplier::get,
+                    (v) -> Logger.recordOutput(key, v)));
         } else {
             return;
         }

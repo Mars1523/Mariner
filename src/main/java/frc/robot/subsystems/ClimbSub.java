@@ -37,8 +37,10 @@ public class ClimbSub extends SubsystemBase {
     private final SparkMax climb1 = new SparkMax(57, MotorType.kBrushless); // short arm
     // private final SparkMax climb2 = new SparkMax(57, MotorType.kBrushless);
     // //long arm
-    TrapezoidProfile climbTrapezoidProfile1 = new TrapezoidProfile(new Constraints(.2, 40));
-    TrapezoidProfile.State climbTrapezoidSetpoint1 = new TrapezoidProfile.State();
+    TrapezoidProfile climbTrapezoidProfile1 =
+            new TrapezoidProfile(new Constraints(.2, 40));
+    TrapezoidProfile.State climbTrapezoidSetpoint1 =
+            new TrapezoidProfile.State();
     // TrapezoidProfile climbTrapezoidProfile2 = new TrapezoidProfile(new
     // Constraints(.2, 40));
     // TrapezoidProfile.State climbTrapezoidSetpoint2 = new
@@ -54,17 +56,14 @@ public class ClimbSub extends SubsystemBase {
         // Constants.configPIDMotor(climbMotorOne,false, 0,0,0);
 
         SparkMaxConfig configLeader = new SparkMaxConfig();
-        configLeader
-                .openLoopRampRate(.5)
-                .inverted(true)
+        configLeader.openLoopRampRate(.5).inverted(true)
                 .idleMode(SparkMaxConfig.IdleMode.kBrake);
-        configLeader.closedLoop
-                .pid(5, 0, 0)
-                .outputRange(0, 1);
+        configLeader.closedLoop.pid(5, 0, 0).outputRange(0, 1);
         configLeader.smartCurrentLimit(100, 100);
         configLeader.secondaryCurrentLimit(100);
         configLeader.encoder.positionConversionFactor(1.0 / 135.0);
-        climb1.configure(configLeader, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+        climb1.configure(configLeader, ResetMode.kResetSafeParameters,
+                PersistMode.kNoPersistParameters);
 
         // SparkMaxConfig config2 = new SparkMaxConfig();
         // config2
@@ -92,15 +91,16 @@ public class ClimbSub extends SubsystemBase {
         // climb1.getEncoder().getPosition());
         // Shuffleboard.getTab("Debug").addDouble("Climb 2 Position", () ->
         // climb2.getEncoder().getPosition());
-        Shuffleboard.getTab("Debug").add("Rezero climb encoders", Commands.runOnce(() -> {
-            climb1.getEncoder().setPosition(0);
-            // climb2.getEncoder().setPosition(0);
-            climbSetpoint1 = 0;
-            // climbSetpoint2 = 0;
-            climbTrapezoidSetpoint1 = new TrapezoidProfile.State();
-            // climb1.getEncoder().setPosition(0);
-            // climbTrapezoidSetpoint2 = new TrapezoidProfile.State();
-        }));
+        Shuffleboard.getTab("Debug").add("Rezero climb encoders",
+                Commands.runOnce(() -> {
+                    climb1.getEncoder().setPosition(0);
+                    // climb2.getEncoder().setPosition(0);
+                    climbSetpoint1 = 0;
+                    // climbSetpoint2 = 0;
+                    climbTrapezoidSetpoint1 = new TrapezoidProfile.State();
+                    // climb1.getEncoder().setPosition(0);
+                    // climbTrapezoidSetpoint2 = new TrapezoidProfile.State();
+                }));
     }
 
     public void periodic() {

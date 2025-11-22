@@ -24,39 +24,40 @@ import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.SwerveSubsystem;
 
 public class RightAuto extends SequentialCommandGroup {
-        final CoralArm coralArm;
-        final AlgaeArm algaeArm;
-        final Elevator elevator;
-        final SwerveSubsystem swerveSubsystem;
+    final CoralArm coralArm;
+    final AlgaeArm algaeArm;
+    final Elevator elevator;
+    final SwerveSubsystem swerveSubsystem;
 
-        public RightAuto(CoralArm coralArm, AlgaeArm algaeArm, Elevator elevator, SwerveSubsystem swerve) {
-                this.coralArm = coralArm;
-                this.algaeArm = algaeArm;
-                this.elevator = elevator;
-                this.swerveSubsystem = swerve;
+    public RightAuto(CoralArm coralArm, AlgaeArm algaeArm, Elevator elevator,
+            SwerveSubsystem swerve) {
+        this.coralArm = coralArm;
+        this.algaeArm = algaeArm;
+        this.elevator = elevator;
+        this.swerveSubsystem = swerve;
 
-                addCommands(
-                                // new AutoRotate(swerve, 90, 0.5),
-                                GoTo.reefNE(),
-                                new L4AlignmentSequence(coralArm, algaeArm, elevator, swerve,
-                                                Constants.SetpointConstants.StrafeOffsets.leftL4,
-                                                Constants.SetpointConstants.DistanceOffsets.L4left),
-                                GoTo.coralStationRight(),
-                                new CoralStationSequence(coralArm, algaeArm, elevator, swerve),
-                                GoTo.reefSE(),
-                                new LeftAlignmentSequence(coralArm, algaeArm, elevator, swerve,
-                                                Constants.SetpointConstants.Options.l3),
-                                GoTo.coralStationRight(),
-                                new CoralStationSequence(coralArm, algaeArm, elevator, swerve),
-                                GoTo.reefSE()
+        addCommands(
+                // new AutoRotate(swerve, 90, 0.5),
+                GoTo.reefNE(),
+                new L4AlignmentSequence(coralArm, algaeArm, elevator, swerve,
+                        Constants.SetpointConstants.StrafeOffsets.leftL4,
+                        Constants.SetpointConstants.DistanceOffsets.L4left),
+                GoTo.coralStationRight(),
+                new CoralStationSequence(coralArm, algaeArm, elevator, swerve),
+                GoTo.reefSE(),
+                new LeftAlignmentSequence(coralArm, algaeArm, elevator, swerve,
+                        Constants.SetpointConstants.Options.l3),
+                GoTo.coralStationRight(),
+                new CoralStationSequence(coralArm, algaeArm, elevator, swerve),
+                GoTo.reefSE()
 
-                // new ParallelCommandGroup(new AutoNav(), ConfigSystem)
-                // aim andl score corale
-                // new AutoNav(0) //go to coral station
-                // aim and intake coral
-                // run to reef spot again
-                // aim and score coral
+        // new ParallelCommandGroup(new AutoNav(), ConfigSystem)
+        // aim andl score corale
+        // new AutoNav(0) //go to coral station
+        // aim and intake coral
+        // run to reef spot again
+        // aim and score coral
 
-                );
-        }
+        );
+    }
 }

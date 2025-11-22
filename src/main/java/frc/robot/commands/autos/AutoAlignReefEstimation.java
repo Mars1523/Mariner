@@ -48,15 +48,17 @@ public class AutoAlignReefEstimation extends Command {
 
     private String stringPose(Pose3d pose) {
         var rot = pose.getRotation();
-        return String.format("{x:%.2f,y:%.2f, rx:%.2f,ry:%.2f,rz:%.2f}", pose.getX(), pose.getY(), rot.getX(),
-                rot.getY(), rot.getZ());
+        return String.format("{x:%.2f,y:%.2f, rx:%.2f,ry:%.2f,rz:%.2f}",
+                pose.getX(), pose.getY(), rot.getX(), rot.getY(), rot.getZ());
     }
 
-    NetworkTableEntry lastAprilTagEntry = NetworkTableInstance.getDefault().getEntry("/Debug/LastAprilTagSeen");
+    NetworkTableEntry lastAprilTagEntry = NetworkTableInstance.getDefault()
+            .getEntry("/Debug/LastAprilTagSeen");
 
     final Optional<Pose3d> getTargetPose() {
         if (LimelightHelpers.getTV(Constants.ReefLimelightName)) {
-            lastApriltag = (int) LimelightHelpers.getFiducialID(Constants.ReefLimelightName);
+            lastApriltag = (int) LimelightHelpers
+                    .getFiducialID(Constants.ReefLimelightName);
             if (lastApriltag == 0) {
                 System.out.println("Saw zero apriltag");
                 return Optional.empty();
@@ -67,11 +69,16 @@ public class AutoAlignReefEstimation extends Command {
 
             var targetAbsPose = Constants.kField.getTagPose(lastApriltag).get();
 
-            var targetPoseRelativeToField = targetAbsPose.relativeTo(robotAbsPose);
-            var targetPoseRelativeToRobot = targetPoseRelativeToField.rotateBy(robotAbsPose.getRotation().unaryMinus());
-            var llpose = LimelightHelpers.getTargetPose3d_RobotSpace(Constants.ReefLimelightName);
-            System.out.println("ll" + stringPose(llpose) + " estim" + stringPose(robotAbsPose) + " april"
-                    + stringPose(targetAbsPose) + " rel" + stringPose(targetPoseRelativeToRobot));
+            var targetPoseRelativeToField =
+                    targetAbsPose.relativeTo(robotAbsPose);
+            var targetPoseRelativeToRobot = targetPoseRelativeToField
+                    .rotateBy(robotAbsPose.getRotation().unaryMinus());
+            var llpose = LimelightHelpers
+                    .getTargetPose3d_RobotSpace(Constants.ReefLimelightName);
+            System.out.println("ll" + stringPose(llpose) + " estim"
+                    + stringPose(robotAbsPose) + " april"
+                    + stringPose(targetAbsPose) + " rel"
+                    + stringPose(targetPoseRelativeToRobot));
             // return Optional.of(targetPoseRelativeToRobot);
 
             // return
@@ -98,8 +105,9 @@ public class AutoAlignReefEstimation extends Command {
         return LimelightHelpers.getTV(Constants.ReefLimelightName);
     }
 
-    public AutoAlignReefEstimation(SwerveSubsystem swerveSub, NTDouble strafeGoal, NTDouble distanceGoal,
-            NTDouble rotationGoal, NTDouble strafeError, NTDouble distanceError) {
+    public AutoAlignReefEstimation(SwerveSubsystem swerveSub,
+            NTDouble strafeGoal, NTDouble distanceGoal, NTDouble rotationGoal,
+            NTDouble strafeError, NTDouble distanceError) {
         addRequirements(swerveSub);
         this.swerveSub = swerveSub;
         this.strafeGoal = strafeGoal;
@@ -109,11 +117,17 @@ public class AutoAlignReefEstimation extends Command {
         this.distanceError = distanceError;
 
         strafePID = new ProfiledPIDController(3.3 * .6, .8 * .5, .8 * .125,
-                new TrapezoidProfile.Constraints(Constants.DriveConstants.MaxVelocityMetersPerSecond / 3, 3 / 1.5));
+                new TrapezoidProfile.Constraints(
+                        Constants.DriveConstants.MaxVelocityMetersPerSecond / 3,
+                        3 / 1.5));
         distancePID = new ProfiledPIDController(3.3 * .6, .8 * .5, .8 * .125,
-                new TrapezoidProfile.Constraints(Constants.DriveConstants.MaxVelocityMetersPerSecond / 3, 3 / 1.5));
+                new TrapezoidProfile.Constraints(
+                        Constants.DriveConstants.MaxVelocityMetersPerSecond / 3,
+                        3 / 1.5));
         rotationPID = new ProfiledPIDController(3.3 * .6, .8 * .5, .8 * .125,
-                new TrapezoidProfile.Constraints(Constants.DriveConstants.MaxAngularVelocityRadiansPerSecond / 3,
+                new TrapezoidProfile.Constraints(
+                        Constants.DriveConstants.MaxAngularVelocityRadiansPerSecond
+                                / 3,
                         3 / 1.5));
 
         distanceGoal.subscribe(goal -> distancePID.setGoal(goal));
@@ -142,8 +156,10 @@ public class AutoAlignReefEstimation extends Command {
         }
         var target = target_opt.get();
         if ((Math.abs(distanceGoal.get() - target.getZ()) < distanceError.get())
-                && (Math.abs(strafeGoal.get() - target.getX()) < strafeError.get())
-                && (Math.abs(rotationGoal.get() - target.getRotation().getZ()) < 0.02)
+                && (Math.abs(strafeGoal.get() - target.getX()) < strafeError
+                        .get())
+                && (Math.abs(rotationGoal.get()
+                        - target.getRotation().getZ()) < 0.02)
         // && (Math.abs(target.getRotation().getAngle()) < 0.5)
         ) {
             return true;
@@ -169,29 +185,39 @@ public class AutoAlignReefEstimation extends Command {
         var nt = NetworkTableInstance.getDefault();
 
         double distanceSpeed = -distancePID.calculate(target.getZ());
-        distanceSpeed = MathUtil.clamp(distanceSpeed, -DriveConstants.MaxVelocityMetersPerSecond / 3.5,
+        distanceSpeed = MathUtil.clamp(distanceSpeed,
+                -DriveConstants.MaxVelocityMetersPerSecond / 3.5,
                 DriveConstants.MaxVelocityMetersPerSecond / 3.5);
 
         double strafeSpeed = strafePID.calculate(target.getX());
-        strafeSpeed = MathUtil.clamp(strafeSpeed, -DriveConstants.MaxVelocityMetersPerSecond / 5,
+        strafeSpeed = MathUtil.clamp(strafeSpeed,
+                -DriveConstants.MaxVelocityMetersPerSecond / 5,
                 DriveConstants.MaxVelocityMetersPerSecond / 5);
 
         double rot = rotationPID.calculate(target.getRotation().getZ());
-        rot = MathUtil.clamp(rot, -DriveConstants.MaxAngularVelocityRadiansPerSecond / 3.5,
+        rot = MathUtil.clamp(rot,
+                -DriveConstants.MaxAngularVelocityRadiansPerSecond / 3.5,
                 DriveConstants.MaxAngularVelocityRadiansPerSecond / 3.5);
 
-        nt.getEntry("/Shuffleboard/Tune/AutoAlignTags/LL Distance").setDouble(target.getZ());
-        nt.getEntry("/Shuffleboard/Tune/AutoAlignTags/PID Distance Out").setDouble(distanceSpeed);
-        nt.getEntry("/Shuffleboard/Tune/AutoAlignTags/LL Strafe").setDouble(target.getX());
-        nt.getEntry("/Shuffleboard/Tune/AutoAlignTags/PID Strafe Out").setDouble(strafeSpeed);
-        nt.getEntry("/Shuffleboard/Tune/AutoAlignTags/LL rotation yaw").setDouble(target.getRotation().getZ());
-        nt.getEntry("/Shuffleboard/Tune/AutoAlignTags/PID rotation out").setDouble(rot);
+        nt.getEntry("/Shuffleboard/Tune/AutoAlignTags/LL Distance")
+                .setDouble(target.getZ());
+        nt.getEntry("/Shuffleboard/Tune/AutoAlignTags/PID Distance Out")
+                .setDouble(distanceSpeed);
+        nt.getEntry("/Shuffleboard/Tune/AutoAlignTags/LL Strafe")
+                .setDouble(target.getX());
+        nt.getEntry("/Shuffleboard/Tune/AutoAlignTags/PID Strafe Out")
+                .setDouble(strafeSpeed);
+        nt.getEntry("/Shuffleboard/Tune/AutoAlignTags/LL rotation yaw")
+                .setDouble(target.getRotation().getZ());
+        nt.getEntry("/Shuffleboard/Tune/AutoAlignTags/PID rotation out")
+                .setDouble(rot);
 
         // how do i set a different goal for the distance
 
         // System.out.println(getStance());
 
-        swerveSub.drive(distanceSpeed / DriveConstants.MaxVelocityMetersPerSecond,
+        swerveSub.drive(
+                distanceSpeed / DriveConstants.MaxVelocityMetersPerSecond,
                 strafeSpeed / DriveConstants.MaxVelocityMetersPerSecond,
                 rot / DriveConstants.MaxAngularVelocityRadiansPerSecond, false);
         // wtf why is LimelightHelpers wrong

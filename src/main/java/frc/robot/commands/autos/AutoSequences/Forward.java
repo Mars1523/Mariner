@@ -12,7 +12,6 @@ public class Forward extends SequentialCommandGroup {
 
     public Forward(SwerveSubsystem swerveSub) {
         this.swerveSub = swerveSub;
-        addCommands(
-                new AutoDrive(swerveSub, 2, 0.5));
+        addCommands(new AutoDrive(swerveSub, 2, 0.5));
     }
 }

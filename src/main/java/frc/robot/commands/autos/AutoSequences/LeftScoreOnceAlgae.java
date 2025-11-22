@@ -23,20 +23,20 @@ public class LeftScoreOnceAlgae extends SequentialCommandGroup {
     final AlgaeArm algaeArm;
     final SwerveSubsystem swerveSubsystem;
 
-    public LeftScoreOnceAlgae(CoralArm coralArm, AlgaeArm algaeArm, Elevator elevator,
-            SwerveSubsystem swerveSubsystem) {
+    public LeftScoreOnceAlgae(CoralArm coralArm, AlgaeArm algaeArm,
+            Elevator elevator, SwerveSubsystem swerveSubsystem) {
         this.coralArm = coralArm;
         this.algaeArm = algaeArm;
         this.elevator = elevator;
         this.swerveSubsystem = swerveSubsystem;
 
-        addCommands(
-                new AutoDrive(swerveSubsystem, 1, 0.5),
-                GoTo.reefNW(),
-                new L4AlignmentSequence(coralArm, algaeArm, elevator, swerveSubsystem,
+        addCommands(new AutoDrive(swerveSubsystem, 1, 0.5), GoTo.reefNW(),
+                new L4AlignmentSequence(coralArm, algaeArm, elevator,
+                        swerveSubsystem,
                         Constants.SetpointConstants.StrafeOffsets.leftL4,
                         Constants.SetpointConstants.DistanceOffsets.L4left),
-                new AlgaeIntakeAlignmentSequence(coralArm, elevator, algaeArm, swerveSubsystem,
+                new AlgaeIntakeAlignmentSequence(coralArm, elevator, algaeArm,
+                        swerveSubsystem,
                         Constants.SetpointConstants.Options.algaeHigh)
         // new WaitCommand(5),
         // GoTo.coralStationLeft(),

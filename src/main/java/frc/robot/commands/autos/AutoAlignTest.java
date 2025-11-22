@@ -44,7 +44,8 @@ public class AutoAlignTest extends Command {
 
     static final Optional<Pose3d> getTargetPose() {
         if (LimelightHelpers.getTV(Constants.ReefLimelightName)) {
-            return Optional.of(LimelightHelpers.getTargetPose3d_RobotSpace(Constants.ReefLimelightName));
+            return Optional.of(LimelightHelpers
+                    .getTargetPose3d_RobotSpace(Constants.ReefLimelightName));
         } else {
             return Optional.empty();
         }
@@ -60,13 +61,16 @@ public class AutoAlignTest extends Command {
         return LimelightHelpers.getTV(Constants.ReefLimelightName);
     }
 
-    public AutoAlignTest(SwerveSubsystem swerveSub, NTDouble strafeGoal, NTDouble distanceGoal, NTDouble rotationGoal,
-            NTDouble strafeError, NTDouble distanceError) {
-        this(swerveSub, strafeGoal, distanceGoal, rotationGoal, strafeError, distanceError, false);
+    public AutoAlignTest(SwerveSubsystem swerveSub, NTDouble strafeGoal,
+            NTDouble distanceGoal, NTDouble rotationGoal, NTDouble strafeError,
+            NTDouble distanceError) {
+        this(swerveSub, strafeGoal, distanceGoal, rotationGoal, strafeError,
+                distanceError, false);
     }
 
-    public AutoAlignTest(SwerveSubsystem swerveSub, NTDouble strafeGoal, NTDouble distanceGoal, NTDouble rotationGoal,
-            NTDouble strafeError, NTDouble distanceError, boolean slow) {
+    public AutoAlignTest(SwerveSubsystem swerveSub, NTDouble strafeGoal,
+            NTDouble distanceGoal, NTDouble rotationGoal, NTDouble strafeError,
+            NTDouble distanceError, boolean slow) {
         addRequirements(swerveSub);
         this.swerveSub = swerveSub;
         this.strafeGoal = strafeGoal;
@@ -80,11 +84,16 @@ public class AutoAlignTest extends Command {
             maxAccel *= 0.2;
         }
         strafePID = new ProfiledPIDController(4.3 * 0.9, 0, 0.125 * 0.85,
-                new TrapezoidProfile.Constraints(Constants.DriveConstants.MaxVelocityMetersPerSecond / 3, maxAccel));
+                new TrapezoidProfile.Constraints(
+                        Constants.DriveConstants.MaxVelocityMetersPerSecond / 3,
+                        maxAccel));
         distancePID = new ProfiledPIDController(4.3 * 0.9, 0, 0.125 * 0.85,
-                new TrapezoidProfile.Constraints(Constants.DriveConstants.MaxVelocityMetersPerSecond / 3, maxAccel));
+                new TrapezoidProfile.Constraints(
+                        Constants.DriveConstants.MaxVelocityMetersPerSecond / 3,
+                        maxAccel));
         rotationPID = new ProfiledPIDController(3.95 * .9, 0, 0,
-                new TrapezoidProfile.Constraints(Constants.DriveConstants.MaxVelocityMetersPerSecond / 3,
+                new TrapezoidProfile.Constraints(
+                        Constants.DriveConstants.MaxVelocityMetersPerSecond / 3,
                         maxAccel));
 
         distanceGoal.subscribe(goal -> distancePID.setGoal(goal));
@@ -119,8 +128,10 @@ public class AutoAlignTest extends Command {
         }
         var target = target_opt.get();
         if ((Math.abs(distanceGoal.get() - target.getZ()) < distanceError.get())
-                && (Math.abs(strafeGoal.get() - target.getX()) < strafeError.get())
-                && (Math.abs(rotationGoal.get() - target.getRotation().getZ()) < 0.02)
+                && (Math.abs(strafeGoal.get() - target.getX()) < strafeError
+                        .get())
+                && (Math.abs(rotationGoal.get()
+                        - target.getRotation().getZ()) < 0.02)
         // && (Math.abs(target.getRotation().getAngle()) < 0.5)
         ) {
             return true;
@@ -146,15 +157,18 @@ public class AutoAlignTest extends Command {
         var nt = NetworkTableInstance.getDefault();
 
         double distanceSpeed = -distancePID.calculate(target.getZ());
-        distanceSpeed = MathUtil.clamp(distanceSpeed, -DriveConstants.MaxVelocityMetersPerSecond / 3.5,
+        distanceSpeed = MathUtil.clamp(distanceSpeed,
+                -DriveConstants.MaxVelocityMetersPerSecond / 3.5,
                 DriveConstants.MaxVelocityMetersPerSecond / 3.5);
 
         double strafeSpeed = strafePID.calculate(target.getX());
-        strafeSpeed = MathUtil.clamp(strafeSpeed, -DriveConstants.MaxVelocityMetersPerSecond / 5,
+        strafeSpeed = MathUtil.clamp(strafeSpeed,
+                -DriveConstants.MaxVelocityMetersPerSecond / 5,
                 DriveConstants.MaxVelocityMetersPerSecond / 5);
 
         double rot = rotationPID.calculate(target.getRotation().getZ());
-        rot = MathUtil.clamp(rot, -DriveConstants.MaxAngularVelocityRadiansPerSecond / 3.5,
+        rot = MathUtil.clamp(rot,
+                -DriveConstants.MaxAngularVelocityRadiansPerSecond / 3.5,
                 DriveConstants.MaxAngularVelocityRadiansPerSecond / 3.5);
 
         // nt.getEntry("/Shuffleboard/Tune/AutoAlignTags/LL
@@ -170,27 +184,34 @@ public class AutoAlignTest extends Command {
         // nt.getEntry("/Shuffleboard/Tune/AutoAlignTags/PID rotation
         // out").setDouble(rot);
 
-        nt.getEntry("/Shuffleboard/Tune/AutoAlignTags/LL Distance").setDouble(target.getZ());
-        nt.getEntry("/Shuffleboard/Tune/AutoAlignTags/PID Distance Out").setDouble(distanceSpeed);
+        nt.getEntry("/Shuffleboard/Tune/AutoAlignTags/LL Distance")
+                .setDouble(target.getZ());
+        nt.getEntry("/Shuffleboard/Tune/AutoAlignTags/PID Distance Out")
+                .setDouble(distanceSpeed);
         nt.getEntry("/Shuffleboard/Tune/AutoAlignTags/PID Distance Setpoint")
                 .setDouble(distancePID.getSetpoint().position);
-        nt.getEntry("/Shuffleboard/Tune/AutoAlignTags/PID Distance Goal").setDouble(distancePID.getGoal().position);
+        nt.getEntry("/Shuffleboard/Tune/AutoAlignTags/PID Distance Goal")
+                .setDouble(distancePID.getGoal().position);
         nt.getEntry("/Shuffleboard/Tune/AutoAlignTags/PID Distance Error")
                 .setDouble(distancePID.getSetpoint().position - target.getZ());
-        nt.getEntry("/Shuffleboard/Tune/AutoAlignTags/LL Strafe").setDouble(target.getX());
+        nt.getEntry("/Shuffleboard/Tune/AutoAlignTags/LL Strafe")
+                .setDouble(target.getX());
         nt.getEntry("/Shuffleboard/Tune/AutoAlignTags/PID Strafe Setpoint")
                 .setDouble(strafePID.getSetpoint().position);
-        nt.getEntry("/Shuffleboard/Tune/AutoAlignTags/PID Strafe Out").setDouble(strafeSpeed);
-        nt.getEntry("/Shuffleboard/Tune/AutoAlignTags/LL rotation yaw").setDouble(target.getRotation().getZ());
-        nt.getEntry("/Shuffleboard/Tune/AutoAlignTags/PID rotation out").setDouble(rot);
+        nt.getEntry("/Shuffleboard/Tune/AutoAlignTags/PID Strafe Out")
+                .setDouble(strafeSpeed);
+        nt.getEntry("/Shuffleboard/Tune/AutoAlignTags/LL rotation yaw")
+                .setDouble(target.getRotation().getZ());
+        nt.getEntry("/Shuffleboard/Tune/AutoAlignTags/PID rotation out")
+                .setDouble(rot);
         // how do i set a different goal for the distance
 
         // System.out.println(getStance());
 
-        swerveSub.drive(distanceSpeed / DriveConstants.MaxVelocityMetersPerSecond,
-                strafeSpeed
-                        / DriveConstants.MaxVelocityMetersPerSecond,
-                0, false);
+        swerveSub.drive(
+                distanceSpeed / DriveConstants.MaxVelocityMetersPerSecond,
+                strafeSpeed / DriveConstants.MaxVelocityMetersPerSecond, 0,
+                false);
         // wtf why is LimelightHelpers wrong
     }
 

@@ -8,19 +8,20 @@ import frc.robot.subsystems.ClimbSub;
 
 
 
-public class DefaultClimb extends Command{
+public class DefaultClimb extends Command {
     private final Joystick primaryJoy;
     private final XboxController secondaryController;
     ClimbSub climbSub;
 
-    public DefaultClimb(ClimbSub climbSub, Joystick primaryJoy, XboxController secondaryController){
+    public DefaultClimb(ClimbSub climbSub, Joystick primaryJoy,
+            XboxController secondaryController) {
         addRequirements(climbSub);
         this.climbSub = climbSub;
         this.primaryJoy = primaryJoy;
         this.secondaryController = secondaryController;
     }
-    
 
 
-    //when get some button. Arm down.
+
+    // when get some button. Arm down.
 }

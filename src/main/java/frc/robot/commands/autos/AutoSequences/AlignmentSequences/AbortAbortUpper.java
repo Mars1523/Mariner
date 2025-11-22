@@ -14,15 +14,15 @@ import frc.robot.subsystems.CoralArm;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.SwerveSubsystem;
 
-public class AbortAbortUpper extends SequentialCommandGroup{
-    public AbortAbortUpper(CoralArm coralArm, AlgaeArm algaeArm, Elevator elevator, SwerveSubsystem swerveSub){
-    var stow = new ConfigSystem(Constants.SetpointConstants.Options.driveConfig, coralArm, elevator, algaeArm);
-    var safetyAlign = new AutoAlignUpper(swerveSub, NTD.of(0.0), Constants.SetpointConstants.DistanceOffsets.csConfigure, NTD.of(0.0), NTD.of(0.05), NTD.of(0.05));
-    addCommands(
-        new ParallelCommandGroup(
-            stow,
-            safetyAlign
-        )
-    );
+public class AbortAbortUpper extends SequentialCommandGroup {
+    public AbortAbortUpper(CoralArm coralArm, AlgaeArm algaeArm,
+            Elevator elevator, SwerveSubsystem swerveSub) {
+        var stow = new ConfigSystem(
+                Constants.SetpointConstants.Options.driveConfig, coralArm,
+                elevator, algaeArm);
+        var safetyAlign = new AutoAlignUpper(swerveSub, NTD.of(0.0),
+                Constants.SetpointConstants.DistanceOffsets.csConfigure,
+                NTD.of(0.0), NTD.of(0.05), NTD.of(0.05));
+        addCommands(new ParallelCommandGroup(stow, safetyAlign));
     }
 }

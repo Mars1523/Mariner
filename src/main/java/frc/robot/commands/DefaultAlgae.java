@@ -11,7 +11,8 @@ public class DefaultAlgae extends Command {
     private final XboxController secondaryController;
     AlgaeArm algaeSub;
 
-    public DefaultAlgae(AlgaeArm algaeSub, Joystick primaryJoy, XboxController secondaryController) {
+    public DefaultAlgae(AlgaeArm algaeSub, Joystick primaryJoy,
+            XboxController secondaryController) {
         addRequirements(algaeSub);
         this.primaryJoy = primaryJoy;
         this.algaeSub = algaeSub;

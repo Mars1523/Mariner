@@ -23,20 +23,20 @@ public class RightScoreOnceAlgae extends SequentialCommandGroup {
     final SwerveSubsystem swerveSub;
     final AlgaeArm algaeArm;
 
-    public RightScoreOnceAlgae(CoralArm coralArm, AlgaeArm algaeArm, Elevator elevator,
-            SwerveSubsystem swerveSubsystem) {
+    public RightScoreOnceAlgae(CoralArm coralArm, AlgaeArm algaeArm,
+            Elevator elevator, SwerveSubsystem swerveSubsystem) {
         this.coralArm = coralArm;
         this.elevator = elevator;
         this.swerveSub = swerveSubsystem;
         this.algaeArm = algaeArm;
 
-        addCommands(
-                new AutoDrive(swerveSubsystem, 1, 0.5),
-                GoTo.reefNE(),
-                new L4AlignmentSequence(coralArm, algaeArm, elevator, swerveSubsystem,
+        addCommands(new AutoDrive(swerveSubsystem, 1, 0.5), GoTo.reefNE(),
+                new L4AlignmentSequence(coralArm, algaeArm, elevator,
+                        swerveSubsystem,
                         Constants.SetpointConstants.StrafeOffsets.leftL4,
                         Constants.SetpointConstants.DistanceOffsets.L4left),
-                new AlgaeIntakeAlignmentSequence(coralArm, elevator, algaeArm, swerveSubsystem,
+                new AlgaeIntakeAlignmentSequence(coralArm, elevator, algaeArm,
+                        swerveSubsystem,
                         Constants.SetpointConstants.Options.algaeHigh)
         // new WaitCommand(5),
         // GoTo.coralStationRight(),

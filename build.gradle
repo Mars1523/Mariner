@@ -1,6 +1,7 @@
 plugins {
     id "java"
     id "edu.wpi.first.GradleRIO" version "2025.3.2"
+      id "com.diffplug.spotless" version "8.1.0"
 }
 
 java {
@@ -76,6 +77,13 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter:5.10.1'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
+spotless {
+  java {
+    // optional: you can specify a specific version and/or config file
+    eclipse('4.26').configFile('.wpilib/eclipse-java-google-style.xml')
+  }
+}    
+
 
 test {
     useJUnitPlatform()

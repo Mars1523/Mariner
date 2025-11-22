@@ -10,10 +10,12 @@ import edu.wpi.first.util.struct.Struct;
 public class StructRegistry {
     private static final String STRUCT_FIELD_NAME = "struct";
 
-    private static final Map<Class<?>, Optional<Struct<?>>> resolvedStructs = new HashMap<>();
+    private static final Map<Class<?>, Optional<Struct<?>>> resolvedStructs =
+            new HashMap<>();
 
     public static Optional<Struct<?>> getStruct(Class<?> entryClass) {
-        return resolvedStructs.computeIfAbsent(entryClass, key -> getStructRaw(entryClass));
+        return resolvedStructs.computeIfAbsent(entryClass,
+                key -> getStructRaw(entryClass));
     }
 
     private static Optional<Struct<?>> getStructRaw(Class<?> classObj) {
@@ -27,6 +29,5 @@ public class StructRegistry {
         }
     }
 
-    private StructRegistry() {
-    }
+    private StructRegistry() {}
 }

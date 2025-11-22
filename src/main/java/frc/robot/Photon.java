@@ -17,8 +17,7 @@ public class Photon {
         return instance;
     }
 
-    Photon() {
-    }
+    Photon() {}
 
     public PhotonCamera upper = new PhotonCamera("Upper");
 
@@ -29,7 +28,8 @@ public class Photon {
         results = upper.getAllUnreadResults();
     }
 
-    private static PhotonPipelineResult kEmptyPiplineResult = new PhotonPipelineResult();
+    private static PhotonPipelineResult kEmptyPiplineResult =
+            new PhotonPipelineResult();
 
     public PhotonPipelineResult getLastResult() {
         if (results.size() == 0) {

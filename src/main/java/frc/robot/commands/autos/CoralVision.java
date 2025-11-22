@@ -28,7 +28,8 @@ public class CoralVision {
 
     static final Optional<Pose3d> getAprilTagPose() {
         if (LimelightHelpers.getTV(Constants.ReefLimelightName)) {
-            return Optional.of(LimelightHelpers.getTargetPose3d_RobotSpace(Constants.ReefLimelightName));
+            return Optional.of(LimelightHelpers
+                    .getTargetPose3d_RobotSpace(Constants.ReefLimelightName));
         } else {
             return Optional.empty();
         }
@@ -54,12 +55,18 @@ public class CoralVision {
 
         var llResults = LimelightHelpers.getLatestResults("").targets_Detector;
 
-        Transform3d l4LeftTranslation = new Transform3d(0.0, 0.0, 0.0, new Rotation3d());
-        Transform3d l4RightTranslation = new Transform3d(0.0, 0.0, 0.0, new Rotation3d());
-        Transform3d l3LeftTranslation = new Transform3d(0.0, 0.0, 0.0, new Rotation3d());
-        Transform3d l3RightTranslation = new Transform3d(0.0, 0.0, 0.0, new Rotation3d());
-        Transform3d l2LeftTranslation = new Transform3d(0.0, 0.0, 0.0, new Rotation3d());
-        Transform3d l2RightTranslation = new Transform3d(0.0, 0.0, 0.0, new Rotation3d());
+        Transform3d l4LeftTranslation =
+                new Transform3d(0.0, 0.0, 0.0, new Rotation3d());
+        Transform3d l4RightTranslation =
+                new Transform3d(0.0, 0.0, 0.0, new Rotation3d());
+        Transform3d l3LeftTranslation =
+                new Transform3d(0.0, 0.0, 0.0, new Rotation3d());
+        Transform3d l3RightTranslation =
+                new Transform3d(0.0, 0.0, 0.0, new Rotation3d());
+        Transform3d l2LeftTranslation =
+                new Transform3d(0.0, 0.0, 0.0, new Rotation3d());
+        Transform3d l2RightTranslation =
+                new Transform3d(0.0, 0.0, 0.0, new Rotation3d());
 
         Pose3d l4LeftPose = tagPose.transformBy(l4LeftTranslation);
         Pose3d l4RightPose = tagPose.transformBy(l4RightTranslation);

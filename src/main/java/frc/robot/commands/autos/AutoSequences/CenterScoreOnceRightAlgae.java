@@ -16,19 +16,20 @@ public class CenterScoreOnceRightAlgae extends SequentialCommandGroup {
     final AlgaeArm algaeArm;
     final SwerveSubsystem swerveSubsystem;
 
-    public CenterScoreOnceRightAlgae(CoralArm coralArm, Elevator elevator, AlgaeArm algaeArm,
-            SwerveSubsystem swerveSubsystem) {
+    public CenterScoreOnceRightAlgae(CoralArm coralArm, Elevator elevator,
+            AlgaeArm algaeArm, SwerveSubsystem swerveSubsystem) {
         this.coralArm = coralArm;
         this.elevator = elevator;
         this.algaeArm = algaeArm;
         this.swerveSubsystem = swerveSubsystem;
 
-        addCommands(
-                GoTo.reefN(),
-                new L4AlignmentSequence(coralArm, algaeArm, elevator, swerveSubsystem,
+        addCommands(GoTo.reefN(),
+                new L4AlignmentSequence(coralArm, algaeArm, elevator,
+                        swerveSubsystem,
                         Constants.SetpointConstants.StrafeOffsets.rightL4,
                         Constants.SetpointConstants.DistanceOffsets.L4Right),
-                new AlgaeIntakeAlignmentSequence(coralArm, elevator, algaeArm, swerveSubsystem,
+                new AlgaeIntakeAlignmentSequence(coralArm, elevator, algaeArm,
+                        swerveSubsystem,
                         Constants.SetpointConstants.Options.algaeLow));
     }
 }

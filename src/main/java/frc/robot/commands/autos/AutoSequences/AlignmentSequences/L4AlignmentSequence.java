@@ -14,40 +14,35 @@ import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.SwerveSubsystem;
 
 public class L4AlignmentSequence extends SequentialCommandGroup {
-        // give it a strafeoffset for each side in the parameters, when constructing
-        // just use the leftreef or rightReef setpoint strafeoffset constants
-        // this is so we dont need two identical classes
-        public L4AlignmentSequence(CoralArm coralArm, AlgaeArm algaeArm, Elevator elevator,
-                        SwerveSubsystem swerveSubsystem,
-                        NTDouble strafeOffset, NTDouble distanceOffset) {
-                String llName = Constants.ReefLimelightName;
-                var config = new ConfigSystem(Constants.SetpointConstants.Options.l4, coralArm, elevator, algaeArm);
-                var stow = new ConfigSystem(Constants.SetpointConstants.Options.driveConfig, coralArm, elevator,
-                                algaeArm);
-                var configureAlign = new AutoAlignReef(swerveSubsystem, strafeOffset,
-                                Constants.SetpointConstants.DistanceOffsets.reefCoralConfigure, NTD.of(0), NTD.of(0.1),
-                                NTD.of(0.07));
-                var secondConfigureAlign = new AutoAlignReef(swerveSubsystem, NTD.of(0),
-                                Constants.SetpointConstants.DistanceOffsets.reefCoralConfigure, NTD.of(0), NTD.of(0.04),
-                                NTD.of(0.04), true);
-                if (strafeOffset.get() > 0) {
-                        llName = Constants.LeftReefLimelightName;
-                } else {
-                        llName = Constants.ReefLimelightName;
-                }
-                var scoreAlign = new AutoAlignReef(swerveSubsystem, strafeOffset,
-                                distanceOffset, NTD.of(0), NTD.of(0.02),
-                                NTD.of(0.02));
-
-                var scoreCoral = new AutoCoralScore(coralArm);
-                addCommands(
-                                new ParallelCommandGroup(
-                                                configureAlign,
-                                                config),
-                                scoreAlign,
-                                scoreCoral.withTimeout(0.5),
-                                new ParallelCommandGroup(
-                                                secondConfigureAlign,
-                                                stow));
+    // give it a strafeoffset for each side in the parameters, when constructing
+    // just use the leftreef or rightReef setpoint strafeoffset constants
+    // this is so we dont need two identical classes
+    public L4AlignmentSequence(CoralArm coralArm, AlgaeArm algaeArm,
+            Elevator elevator, SwerveSubsystem swerveSubsystem,
+            NTDouble strafeOffset, NTDouble distanceOffset) {
+        String llName = Constants.ReefLimelightName;
+        var config = new ConfigSystem(Constants.SetpointConstants.Options.l4,
+                coralArm, elevator, algaeArm);
+        var stow = new ConfigSystem(
+                Constants.SetpointConstants.Options.driveConfig, coralArm,
+                elevator, algaeArm);
+        var configureAlign = new AutoAlignReef(swerveSubsystem, strafeOffset,
+                Constants.SetpointConstants.DistanceOffsets.reefCoralConfigure,
+                NTD.of(0), NTD.of(0.1), NTD.of(0.07));
+        var secondConfigureAlign = new AutoAlignReef(swerveSubsystem, NTD.of(0),
+                Constants.SetpointConstants.DistanceOffsets.reefCoralConfigure,
+                NTD.of(0), NTD.of(0.04), NTD.of(0.04), true);
+        if (strafeOffset.get() > 0) {
+            llName = Constants.LeftReefLimelightName;
+        } else {
+            llName = Constants.ReefLimelightName;
         }
+        var scoreAlign = new AutoAlignReef(swerveSubsystem, strafeOffset,
+                distanceOffset, NTD.of(0), NTD.of(0.02), NTD.of(0.02));
+
+        var scoreCoral = new AutoCoralScore(coralArm);
+        addCommands(new ParallelCommandGroup(configureAlign, config),
+                scoreAlign, scoreCoral.withTimeout(0.5),
+                new ParallelCommandGroup(secondConfigureAlign, stow));
+    }
 }

@@ -46,21 +46,16 @@ public class CoralArm extends SubsystemBase {
     public CoralArm(Elevator elevator) {
         this.elevator = elevator;
         SparkMaxConfig configWrist = new SparkMaxConfig();
-        configWrist
-                .inverted(false)
-                .idleMode(SparkMaxConfig.IdleMode.kBrake)
+        configWrist.inverted(false).idleMode(SparkMaxConfig.IdleMode.kBrake)
                 .smartCurrentLimit(20);
-        configWrist.signals
-                .absoluteEncoderPositionAlwaysOn(true);
+        configWrist.signals.absoluteEncoderPositionAlwaysOn(true);
         configWrist.encoder.positionConversionFactor(1.0 / 100.0);
-        configWrist.absoluteEncoder.inverted(true)
-                .zeroOffset(0.501)
+        configWrist.absoluteEncoder.inverted(true).zeroOffset(0.501)
                 .zeroCentered(true);
-        configWrist.closedLoop
-                .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
-                .pid(3, 0.0001, 0.001)
-                .outputRange(-0.8, 0.7);
-        coralWrist.configure(configWrist, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        configWrist.closedLoop.feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
+                .pid(3, 0.0001, 0.001).outputRange(-0.8, 0.7);
+        coralWrist.configure(configWrist, ResetMode.kResetSafeParameters,
+                PersistMode.kPersistParameters);
 
         // coralWrist.getEncoder().setPosition(coralWrist.getAbsoluteEncoder().getPosition());
 
@@ -75,7 +70,9 @@ public class CoralArm extends SubsystemBase {
         // Constants.configMotor(coralWheel, true);
 
         coralWristController = coralWrist.getClosedLoopController();
-        coralWristController.setReference(Constants.SetpointConstants.CoralPivotAngles.up.get(), ControlType.kPosition);
+        coralWristController.setReference(
+                Constants.SetpointConstants.CoralPivotAngles.up.get(),
+                ControlType.kPosition);
 
         coralWheel.setInverted(true);
         coralWheel.setSelectedSensorPosition(0);
@@ -97,7 +94,8 @@ public class CoralArm extends SubsystemBase {
     @Override
     public void periodic() {
         if (DriverStation.isDisabled()) {
-            applyWristSetpointToMotor(coralWrist.getAbsoluteEncoder().getPosition());
+            applyWristSetpointToMotor(
+                    coralWrist.getAbsoluteEncoder().getPosition());
         }
 
         if (!elevator.isReady()) {
@@ -116,11 +114,15 @@ public class CoralArm extends SubsystemBase {
         }
 
         var inst = NetworkTableInstance.getDefault();
-        inst.getEntry("/Debug/CoralArm/cwsetpoint").setDouble(coralWristSetpoint);
-        inst.getEntry("/Debug/CoralArm/Cweabs").setDouble(coralWrist.getAbsoluteEncoder().getPosition());
+        inst.getEntry("/Debug/CoralArm/cwsetpoint")
+                .setDouble(coralWristSetpoint);
+        inst.getEntry("/Debug/CoralArm/Cweabs")
+                .setDouble(coralWrist.getAbsoluteEncoder().getPosition());
         inst.getEntry("/Debug/CoralArm/test").setDouble(0.01);
-        inst.getEntry("/Debug/CoralArm/cwe").setDouble(coralWrist.getEncoder().getPosition());
-        inst.getEntry("/Debug/CoralArm/Coral Wrist Power").setDouble(coralWrist.getAppliedOutput());
+        inst.getEntry("/Debug/CoralArm/cwe")
+                .setDouble(coralWrist.getEncoder().getPosition());
+        inst.getEntry("/Debug/CoralArm/Coral Wrist Power")
+                .setDouble(coralWrist.getAppliedOutput());
 
     }
 
@@ -161,7 +163,8 @@ public class CoralArm extends SubsystemBase {
 
     public boolean isReady() {
         double coralPosition = coralWrist.getAbsoluteEncoder().getPosition();
-        return coralPosition > (coralWristSetpoint - 0.1) && coralPosition < (coralWristSetpoint + 0.1);
+        return coralPosition > (coralWristSetpoint - 0.1)
+                && coralPosition < (coralWristSetpoint + 0.1);
     }
 
     public boolean hasCoral() {
@@ -183,20 +186,24 @@ public class CoralArm extends SubsystemBase {
     // }
 
     public Command l1() {
-        return run(() -> setCoralWristSetpoint(Constants.SetpointConstants.CoralPivotAngles.l1.get()));
+        return run(() -> setCoralWristSetpoint(
+                Constants.SetpointConstants.CoralPivotAngles.l1.get()));
     }
 
     // out
     public Command lmid() {
-        return run(() -> setCoralWristSetpoint(Constants.SetpointConstants.CoralPivotAngles.lmid.get()));
+        return run(() -> setCoralWristSetpoint(
+                Constants.SetpointConstants.CoralPivotAngles.lmid.get()));
     }
 
     public Command l4() {
-        return run(() -> setCoralWristSetpoint(Constants.SetpointConstants.CoralPivotAngles.l4.get()));
+        return run(() -> setCoralWristSetpoint(
+                Constants.SetpointConstants.CoralPivotAngles.l4.get()));
     }
 
     public Command coralStation() {
-        return run(() -> setCoralWristSetpoint(Constants.SetpointConstants.CoralPivotAngles.CoralSt.get()));
+        return run(() -> setCoralWristSetpoint(
+                Constants.SetpointConstants.CoralPivotAngles.CoralSt.get()));
     }
 
     public Command up() {

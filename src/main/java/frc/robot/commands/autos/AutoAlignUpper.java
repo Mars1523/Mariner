@@ -45,8 +45,10 @@ public class AutoAlignUpper extends Command {
     // }
     static final Optional<Pose3d> getTargetPoseLimelight() {
         if (LimelightHelpers.getTV(Constants.UpperLimelightName)) {
-            var pose = LimelightHelpers.getTargetPose3d_RobotSpace(Constants.UpperLimelightName);
-            return Optional.of(new Pose3d(pose.getZ(), pose.getX(), pose.getY(), pose.getRotation()));
+            var pose = LimelightHelpers
+                    .getTargetPose3d_RobotSpace(Constants.UpperLimelightName);
+            return Optional.of(new Pose3d(pose.getZ(), pose.getX(), pose.getY(),
+                    pose.getRotation()));
         } else {
             return Optional.empty();
         }
@@ -55,12 +57,15 @@ public class AutoAlignUpper extends Command {
     public final Optional<Transform3d> getTargetPosePhoton() {
         var results = Photon.getInstance().getLastResult();
         if (results.hasTargets()) {
-            var cameraToTarget = results.getBestTarget().getBestCameraToTarget();
+            var cameraToTarget =
+                    results.getBestTarget().getBestCameraToTarget();
             System.out.println("Camera to Target" + cameraToTarget);
             var transform = Constants.robotToCamera.plus(cameraToTarget);
             var fieldToRobot = new Pose3d(swerveSub.getPose());
-            Logger.recordOutput("RobotToCamera", fieldToRobot.transformBy(Constants.robotToCamera));
-            Logger.recordOutput("PhotonFinalOffset", fieldToRobot.transformBy(transform));
+            Logger.recordOutput("RobotToCamera",
+                    fieldToRobot.transformBy(Constants.robotToCamera));
+            Logger.recordOutput("PhotonFinalOffset",
+                    fieldToRobot.transformBy(transform));
 
             // System.out.println("robot to camera" + Constants.robotToCamera);
             // System.out.println("final offset: " + transform.getTranslation());
@@ -75,13 +80,16 @@ public class AutoAlignUpper extends Command {
         return LimelightHelpers.getTV(Constants.UpperLimelightName);
     }
 
-    public AutoAlignUpper(SwerveSubsystem swerveSub, NTDouble strafeGoal, NTDouble distanceGoal, NTDouble rotationGoal,
-            NTDouble strafeError, NTDouble distanceError) {
-        this(swerveSub, strafeGoal, distanceGoal, rotationGoal, strafeError, distanceError, false);
+    public AutoAlignUpper(SwerveSubsystem swerveSub, NTDouble strafeGoal,
+            NTDouble distanceGoal, NTDouble rotationGoal, NTDouble strafeError,
+            NTDouble distanceError) {
+        this(swerveSub, strafeGoal, distanceGoal, rotationGoal, strafeError,
+                distanceError, false);
     }
 
-    public AutoAlignUpper(SwerveSubsystem swerveSub, NTDouble strafeGoal, NTDouble distanceGoal, NTDouble rotationGoal,
-            NTDouble strafeError, NTDouble distanceError, boolean tune) {
+    public AutoAlignUpper(SwerveSubsystem swerveSub, NTDouble strafeGoal,
+            NTDouble distanceGoal, NTDouble rotationGoal, NTDouble strafeError,
+            NTDouble distanceError, boolean tune) {
         addRequirements(swerveSub);
         this.tune = tune;
         this.swerveSub = swerveSub;
@@ -92,11 +100,19 @@ public class AutoAlignUpper extends Command {
         this.distanceError = distanceError;
 
         strafePID = new ProfiledPIDController(4.4, .8 * .7, .1 * .125,
-                new TrapezoidProfile.Constraints(Constants.DriveConstants.MaxVelocityMetersPerSecond / 3.0, 3.2));
+                new TrapezoidProfile.Constraints(
+                        Constants.DriveConstants.MaxVelocityMetersPerSecond
+                                / 3.0,
+                        3.2));
         distancePID = new ProfiledPIDController(4.55, .8 * .7, .1 * .1,
-                new TrapezoidProfile.Constraints(Constants.DriveConstants.MaxVelocityMetersPerSecond / 3.0, 3.85));
+                new TrapezoidProfile.Constraints(
+                        Constants.DriveConstants.MaxVelocityMetersPerSecond
+                                / 3.0,
+                        3.85));
         rotationPID = new ProfiledPIDController(3.8 * .9, .8 * .7, .8 * .1,
-                new TrapezoidProfile.Constraints(Constants.DriveConstants.MaxAngularVelocityRadiansPerSecond / 3.0,
+                new TrapezoidProfile.Constraints(
+                        Constants.DriveConstants.MaxAngularVelocityRadiansPerSecond
+                                / 3.0,
                         3.0 / 1.5));
         rotationPID.enableContinuousInput(-Math.PI, Math.PI);
 
@@ -128,10 +144,12 @@ public class AutoAlignUpper extends Command {
         }
         var target = target_opt.get();
 
-        var rotationDelta = new Rotation2d(rotationGoal.get()).minus(target.getRotation().toRotation2d());
+        var rotationDelta = new Rotation2d(rotationGoal.get())
+                .minus(target.getRotation().toRotation2d());
 
         if ((Math.abs(distanceGoal.get() - target.getX()) < distanceError.get())
-                && (Math.abs(strafeGoal.get() - target.getY()) < strafeError.get())
+                && (Math.abs(strafeGoal.get() - target.getY()) < strafeError
+                        .get())
                 && rotationDelta.getRadians() < 0.01) {
             return true;
         } else {
@@ -167,33 +185,48 @@ public class AutoAlignUpper extends Command {
         var nt = NetworkTableInstance.getDefault();
 
         double distanceSpeed = -distancePID.calculate(target.getX());
-        distanceSpeed = MathUtil.clamp(distanceSpeed, -DriveConstants.MaxVelocityMetersPerSecond / 3.5,
+        distanceSpeed = MathUtil.clamp(distanceSpeed,
+                -DriveConstants.MaxVelocityMetersPerSecond / 3.5,
                 DriveConstants.MaxVelocityMetersPerSecond / 3.5);
 
         double strafeSpeed = -strafePID.calculate(target.getY());
-        strafeSpeed = MathUtil.clamp(strafeSpeed, -DriveConstants.MaxVelocityMetersPerSecond / 5,
+        strafeSpeed = MathUtil.clamp(strafeSpeed,
+                -DriveConstants.MaxVelocityMetersPerSecond / 5,
                 DriveConstants.MaxVelocityMetersPerSecond / 5);
 
         double rot = -rotationPID.calculate(target.getRotation().getZ());
-        rot = MathUtil.clamp(rot, -DriveConstants.MaxAngularVelocityRadiansPerSecond / 3.5,
+        rot = MathUtil.clamp(rot,
+                -DriveConstants.MaxAngularVelocityRadiansPerSecond / 3.5,
                 DriveConstants.MaxAngularVelocityRadiansPerSecond / 3.5);
 
-        Logger.recordOutput("/Shuffleboard/Tune/AutoAlignTags/UpperAlign/LL Distance", target.getX());
-        Logger.recordOutput("AutoAlignTags/UpperAlign/PID Distance Out", distanceSpeed);
+        Logger.recordOutput(
+                "/Shuffleboard/Tune/AutoAlignTags/UpperAlign/LL Distance",
+                target.getX());
+        Logger.recordOutput("AutoAlignTags/UpperAlign/PID Distance Out",
+                distanceSpeed);
         Logger.recordOutput("AutoAlignTags/UpperAlign/PID Distance Setpoint",
                 distancePID.getSetpoint().position);
-        Logger.recordOutput("AutoAlignTags/UpperAlign/PID Distance Goal", distancePID.getGoal().position);
-        Logger.recordOutput("AutoAlignTags/UpperAlign/LL Strafe", target.getY());
-        Logger.recordOutput("AutoAlignTags/UpperAlign/PID Strafe Setpoint", strafePID.getSetpoint().position);
-        Logger.recordOutput("AutoAlignTags/UpperAlign/PID Strafe Goal", strafePID.getGoal().position);
-        Logger.recordOutput("AutoAlignTags/UpperAlign/PID Strafe Out", strafeSpeed);
-        Logger.recordOutput("AutoAlignTags/UpperAlign/LL rotation yaw", target.getRotation().getZ());
+        Logger.recordOutput("AutoAlignTags/UpperAlign/PID Distance Goal",
+                distancePID.getGoal().position);
+        Logger.recordOutput("AutoAlignTags/UpperAlign/LL Strafe",
+                target.getY());
+        Logger.recordOutput("AutoAlignTags/UpperAlign/PID Strafe Setpoint",
+                strafePID.getSetpoint().position);
+        Logger.recordOutput("AutoAlignTags/UpperAlign/PID Strafe Goal",
+                strafePID.getGoal().position);
+        Logger.recordOutput("AutoAlignTags/UpperAlign/PID Strafe Out",
+                strafeSpeed);
+        Logger.recordOutput("AutoAlignTags/UpperAlign/LL rotation yaw",
+                target.getRotation().getZ());
         Logger.recordOutput("AutoAlignTags/UpperAlign/PID rotation out", rot);
         System.out.println("supposed yaw: " + target.getRotation().getZ());
 
-        Logger.recordOutput("AutoAlignTags/StrafeError", strafeGoal.get() - target.getY());
-        Logger.recordOutput("AutoAlignTags/DistanceError", distanceGoal.get() - target.getX());
-        var rotationDelta = new Rotation2d(rotationGoal.get()).minus(target.getRotation().toRotation2d());
+        Logger.recordOutput("AutoAlignTags/StrafeError",
+                strafeGoal.get() - target.getY());
+        Logger.recordOutput("AutoAlignTags/DistanceError",
+                distanceGoal.get() - target.getX());
+        var rotationDelta = new Rotation2d(rotationGoal.get())
+                .minus(target.getRotation().toRotation2d());
         Logger.recordOutput("AutoAlignTags/RotationError", rotationDelta);
         // Logger.recordOutput("AutoAlignTags/RotationError", rotationGoal.get() -
         // target.getRotation().getZ());
@@ -203,7 +236,8 @@ public class AutoAlignUpper extends Command {
         // System.out.println("supposed Height: " + target.getZ());
         // System.out.println("camera to target" + target.getZ());
 
-        swerveSub.drive(distanceSpeed / DriveConstants.MaxVelocityMetersPerSecond,
+        swerveSub.drive(
+                distanceSpeed / DriveConstants.MaxVelocityMetersPerSecond,
                 strafeSpeed / DriveConstants.MaxVelocityMetersPerSecond,
                 rot / DriveConstants.MaxAngularVelocityRadiansPerSecond, false);
         // wtf why is LimelightHelpers wrong

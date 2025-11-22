@@ -23,28 +23,28 @@ import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.SwerveSubsystem;
 
 public class LeftAuto extends SequentialCommandGroup {
-        final SwerveSubsystem swerveSubsystem;
-        final AlgaeArm algaeArm;
-        final CoralArm coralArm;
-        final Elevator elevator;
+    final SwerveSubsystem swerveSubsystem;
+    final AlgaeArm algaeArm;
+    final CoralArm coralArm;
+    final Elevator elevator;
 
-        public LeftAuto(CoralArm coralArm, AlgaeArm algaeArm, Elevator elevator, SwerveSubsystem swerve) {
-                this.coralArm = coralArm;
-                this.algaeArm = algaeArm;
-                this.elevator = elevator;
-                this.swerveSubsystem = swerve;
+    public LeftAuto(CoralArm coralArm, AlgaeArm algaeArm, Elevator elevator,
+            SwerveSubsystem swerve) {
+        this.coralArm = coralArm;
+        this.algaeArm = algaeArm;
+        this.elevator = elevator;
+        this.swerveSubsystem = swerve;
 
-                addCommands(
-                                GoTo.reefNW(),
-                                new L4AlignmentSequence(coralArm, algaeArm, elevator, swerve,
-                                                Constants.SetpointConstants.StrafeOffsets.leftL4,
-                                                Constants.SetpointConstants.StrafeOffsets.leftL4),
-                                GoTo.coralStationLeft(),
-                                new CoralStationSequence(coralArm, algaeArm, elevator, swerve),
-                                GoTo.reefSW(),
-                                new LeftAlignmentSequence(coralArm, algaeArm, elevator, swerve,
-                                                Constants.SetpointConstants.Options.l3),
-                                GoTo.coralStationLeft(),
-                                new CoralStationSequence(coralArm, algaeArm, elevator, swerve));
-        }
+        addCommands(GoTo.reefNW(),
+                new L4AlignmentSequence(coralArm, algaeArm, elevator, swerve,
+                        Constants.SetpointConstants.StrafeOffsets.leftL4,
+                        Constants.SetpointConstants.StrafeOffsets.leftL4),
+                GoTo.coralStationLeft(),
+                new CoralStationSequence(coralArm, algaeArm, elevator, swerve),
+                GoTo.reefSW(),
+                new LeftAlignmentSequence(coralArm, algaeArm, elevator, swerve,
+                        Constants.SetpointConstants.Options.l3),
+                GoTo.coralStationLeft(),
+                new CoralStationSequence(coralArm, algaeArm, elevator, swerve));
+    }
 }

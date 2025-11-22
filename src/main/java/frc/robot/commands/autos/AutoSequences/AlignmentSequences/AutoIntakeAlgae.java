@@ -12,14 +12,15 @@ import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.SwerveSubsystem;
 
 public class AutoIntakeAlgae extends SequentialCommandGroup {
-    public AutoIntakeAlgae(CoralArm coralArm, Elevator elevator, AlgaeArm algaeArm, SwerveSubsystem swerveSubsystem) {
-        var config = new ConfigSystem(Constants.SetpointConstants.Options.processor, coralArm, elevator, algaeArm);
+    public AutoIntakeAlgae(CoralArm coralArm, Elevator elevator,
+            AlgaeArm algaeArm, SwerveSubsystem swerveSubsystem) {
+        var config =
+                new ConfigSystem(Constants.SetpointConstants.Options.processor,
+                        coralArm, elevator, algaeArm);
         // var intakeAlgae = new AutoAlgaeIntake(algaeArm);
-        addCommands(
-                Commands.print("AutoIntakeAlgaeStart"),
+        addCommands(Commands.print("AutoIntakeAlgaeStart"),
                 // intakeAlgae.until(algaeArm::hasAlgae),
-                config,
-                algaeArm.algaeSpinIn(),
+                config, algaeArm.algaeSpinIn(),
                 Commands.print("AutoIntakeAlgae Done Intaking"),
                 Commands.print("AutoIntakeAlgae Done Config"));
     }

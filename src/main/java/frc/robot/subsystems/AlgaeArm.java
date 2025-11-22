@@ -24,7 +24,8 @@ public class AlgaeArm extends SubsystemBase {
     SparkMax algaeWrist = new SparkMax(56, MotorType.kBrushless);
     SparkMax algaeSpinner = new SparkMax(41, MotorType.kBrushless);
     // SparkMax algaeSpinMotor = new SparkMax(0, MotorType.kBrushless);
-    TrapezoidProfile trapezoidProfile = new TrapezoidProfile(new Constraints(30, 10));
+    TrapezoidProfile trapezoidProfile =
+            new TrapezoidProfile(new Constraints(30, 10));
     private SparkClosedLoopController algaeWristController;
     private double algaeWristSetpoint = 0;
     SparkLimitSwitch algaeLimitSwitch = algaeSpinner.getForwardLimitSwitch();
@@ -38,32 +39,26 @@ public class AlgaeArm extends SubsystemBase {
     public AlgaeArm() {
 
         SparkMaxConfig configAlgaeWrist = new SparkMaxConfig();
-        configAlgaeWrist
-                .inverted(false)
+        configAlgaeWrist.inverted(false)
                 .idleMode(SparkMaxConfig.IdleMode.kCoast);
-        configAlgaeWrist.absoluteEncoder
-                .inverted(true)
-                .zeroCentered(true);
+        configAlgaeWrist.absoluteEncoder.inverted(true).zeroCentered(true);
         // .zeroOffset(0.72);
-        configAlgaeWrist.signals
-                .absoluteEncoderPositionAlwaysOn(true)
+        configAlgaeWrist.signals.absoluteEncoderPositionAlwaysOn(true)
                 .absoluteEncoderPositionPeriodMs(100);
-        configAlgaeWrist.encoder
-                .positionConversionFactor(1.0 / 125.0)
+        configAlgaeWrist.encoder.positionConversionFactor(1.0 / 125.0)
                 .velocityConversionFactor((1.0 / 125.0) / 60.0);
-        configAlgaeWrist.closedLoop
-                .pid(4.2, 0, 0)
-                .outputRange(-0.6, 0.6);
-        algaeWrist.configure(configAlgaeWrist, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+        configAlgaeWrist.closedLoop.pid(4.2, 0, 0).outputRange(-0.6, 0.6);
+        algaeWrist.configure(configAlgaeWrist, ResetMode.kResetSafeParameters,
+                PersistMode.kNoPersistParameters);
 
         SparkMaxConfig configAlgaeSpinMotor = new SparkMaxConfig();
-        configAlgaeSpinMotor
-                .inverted(false)
-                .idleMode(IdleMode.kBrake)
+        configAlgaeSpinMotor.inverted(false).idleMode(IdleMode.kBrake)
                 .smartCurrentLimit(20);
-        algaeSpinner.configure(configAlgaeSpinMotor, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        algaeSpinner.configure(configAlgaeSpinMotor,
+                ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
-        algaeWrist.getEncoder().setPosition(algaeWrist.getAbsoluteEncoder().getPosition());
+        algaeWrist.getEncoder()
+                .setPosition(algaeWrist.getAbsoluteEncoder().getPosition());
 
         // Constants.configPIDMotor(algaeWrist,true, 0,0,0);
         // Constants.configMotor(algaeSpinMotor, false);
@@ -83,10 +78,12 @@ public class AlgaeArm extends SubsystemBase {
 
         // Shuffleboard.getTab("Debug").add("P", 0.0);
         Souffle.record("Debug/Algae Wrist Setpoint", () -> algaeWristSetpoint);
-        Souffle.record("Debug/Algae Wrist Current", () -> algaeWrist.getEncoder().getPosition());
+        Souffle.record("Debug/Algae Wrist Current",
+                () -> algaeWrist.getEncoder().getPosition());
         Souffle.record("Debug/Algae Wrist Absolute",
                 () -> algaeWrist.getAbsoluteEncoder().getPosition());
-        Souffle.record("Debug/Algae Wrist Power", () -> algaeWrist.getAppliedOutput());
+        Souffle.record("Debug/Algae Wrist Power",
+                () -> algaeWrist.getAppliedOutput());
         Souffle.record("Debug/has Algae", () -> hasAlgae());
 
     }
@@ -123,7 +120,8 @@ public class AlgaeArm extends SubsystemBase {
 
     public boolean isReady() {
         double algaePosition = algaeWrist.getEncoder().getPosition();
-        return algaePosition > (algaeWristSetpoint - 0.1) && algaePosition < (algaeWristSetpoint + 0.1);
+        return algaePosition > (algaeWristSetpoint - 0.1)
+                && algaePosition < (algaeWristSetpoint + 0.1);
     }
 
     @Override
@@ -133,16 +131,18 @@ public class AlgaeArm extends SubsystemBase {
             trapezoidSetpoint = new TrapezoidProfile.State(
                     algaeWrist.getEncoder().getPosition(),
                     algaeWrist.getEncoder().getVelocity());
-            algaeWristController.setReference(trapezoidSetpoint.position, ControlType.kPosition);
+            algaeWristController.setReference(trapezoidSetpoint.position,
+                    ControlType.kPosition);
         }
 
-        trapezoidSetpoint = trapezoidProfile.calculate(0.02,
-                trapezoidSetpoint,
+        trapezoidSetpoint = trapezoidProfile.calculate(0.02, trapezoidSetpoint,
                 new TrapezoidProfile.State(algaeWristSetpoint, 0));
         // System.out.println("Setpoint " + setpoint + " goal "+ trapezoidSetpoint);
-        NetworkTableInstance.getDefault().getEntry("/Shuffleboard/Debug/AlgaeWristGoal")
+        NetworkTableInstance.getDefault()
+                .getEntry("/Shuffleboard/Debug/AlgaeWristGoal")
                 .setDouble(trapezoidSetpoint.position);
-        algaeWristController.setReference(trapezoidSetpoint.position, ControlType.kPosition);
+        algaeWristController.setReference(trapezoidSetpoint.position,
+                ControlType.kPosition);
     }
 
     // public boolean hasAlgae() {
@@ -167,11 +167,13 @@ public class AlgaeArm extends SubsystemBase {
     }
 
     public Command algaeArmDown() {
-        return runOnce(() -> setAlgaeSetpoint(Constants.SetpointConstants.AlgaeArmAngles.down.get()));
+        return runOnce(() -> setAlgaeSetpoint(
+                Constants.SetpointConstants.AlgaeArmAngles.down.get()));
     }
 
     public Command algaeArmUp() {
-        return runOnce(() -> setAlgaeSetpoint(Constants.SetpointConstants.AlgaeArmAngles.up.get()));
+        return runOnce(() -> setAlgaeSetpoint(
+                Constants.SetpointConstants.AlgaeArmAngles.up.get()));
     }
 
     public Command algaeArmStop() {

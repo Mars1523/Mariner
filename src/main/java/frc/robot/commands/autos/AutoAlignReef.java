@@ -56,13 +56,16 @@ public class AutoAlignReef extends Command {
         return LimelightHelpers.getTV(Constants.ReefLimelightName);
     }
 
-    public AutoAlignReef(SwerveSubsystem swerveSub, NTDouble strafeGoal, NTDouble distanceGoal, NTDouble rotationGoal,
-            NTDouble strafeError, NTDouble distanceError) {
-        this(swerveSub, strafeGoal, distanceGoal, rotationGoal, strafeError, distanceError, false);
+    public AutoAlignReef(SwerveSubsystem swerveSub, NTDouble strafeGoal,
+            NTDouble distanceGoal, NTDouble rotationGoal, NTDouble strafeError,
+            NTDouble distanceError) {
+        this(swerveSub, strafeGoal, distanceGoal, rotationGoal, strafeError,
+                distanceError, false);
     }
 
-    public AutoAlignReef(SwerveSubsystem swerveSub, NTDouble strafeGoal, NTDouble distanceGoal, NTDouble rotationGoal,
-            NTDouble strafeError, NTDouble distanceError, boolean slow) {
+    public AutoAlignReef(SwerveSubsystem swerveSub, NTDouble strafeGoal,
+            NTDouble distanceGoal, NTDouble rotationGoal, NTDouble strafeError,
+            NTDouble distanceError, boolean slow) {
         addRequirements(swerveSub);
         this.swerveSub = swerveSub;
         this.strafeGoal = strafeGoal;
@@ -76,11 +79,17 @@ public class AutoAlignReef extends Command {
             maxAccel *= 0.35;
         }
         strafePID = new ProfiledPIDController(4.3 * .9, 0, .85 * .125,
-                new TrapezoidProfile.Constraints(Constants.DriveConstants.MaxVelocityMetersPerSecond / 3, maxAccel));
+                new TrapezoidProfile.Constraints(
+                        Constants.DriveConstants.MaxVelocityMetersPerSecond / 3,
+                        maxAccel));
         distancePID = new ProfiledPIDController(4.3 * .9, 0, .85 * .125,
-                new TrapezoidProfile.Constraints(Constants.DriveConstants.MaxVelocityMetersPerSecond / 3, maxAccel));
+                new TrapezoidProfile.Constraints(
+                        Constants.DriveConstants.MaxVelocityMetersPerSecond / 3,
+                        maxAccel));
         rotationPID = new ProfiledPIDController(3.95 * .9, 0, .85 * .125,
-                new TrapezoidProfile.Constraints(Constants.DriveConstants.MaxAngularVelocityRadiansPerSecond / 3,
+                new TrapezoidProfile.Constraints(
+                        Constants.DriveConstants.MaxAngularVelocityRadiansPerSecond
+                                / 3,
                         maxAccel));
 
         distanceGoal.subscribe(goal -> distancePID.setGoal(goal));
@@ -99,10 +108,12 @@ public class AutoAlignReef extends Command {
     final Optional<Pose3d> getTargetPose() {
         if (LimelightHelpers.getTV(Constants.ReefLimelightName)) {
             System.out.println("using " + Constants.ReefLimelightName);
-            return Optional.of(LimelightHelpers.getTargetPose3d_RobotSpace(Constants.ReefLimelightName));
+            return Optional.of(LimelightHelpers
+                    .getTargetPose3d_RobotSpace(Constants.ReefLimelightName));
         } else if (LimelightHelpers.getTV(Constants.LeftReefLimelightName)) {
             System.out.println("using left limelight");
-            return Optional.of(LimelightHelpers.getTargetPose3d_RobotSpace(Constants.LeftReefLimelightName));
+            return Optional.of(LimelightHelpers.getTargetPose3d_RobotSpace(
+                    Constants.LeftReefLimelightName));
         } else {
             System.out.println("no tags detected");
             return Optional.empty();
@@ -128,8 +139,10 @@ public class AutoAlignReef extends Command {
         }
         var target = target_opt.get();
         if ((Math.abs(distanceGoal.get() - target.getZ()) < distanceError.get())
-                && (Math.abs(strafeGoal.get() - target.getX()) < strafeError.get())
-                && (Math.abs(rotationGoal.get() - target.getRotation().getZ()) < 0.02)
+                && (Math.abs(strafeGoal.get() - target.getX()) < strafeError
+                        .get())
+                && (Math.abs(rotationGoal.get()
+                        - target.getRotation().getZ()) < 0.02)
         // && (Math.abs(target.getRotation().getAngle()) < 0.5)
         ) {
             return true;
@@ -155,15 +168,18 @@ public class AutoAlignReef extends Command {
         var nt = NetworkTableInstance.getDefault();
 
         double distanceSpeed = -distancePID.calculate(target.getZ());
-        distanceSpeed = MathUtil.clamp(distanceSpeed, -DriveConstants.MaxVelocityMetersPerSecond / 3.5,
+        distanceSpeed = MathUtil.clamp(distanceSpeed,
+                -DriveConstants.MaxVelocityMetersPerSecond / 3.5,
                 DriveConstants.MaxVelocityMetersPerSecond / 3.5);
 
         double strafeSpeed = strafePID.calculate(target.getX());
-        strafeSpeed = MathUtil.clamp(strafeSpeed, -DriveConstants.MaxVelocityMetersPerSecond / 5,
+        strafeSpeed = MathUtil.clamp(strafeSpeed,
+                -DriveConstants.MaxVelocityMetersPerSecond / 5,
                 DriveConstants.MaxVelocityMetersPerSecond / 5);
 
         double rot = rotationPID.calculate(target.getRotation().getZ());
-        rot = MathUtil.clamp(rot, -DriveConstants.MaxAngularVelocityRadiansPerSecond / 3.5,
+        rot = MathUtil.clamp(rot,
+                -DriveConstants.MaxAngularVelocityRadiansPerSecond / 3.5,
                 DriveConstants.MaxAngularVelocityRadiansPerSecond / 3.5);
 
         // nt.getEntry("/Shuffleboard/Tune/AutoAlignTags/LL
@@ -179,27 +195,39 @@ public class AutoAlignReef extends Command {
         // nt.getEntry("/Shuffleboard/Tune/AutoAlignTags/PID rotation
         // out").setDouble(rot);
 
-        Logger.recordOutput("/Shuffleboard/Tune/AutoAlignTags/ReefAlign/LL Distance", target.getX());
-        Logger.recordOutput("AutoAlignTags/ReefAlign/PID Distance Out", distanceSpeed);
+        Logger.recordOutput(
+                "/Shuffleboard/Tune/AutoAlignTags/ReefAlign/LL Distance",
+                target.getX());
+        Logger.recordOutput("AutoAlignTags/ReefAlign/PID Distance Out",
+                distanceSpeed);
         Logger.recordOutput("AutoAlignTags/ReefAlign/PID Distance Setpoint",
                 distancePID.getSetpoint().position);
-        Logger.recordOutput("AutoAlignTags/ReefAlign/PID Distance Goal", distancePID.getGoal().position);
+        Logger.recordOutput("AutoAlignTags/ReefAlign/PID Distance Goal",
+                distancePID.getGoal().position);
         Logger.recordOutput("AutoAlignTags/ReefAlign/LL Strafe", target.getY());
-        Logger.recordOutput("AutoAlignTags/ReefAlign/PID Strafe Setpoint", strafePID.getSetpoint().position);
-        Logger.recordOutput("AutoAlignTags/ReefAlign/PID Strafe Goal", strafePID.getGoal().position);
-        Logger.recordOutput("AutoAlignTags/ReefAlign/PID Strafe Out", strafeSpeed);
-        Logger.recordOutput("AutoAlignTags/ReefAlign/LL rotation yaw", target.getRotation().getZ());
+        Logger.recordOutput("AutoAlignTags/ReefAlign/PID Strafe Setpoint",
+                strafePID.getSetpoint().position);
+        Logger.recordOutput("AutoAlignTags/ReefAlign/PID Strafe Goal",
+                strafePID.getGoal().position);
+        Logger.recordOutput("AutoAlignTags/ReefAlign/PID Strafe Out",
+                strafeSpeed);
+        Logger.recordOutput("AutoAlignTags/ReefAlign/LL rotation yaw",
+                target.getRotation().getZ());
         Logger.recordOutput("AutoAlignTags/ReefAlign/PID rotation out", rot);
 
-        Logger.recordOutput("AutoAlignTags/StrafeError", strafeGoal.get() - target.getY());
-        Logger.recordOutput("AutoAlignTags/DistanceError", distanceGoal.get() - target.getX());
-        var rotationDelta = new Rotation2d(rotationGoal.get()).minus(target.getRotation().toRotation2d());
+        Logger.recordOutput("AutoAlignTags/StrafeError",
+                strafeGoal.get() - target.getY());
+        Logger.recordOutput("AutoAlignTags/DistanceError",
+                distanceGoal.get() - target.getX());
+        var rotationDelta = new Rotation2d(rotationGoal.get())
+                .minus(target.getRotation().toRotation2d());
         Logger.recordOutput("AutoAlignTags/RotationError", rotationDelta);
         // how do i set a different goal for the distance
 
         // System.out.println(getStance());
 
-        swerveSub.drive(distanceSpeed / DriveConstants.MaxVelocityMetersPerSecond,
+        swerveSub.drive(
+                distanceSpeed / DriveConstants.MaxVelocityMetersPerSecond,
                 strafeSpeed / DriveConstants.MaxVelocityMetersPerSecond,
                 rot / DriveConstants.MaxAngularVelocityRadiansPerSecond, false);
         // wtf why is LimelightHelpers wrong

@@ -15,15 +15,16 @@ import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.SwerveSubsystem;
 
 public class AbortAbortReef extends SequentialCommandGroup {
-    public AbortAbortReef(CoralArm coralArm, AlgaeArm algaeArm, Elevator elevator, SwerveSubsystem swerveSub) {
-        var stow = new ConfigSystem(Constants.SetpointConstants.Options.driveConfig, coralArm, elevator, algaeArm);
+    public AbortAbortReef(CoralArm coralArm, AlgaeArm algaeArm,
+            Elevator elevator, SwerveSubsystem swerveSub) {
+        var stow = new ConfigSystem(
+                Constants.SetpointConstants.Options.driveConfig, coralArm,
+                elevator, algaeArm);
         var safetyAlign = new AutoAlignReef(swerveSub, NTD.of(0.0),
-                Constants.SetpointConstants.DistanceOffsets.reefAlgaeStow, NTD.of(0.0), NTD.of(0.05), NTD.of(0.05));
-        addCommands(
-                Commands.print("ABORT ABORT ABORT Started"),
-                new ParallelCommandGroup(
-                        stow,
-                        safetyAlign),
+                Constants.SetpointConstants.DistanceOffsets.reefAlgaeStow,
+                NTD.of(0.0), NTD.of(0.05), NTD.of(0.05));
+        addCommands(Commands.print("ABORT ABORT ABORT Started"),
+                new ParallelCommandGroup(stow, safetyAlign),
                 Commands.print("ABORT ABORT ABORT done"));
     }
 }

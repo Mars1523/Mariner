@@ -23,7 +23,8 @@ public class AbsoluteGoto extends Command {
     private Pose2d goal;
     private double rotationError = 0.02;
 
-    public AbsoluteGoto(SwerveSubsystem swerveSub, Pose2d goal, NTDouble translationError) {
+    public AbsoluteGoto(SwerveSubsystem swerveSub, Pose2d goal,
+            NTDouble translationError) {
         addRequirements(swerveSub);
         this.swerveSub = swerveSub;
         this.translationError = translationError;
@@ -31,11 +32,17 @@ public class AbsoluteGoto extends Command {
         this.goal = goal;
 
         xPID = new ProfiledPIDController(8, .0, .85 * .125,
-                new TrapezoidProfile.Constraints(Constants.DriveConstants.MaxVelocityMetersPerSecond / 3, 2.5));
+                new TrapezoidProfile.Constraints(
+                        Constants.DriveConstants.MaxVelocityMetersPerSecond / 3,
+                        2.5));
         yPID = new ProfiledPIDController(8, 0, .85 * .125,
-                new TrapezoidProfile.Constraints(Constants.DriveConstants.MaxVelocityMetersPerSecond / 3, 2.5));
+                new TrapezoidProfile.Constraints(
+                        Constants.DriveConstants.MaxVelocityMetersPerSecond / 3,
+                        2.5));
         rotationPID = new ProfiledPIDController(3.85 * .9, .8 * .7, .85 * .125,
-                new TrapezoidProfile.Constraints(Constants.DriveConstants.MaxAngularVelocityRadiansPerSecond / 2,
+                new TrapezoidProfile.Constraints(
+                        Constants.DriveConstants.MaxAngularVelocityRadiansPerSecond
+                                / 2,
                         (Math.PI * 2) / 2));
 
         yPID.setGoal(goal.getY());
@@ -57,8 +64,10 @@ public class AbsoluteGoto extends Command {
 
     // TODO: Avg speed
     public boolean isAligned() {
-        if (goal.minus(swerveSub.getPose()).getTranslation().getNorm() < translationError.get()
-                && goal.getRotation().minus(swerveSub.getPose().getRotation()).getRadians() < rotationError) {
+        if (goal.minus(swerveSub.getPose()).getTranslation()
+                .getNorm() < translationError.get()
+                && goal.getRotation().minus(swerveSub.getPose().getRotation())
+                        .getRadians() < rotationError) {
             return true;
         } else {
             return false;
@@ -70,16 +79,19 @@ public class AbsoluteGoto extends Command {
         var nt = NetworkTableInstance.getDefault();
 
         double ySpeed = yPID.calculate(swerveSub.getPose().getY());
-        ySpeed = MathUtil.clamp(ySpeed, -DriveConstants.MaxVelocityMetersPerSecond / 3.5,
+        ySpeed = MathUtil.clamp(ySpeed,
+                -DriveConstants.MaxVelocityMetersPerSecond / 3.5,
                 DriveConstants.MaxVelocityMetersPerSecond / 3.5);
 
         double xSpeed = xPID.calculate(swerveSub.getPose().getX());
-        xSpeed = MathUtil.clamp(xSpeed, -DriveConstants.MaxVelocityMetersPerSecond / 3.5,
+        xSpeed = MathUtil.clamp(xSpeed,
+                -DriveConstants.MaxVelocityMetersPerSecond / 3.5,
                 DriveConstants.MaxVelocityMetersPerSecond / 3.5);
 
-        double rot = rotationPID.calculate(swerveSub.getPose().getRotation().getRadians());
-        rot = MathUtil.clamp(rot, -DriveConstants.MaxAngularVelocityRadiansPerSecond
-                / 3.5,
+        double rot = rotationPID
+                .calculate(swerveSub.getPose().getRotation().getRadians());
+        rot = MathUtil.clamp(rot,
+                -DriveConstants.MaxAngularVelocityRadiansPerSecond / 3.5,
                 DriveConstants.MaxAngularVelocityRadiansPerSecond / 3.5);
 
         // Logger.recordOutput("/Debug/AutoAlignAbs/Y Goal", yPID.getGoal().position);
@@ -101,7 +113,8 @@ public class AbsoluteGoto extends Command {
         // Logger.recordOutput("/Debug/AutoAlignAbs/R CurrentSwerve",
         // swerveSub.getPose().getRotation().getRadians());
 
-        var chas = ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, swerveSub.getPose().getRotation());
+        var chas = ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot,
+                swerveSub.getPose().getRotation());
         Logger.recordOutput("/Debug/AutoAlignAbs/Speeds", chas);
         swerveSub.driveSpeeds(chas);
     }

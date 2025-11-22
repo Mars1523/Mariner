@@ -15,7 +15,8 @@ public class AutoDrive extends Command {
     private Translation2d startPosition;
     SlewRateLimiter slew = new SlewRateLimiter(0.7);
 
-    public AutoDrive(SwerveSubsystem swerveSub, double goalDistance, double speed) {
+    public AutoDrive(SwerveSubsystem swerveSub, double goalDistance,
+            double speed) {
 
         addRequirements(swerveSub);
         this.swerveSub = swerveSub;
@@ -35,9 +36,12 @@ public class AutoDrive extends Command {
     public void execute() {
         // drive forqard
 
-        NetworkTableInstance.getDefault().getEntry("/Shuffleboard/Tune/Commanded Speed").setDouble(speed);
+        NetworkTableInstance.getDefault()
+                .getEntry("/Shuffleboard/Tune/Commanded Speed")
+                .setDouble(speed);
         var ss = slew.calculate(speed);
-        NetworkTableInstance.getDefault().getEntry("/Shuffleboard/Tune/Limited Speed").setDouble(ss);
+        NetworkTableInstance.getDefault()
+                .getEntry("/Shuffleboard/Tune/Limited Speed").setDouble(ss);
         swerveSub.drive(ss, 0, 0, false);
         // hird
 
@@ -51,7 +55,8 @@ public class AutoDrive extends Command {
     @Override
     public boolean isFinished() {
 
-        double dist = swerveSub.getPose().getTranslation().getDistance(startPosition);
+        double dist =
+                swerveSub.getPose().getTranslation().getDistance(startPosition);
         System.out.println("distance: " + dist);
         if (goalDistance < dist) {
             return true;

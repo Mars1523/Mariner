@@ -15,7 +15,7 @@ import frc.robot.subsystems.AlgaeArm;
 import frc.robot.subsystems.CoralArm;
 import frc.robot.subsystems.Elevator;
 
-public class ConfigSystem extends Command{
+public class ConfigSystem extends Command {
 
     int choice;
 
@@ -27,13 +27,14 @@ public class ConfigSystem extends Command{
 
     static int i = 0;
 
-    public ConfigSystem(ConfigOption configOption, CoralArm coralArm, Elevator elevator, AlgaeArm algaeArm) {
+    public ConfigSystem(ConfigOption configOption, CoralArm coralArm,
+            Elevator elevator, AlgaeArm algaeArm) {
 
         addRequirements(coralArm);
         addRequirements(elevator);
         addRequirements(algaeArm);
 
-        
+
         this.coralArm = coralArm;
         this.elevator = elevator;
         this.algaeArm = algaeArm;
@@ -43,7 +44,7 @@ public class ConfigSystem extends Command{
 
     }
 
-    public boolean isConfigured(){
+    public boolean isConfigured() {
         return coralArm.isReady() && algaeArm.isReady() && elevator.isReady();
     }
 
@@ -55,8 +56,7 @@ public class ConfigSystem extends Command{
     }
 
     @Override
-    public void execute() {
-    }
+    public void execute() {}
 
     @Override
     public boolean isFinished() {
@@ -73,7 +73,7 @@ public class ConfigSystem extends Command{
     }
 
     // public Command configureCommand(int choice){
-    //     return run(() -> configure(choice));
+    // return run(() -> configure(choice));
     // }
 
 
